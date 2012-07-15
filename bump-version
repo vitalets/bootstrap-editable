@@ -1,0 +1,14 @@
+#!/bin/sh
+usage() {
+echo "usage: bump-version <version-id>"
+}
+
+if [ $# -ne 1 ]; then
+usage
+exit 1
+fi
+
+sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" js/*.js
+sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" css/*.css
+
+echo "Bumped version number to $1"
