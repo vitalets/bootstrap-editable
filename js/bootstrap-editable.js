@@ -34,13 +34,16 @@
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
 
+      //store name
+      this.name = this.settings.name || this.attr('id');      
+      
       //if validate is map take only needed function
-      if(typeof this.settings.validate == 'object' && this.settings.name in this.settings.validate) {
-          this.settings.validate = this.settings.validate[this.settings.name];
+      if(typeof this.settings.validate == 'object' && this.name in this.settings.validate) {
+          this.settings.validate = this.settings.validate[this.name];
       }
-      
+      //apply specific init() if defined
       if(typeof this.settings.init == 'function') this.settings.init.call(this, options);
-      
+                                  
       //error occured while rendering content
       this.errorOnRender = false;
       
@@ -49,9 +52,6 @@
     
       //bind click event
       this.$element.on('click', $.proxy(this.click, this));
-      
-      //store name
-      this.name = this.settings.name;
       
       //set value of element
       if (this.settings.value == undefined) {
@@ -231,13 +231,31 @@
   * ======================= */  
 
   $.fn.editable = function (option) {
+      //special methods returning non-jquery object
+      var result = {};
+      switch(option) {
+         case 'validate':
+           this.each(function () {
+              var $this = $(this), data = $this.data('editable'), error;
+              if(data && (error = data.validate())) result[data.name] = error;
+           });
+           return result;    
+
+         case 'getValue':
+           this.each(function () {
+              var $this = $(this), data = $this.data('editable');
+              if(data) result[data.name] = data.value;
+           });
+           return result;    
+      }
+
+      //return jquery object
       return this.each(function () {
           var $this = $(this)
           , data = $this.data('editable')
           , options = typeof option == 'object' && option;
           if (!data) $this.data('editable', (data = new Editable(this, options)));
-          //here should be list of methods 
-          if (typeof option == 'string') data[option](); 
+          if (typeof option == 'string') data[option]();
       });      
   }
   
