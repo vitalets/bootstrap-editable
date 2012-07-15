@@ -35,7 +35,8 @@
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
 
       //store name
-      this.name = this.settings.name || this.attr('id');      
+      this.name = this.settings.name || this.$element.attr('id'); 
+      if(!this.name) $.error('You should define name (or id) for Editable element');     
       
       //if validate is map take only needed function
       if(typeof this.settings.validate == 'object' && this.name in this.settings.validate) {
