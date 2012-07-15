@@ -1,6 +1,6 @@
 /* =========================================================
- * bootstrap-editable.js 
- * http://www.eyecon.ro/bootstrap-datepicker
+ * bootstrap-editable.js version 0.1.0
+ * https://github.com/vitalets/bootstrap-editable
  * =========================================================
  * Copyright 2012 Vitaliy Potapov
  *
@@ -187,9 +187,7 @@
      },
 
      hide: function() { 
-        //  alert(this.$content.html());
           this.$element.popover('hide');
-       //   alert(this.$content.html());
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
      },
@@ -238,6 +236,7 @@
           , data = $this.data('editable')
           , options = typeof option == 'object' && option;
           if (!data) $this.data('editable', (data = new Editable(this, options)));
+          //here should be list of methods 
           if (typeof option == 'string') data[option](); 
       });      
   }
