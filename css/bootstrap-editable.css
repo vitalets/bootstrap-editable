@@ -1,0 +1,31 @@
+a.editable, a.editable:hover {
+  text-decoration: none;
+  border-bottom: dashed 1px #0088cc;
+}
+
+a.editable-open, a.editable-open:hover {
+ 
+}
+
+a.editable-empty {
+  font-style: italic; 
+  color: #DD1144;  
+}
+
+a.editable-changed {
+  font-weight: bold; 
+}
+                 
+.editable-loading {
+  background: url('../img/loading.gif') center center no-repeat;  
+  height: 20px;  
+}
+
+div.editable-popover-text { width: 260px; } 
+div.editable-popover-text .popover-content { height: 40px; }
+
+div.editable-popover-textarea { width: 420px; }
+div.editable-popover-textarea .popover-content { height: 190px; }
+
+div.editable-popover-date { width: 340px; }
+div.editable-popover-date .popover-content { height: 250px; }

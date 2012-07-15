@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Bootstrap Editable Plugin Test Suite</title>
+
+  <!-- jquery -->
+  <!--<script src="http://code.jquery.com/jquery-1.7.min.js"></script>-->
+  <script src="vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <link rel="stylesheet" href="vendor/qunit.css" type="text/css" media="screen" />
+  <script src="vendor/qunit.js"></script>
+
+   <!-- bootstrap -->
+  <script src="../vendor/bootstrap/js/bootstrap.js"></script>
+  
+  <script src="vendor/jquery.mockjax.js"></script>  
+  
+<!--  datepicker-->
+  <script src="../vendor/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js"></script>   
+  <link href="../vendor/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+  <link href="../vendor/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css" rel="stylesheet">  
+
+  <!--  plugin sources -->
+  <script src="../js/bootstrap-editable.js"></script>
+  <link rel="stylesheet" href="../css/bootstrap-editable.css" type="text/css" media="screen" />  
+
+  <script src="unit/mocks.js"></script>
+  
+  <!-- unit tests -->
+  <script src="unit/common.js"></script>
+  <script src="unit/text.js"></script>
+  <script src="unit/select.js"></script>
+  <script src="unit/textarea.js"></script>
+  <script src="unit/date.js"></script>
+</head>
+<body>
+  <div>
+    <h1 id="qunit-header">Bootstrap Editable Plugin Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+    <div id="async-fixture"></div>
+  </div>
+</body>
+</html>
