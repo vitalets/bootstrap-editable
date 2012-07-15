@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="Vitaliy Potapov">
+        <title>Editable for Bootstrap</title>
+        <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/prettify/prettify-bootstrap.css" rel="stylesheet">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <script src="assets/jquery/jquery-1.7.1.min.js"></script>  
+         
+        <script src="assets/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js"></script>   
+        <link href="assets/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+        <link href="assets/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css" rel="stylesheet">
+        
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>    
+        <script src="assets/prettify/prettify.js"></script>
+        <script src="assets/mockjax/jquery.mockjax.js"></script>
+        
+        <!--
+        <link href="bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+        <script src="bootstrap-editable/js/bootstrap-editable.js"></script>
+        -->
+        
+        <link href="../lib/css/bootstrap-editable.css" rel="stylesheet">
+        <script src="../lib/js/bootstrap-editable.js"></script>
+                                   
+        <script src="main.js"></script>
+        
+        <style type="text/css">
+            body {
+                padding-top: 50px;
+                padding-bottom: 40px;
+            }
+        </style>        
+    </head>
+
+    <body onload="prettyPrint()">
+    
+    <!--     nav bar-->
+     <div class="navbar navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <a class="brand" href="#">Editable for Bootstrap</a>
+              <div class="nav-collapse">
+                <ul class="nav">
+                  <li class="active"><a href="#">Docs and examples</a></li>
+                  <li><a href="http://github.com/addyosmani/jquery-ui-bootstrap/issues">Feedback / Issues</a></li>
+                  <li><a href="http://github.com/addyosmani/jquery-ui-bootstrap/">Watch on GitHub</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div>
+        </div>    
+                         
+        <div class="container">
+            <section id="typeahead">
+                <div class="page-header">
+                    <h1>Editable for Bootstrap <small>In-place editing with Bootstrap Form and Popover</small></h1>
+                </div>
+                <div class="row">
+                    <div class="span3 columns">
+                        <h3>About</h3>
+                        <p>Adds in-place editing feature to any element of your page</p>
+                        <ul>
+                            <li>based on Bootstrap form and popover</li>
+                            <li>supported types: text, textarea, select, date</li>
+                            <li>validation on client and server-side</li>
+                            <li>keyboard events (escape/enter)</li>                            
+                        </ul>   
+                        <p><a href="bootstrap-editable.zip" target="_blank" class="btn btn-primary">Download</a></p>
+                        <br>
+                        <h3>Requirements</h3>
+                        <ul>
+                            <li>Twitter Bootstrap 2</li>
+                            <li>jQuery UI Bootstrap theme (date)</li>
+                        </ul> 
+                    </div>
+                    
+                    <div class="span9">
+                        <h2>Example</h2>
+                        <p>Click on fields to edit:</p>
+                        <div>
+                            <table id="user" class="table table-bordered table-striped">
+                                <tbody> 
+                                    <tr>         
+                                        <td width="30%">Username</td>
+                                        <td><a href="#" id="username" data-type="text" data-pk="1" data-name="username" data-original-title="Enter username">superuser</a></td>
+                                        <td width="30%"><span class="muted">Simple text field</span></td>
+                                    </tr>
+                                    <tr>         
+                                        <td>First name</td>
+                                        <td><a href="#" id="firstname" >John</a></td>
+<!--                                        <td><a href="#" id="firstname" data-type="text" data-pk="1" data-name="firstname" data-original-title="Enter your firstname">John</a></td>-->
+                                        <td><span class="muted">Required text field</span></td>
+                                    </tr>  
+                                    <tr>         
+                                        <td>Last name</td>
+                                        <td><a href="#" id="lastname" data-type="text" data-pk="1" data-name="lastname" data-original-title="Enter your lastname"></a></td>
+                                        <td><span class="muted">Originally empty text field</span></td>
+                                    </tr>  
+                                   <tr>         
+                                        <td>Sex</td>
+                                        <td><a href="#" id="sex" data-type="select" data-name="sex" data-pk="1" data-original-title="Select sex"></a></td>
+                                        <td><span class="muted">Select, filled from json</span></td>
+                                    </tr>
+                                    <tr>         
+                                        <td>Group</td>
+                                        <td><a href="#" id="group" data-type="select" data-name="group" data-pk="1" data-value="5" data-source="groups.php" data-original-title="Select group">Admin</a></td>
+                                        <td><span class="muted">Select, filled from server</span></td>
+                                    </tr> 
+                                    <tr>         
+                                        <td>Date of birth</td>
+                                        <td><a href="#" id="dob" data-type="date" data-format1="dd.mm.yy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
+                                        <td><span class="muted">Date field, format dd.mm.yy</span></td>
+                                    </tr> 
+                                    <tr>         
+                                        <td>Status</td>
+                                        <td><a href="#" id="status" data-type="select" data-name="status" data-pk="1" data-value="0" data-source="status.php" data-original-title="Select status">Active</a></td>
+                                        <td><span class="muted">Select, filled from server (error)</span></td>
+                                    </tr>   
+                                    <tr>         
+                                        <td>Weight, kg</td>
+                                        <td><a href="#" id="weight" data-type="text" data-pk="1" data-name="weight" data-original-title="Enter your weight in kg">65</a></td>
+                                        <td><span class="muted">Internal server error on submit</span></td>
+                                    </tr>                                      
+                                    <tr>         
+                                        <td>Comments</td>
+                                        <td><a href="#" id="comments" data-type="textarea" data-pk="1" data-name="comments" data-original-title="Enter comments">awesome<br>user!</a></td>
+                                        <td><span class="muted">Textarea</span></td>
+                                    </tr>                                                                                            
+                                                                                                        
+                                </tbody>
+                            </table>
+                            <div><span class="muted">* all ajax requests here are simulated</span></div>
+                        </div>
+
+                        <hr>
+                        <h2>Usage and markup</h2>
+                        <p>You can activate editable on your page easily with special markup and a few line of javascript.
+                        Options can be defined via either <code>data-*</code> attributes or json object.
+                        </p> 
+                        <h3>Text and textarea</h3>
+                        <p> Just set <code>data-type</code>, <code>data-pk</code>, <code>data-name</code> and <code>data-url</code> of <code>&lt;A&gt;</code> element. </p>  
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot; data-type=&quot;text&quot; data-pk=&quot;1&quot; data-name=&quot;username&quot; data-url=&quot;post.php&quot; data-original-title=&quot;Enter username&quot;&gt;superuser&lt;/a&gt;</pre> 
+                        <pre class="prettyprint linenums">$('#username').editable();</pre>
+                        <p>Alternatively, you can set all the same options via javascript</p>
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot;&gt;superuser&lt;/a&gt;</pre> 
+                        <pre class="prettyprint linenums">$('#username').editable({
+                           type: 'text',
+                           pk: 1,
+                           name: 'username',
+                           url: 'post.php',  
+                           title: 'Enter username'
+                        });</pre> 
+                        <div class="alert alert-info">
+                            <strong>Tip! </strong>Usually URL for submit is the same for several fields. You can easily define it in defaults:
+                            <code>$.fn.editable.defaults.url = 'post.php';</code>
+                        </div>         
+                        
+                        <h3>Select</h3>
+                        <p>For 'select' element additionally set <code>data-source</code> and <code>data-value</code></p>
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;group&quot; data-type=&quot;select&quot; data-name=&quot;group&quot; data-pk=&quot;1&quot; data-value=&quot;5&quot; data-source=&quot;groups.php&quot; data-original-title=&quot;Select group&quot;&gt;Admin&lt;/a&gt;</pre>
+                        <pre class="prettyprint linenums">$('#group').editable();</pre>  
+                      
+                        <h3>Date</h3>
+                        <p>Date is based on <a>jQuery UI datepicker with Bootstrap theme</a>. You can set <code>data-format</code> to control format of date</p>
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;dob&quot; data-type=&quot;date&quot; data-format=&quot;dd.mm.yy&quot; data-placement=&quot;bottom&quot; data-pk=&quot;1&quot; data-name=&quot;dob&quot; data-original-title=&quot;Select Date of birth&quot;&gt;15.05.1984&lt;/a&gt;</pre>
+                        <pre class="prettyprint linenums">$('#dob').editable();</pre>
+                      
+                         
+                        <h2>Options</h2>
+                        <p>List of all possible options</p>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">Name</th>
+                                    <th style="width: 100px;">type</th>
+                                    <th style="width: 50px;">default</th>
+                                    <th>description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>type</td>
+                                    <td>string</td>
+                                    <td>'text'</td>
+                                    <td>input type - text | select | textarea | date</td>
+                                </tr>                              
+                                <tr>
+                                    <td>name</td>
+                                    <td>string</td>
+                                    <td>null</td>
+                                    <td>name of field</td>
+                                </tr> 
+                                <tr>
+                                    <td>pk</td>
+                                    <td>string | function</td>
+                                    <td>null</td>
+                                    <td>primary key of editable object (e.g. user_id). Use function to get id dynamically, e.g.:<br>
+                                       <pre class="prettyprint linenums">function() {
+    return $('#user_id').text();
+}</pre>
+                                    </td>
+                                </tr>   
+                                <tr>
+                                    <td>value</td>
+                                    <td>string</td>
+                                    <td>$(element).text()</td>
+                                    <td>initial value. Should be defined for 'select' type to store selected ID</td>
+                                </tr>                                                                                          
+                                <tr>
+                                    <td>params</td>
+                                    <td>object</td>
+                                    <td>null</td>
+                                    <td>additional params to submit</td>
+                                </tr>                                
+                                <tr>
+                                    <td>url</td>
+                                    <td>string</td>
+                                    <td>null</td>
+                                    <td>url to submit data: pk, name, value and params</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>emptytext</td>
+                                    <td>string</td>
+                                    <td>'Empty'</td>
+                                    <td>text shown on empty elements</td>
+                                </tr>
+                                <tr>
+                                    <td>send</td>
+                                    <td>string</td>
+                                    <td>'ifpk'</td>
+                                    <td>strategy for sending data on server - ifpk | always | never. 'ifpk' = data will be sent only if <strong>pk</strong> defined</td>
+                                </tr>
+                                <tr>
+                                    <td>validate</td>
+                                    <td>function</td>
+                                    <td>null</td>
+                                    <td>client-side validation. If returns string - means validation not passed and string showed as error. 
+                                        E.g.:
+                                        <pre class="prettyprint linenums">function(value) {
+  if($.trim(value) == '') 
+    return 'This field is required';
+}</pre></td>
+                                </tr>
+                                <tr>
+                                    <td>success</td>
+                                    <td>function</td>
+                                    <td>null</td>
+                                    <td>called after success submit. If returns string - means error occured and string showed as error. In param <code>data</code> is server's response.
+                                    E.g.:
+                                        <pre class="prettyprint linenums">function(data) {
+    if(typeof data == 'object' && !data.success) return data.msg;  
+}</pre></td>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        
+                        <div class="alert alert-info">
+                            <strong>Tip! </strong>If you need one success callback for several fields  you can easily define it in defaults:  <br>
+                            <pre class="prettyprint linenums">$.fn.editable.defaults.success = function(data) { ... }</pre> 
+                        </div>
+                       
+
+                        <h2>Type specific options</h2>
+                        <p>There are additional options for different input types</p> 
+                        <h3>Select</h3> 
+                           <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">Name</th>
+                                    <th style="width: 100px;">type</th>
+                                    <th style="width: 50px;">default</th>
+                                    <th>description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>source</td>
+                                    <td>string | object</td>
+                                    <td>null</td>
+                                    <td>source for data in select element. If string - considered url for ajax call, otherwise should be json</td>
+                                </tr>     
+                            </tbody>
+                           </table>                         
+               
+                        <h3>Date</h3> 
+                           <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">Name</th>
+                                    <th style="width: 60px;">type</th>
+                                    <th style="width: 180px;">default</th>
+                                    <th>description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>format</td>
+                                    <td>string</td>
+                                    <td>yy-mm-dd</td>
+                                    <td>date format. It overwrites datepicker's dateFormat</td>
+                                </tr>   
+                                <tr>
+                                    <td>datepicker</td>
+                                    <td>object</td>
+                                    <td>{ <br>dateFormat: 'yy-mm-dd',<br> changeMonth: true, <br>changeYear: true<br>}</td>
+                                    <td>configuration for jQuery UI datepicker. </td>
+                                </tr>     
+                            </tbody>
+                           </table>                         
+                        
+                        <h3>Methods</h3>
+                        <h4>$().editable(options)</h4>
+                        <p>Initializes an editable.</p>
+                        <h4>$().editable('markAsSaved')</h4>
+                        <p>Mark editable as saved to server - usefull when creating new records.</p>
+                        <h4>$().data('editable').validate()</h4>
+                        <p>Calls validation method. Returns string error if validation fails.</p>
+
+                        <h3>Events</h3>
+                        <p>No events defined for this component.</p>
+                        
+                        <h2>Creating new record</h2> 
+                        <p>When creating new record it's primary key (ID) is undefined and in-place editing of individual fields is unclear (no related object on server).
+                        For that reason there is <code>send = 'ifpk'</code> option. You can create hidden element to store ID and point to it in related editable fields, e.g.:</p>
+                        <pre class="prettyprint linenums">&lt;span style=&quot;display: none&quot; id=&quot;user_id&quot;&gt;&lt;/span&gt;</pre>
+                        <pre class="prettyprint linenums">
+$('.myeditable').editable({
+    url: 'post.php',
+    send: 'ifpk',
+    pk: function() {return $('#user_id').text();} 
+}); 
+                        </pre>
+                        <p>Initially <stronmg>#user_id</stronmg> is empty and no requests will be sent to server.                                       
+                        You can manually collect data and send it to server. When object is created on server - store it's ID in hidden element and editable will work in usual way. E.g.:
+                        </p>
+                        
+                        <pre class="prettyprint linenums">
+function collect() {
+   var data = {}, errors = [], error;
+   $('.myeditable').each(function() {
+         var el = $(this).data('editable'); 
+         if(error = el.validate(el.value)) {
+             errors.push(error);
+         } else {
+             data[el.name] = el.value; 
+         }
+   });
+   
+   if(!errors.length) {
+      $.post('new.php', data, function(response) {
+          $('#user_id').text(response.id); //supposed server response {id: 1}
+          $('.myeditable').editable('markAsSaved'); //inform fields that data successfully saved to server   
+      });
+   }       
+});</pre>
+                    <p>Live example:</p>
+                    <p>Please, fill out data and create new user</p>
+                    <div>
+                        <div class="alert alert-success hide">
+                            <strong>User created!</strong> To modify data just click on values.
+                        </div>
+                        <span style="display: none" id="user_id"></span>
+                        <table id="user" class="table table-bordered table-striped">
+                            <tbody> 
+                                <tr>         
+                                    <td width="30%">Username</td>
+                                    <td><a href="#" class="myeditable" data-type="text" data-name="username" data-original-title="Enter username"></a></td>
+                                </tr>
+                                <tr>         
+                                    <td>First name</td>
+                                    <td><a href="#" class="myeditable" data-type="text" data-name="firstname" data-original-title="Enter your firstname"></a></td>
+                                </tr>  
+                                <tr>         
+                                    <td>Group</td>
+                                    <td><a href="#" class="myeditable" data-type="select" data-name="group" data-source="groups.php" data-original-title="Select group"></a></td>
+                                </tr>     
+                                <tr>         
+                                    <td>Date of birth</td>
+                                    <td><a href="#" class="myeditable" data-type="date" data-name="dob" data-format="dd.mm.yy" data-original-title="Select Date of birth"></a></td>
+                                </tr>  
+                                <tr>         
+                                    <td>Comments</td>
+                                    <td><a href="#" class="myeditable" data-type="textarea" data-name="comments" data-original-title="Enter comments"></a></td>
+                                </tr>                                                                                            
+
+                            </tbody>
+                        </table>
+                        <button id="save-user-btn" class="btn btn-primary">Create user!</button>
+                    </div>                
+                        
+                   </div>
+                </div>
+            </section>
+    
+      <hr>   
+            
+      <footer>
+        <p>Editable for Bootstrap &copy; Vitaliy Potapov 2012. Twitter Bootstrap &copy; Twitter 2012</p>
+      </footer>            
+            
+            
+        </div>
+    </body>
+ </html>
