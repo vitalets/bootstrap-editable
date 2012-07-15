@@ -64,7 +64,45 @@ $(function () {
            e.remove();    
            start();   
         }, timeout);                     
-     })         
+     })      
+     
+     test("test validation map", function () {
+        var e = $('<a href="#" class="map" data-name="e">abc</a>').appendTo('#qunit-fixture'),
+            e1 = $('<a href="#" class="map" data-name="e1">abc</a>').appendTo('#qunit-fixture'),
+            newText = '';
+            
+            $('.map').editable({
+                validate: {
+                    e: function(value) { if(value == '') return 'required1'; 
+                    },
+                    e1:function(value) { if(value == '') return 'required2'; 
+                    },
+                    e2: 'qwerty' //this should not throw error  
+                }
+            });
+         
+
+        e.click();
+        var p = e.data('popover').$tip;
+        p.find('input').val(newText);
+        p.find('form').submit(); 
+        ok(p.is(':visible'), 'popover still shown');  
+        ok(p.find('.error').length, 'class "error" exists');
+        equals(p.find('.help-block').text(), 'required1', 'error msg shown');   
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');
+        
+        e = e1;
+        e.click();
+        var p = e.data('popover').$tip;
+        p.find('input').val(newText);
+        p.find('form').submit(); 
+        ok(p.is(':visible'), 'popover still shown');  
+        ok(p.find('.error').length, 'class "error" exists');
+        equals(p.find('.help-block').text(), 'required2', 'error msg shown');   
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');        
+     })        
       
      asyncTest("should show error if success callback return string", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable({

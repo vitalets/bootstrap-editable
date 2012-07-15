@@ -34,6 +34,11 @@
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
 
+      //if validate is map take only needed function
+      if(typeof this.settings.validate == 'object' && this.settings.name in this.settings.validate) {
+          this.settings.validate = this.settings.validate[this.settings.name];
+      }
+      
       if(typeof this.settings.init == 'function') this.settings.init.call(this, options);
       
       //error occured while rendering content
