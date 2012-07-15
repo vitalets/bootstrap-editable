@@ -135,6 +135,9 @@
               value = this.$input.val();
           if(typeof this.settings.validate == 'function' && (error = this.settings.validate.call(this, value))) {
               this.enableContent(error);
+              if(this.settings.type == 'text' || this.settings.type == 'textarea') {
+                  this.$input.focus();
+              }
               return;
           }
          
@@ -264,7 +267,7 @@
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
                            '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn"><i class="icon-ban-circle"></i></button>'+
-                           '<span class="help-block"></span>'+
+                           '<span class="help-block" style="clear: both"></span>'+
                        '</div>'+
                   '</form>',
     loading: '<div class="editable-loading"></div>',    
