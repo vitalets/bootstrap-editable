@@ -1,0 +1,4 @@
+git archive master css js img | tar -x -C ../gh-pages/assets/bootstrap-editable
+git archive --format=zip -o ../gh-pages/assets/bootstrap-editable.zip master css js img vendor README.md
+
+echo gh-pages updated with newest version from master branch!
