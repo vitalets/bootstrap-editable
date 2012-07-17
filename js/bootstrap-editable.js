@@ -160,7 +160,7 @@
                   method: 'post',
                   success: function(data) {
                       //check response
-                      if(typeof that.settings.success == 'function' && (error = that.settings.success.call(that, data))) {
+                      if(typeof that.settings.success == 'function' && (error = that.settings.success.apply(that, arguments))) {
                           //show form with error message
                           that.enableContent(error);
                       } else {
@@ -173,7 +173,8 @@
                       }
                   },
                   error: function() {
-                      that.enableContent('Server error'); 
+                      var msg = (typeof that.settings.error == 'function') ? that.settings.error.apply(that, arguments) : null;
+                      that.enableContent(msg || 'Server error'); 
                   }     
               });
           } else { //do not send to server   
@@ -272,9 +273,11 @@
     value: null,  //real value, not shown. Especially usefull for select
     params: null,   //additional params to submit
     send: 'ifpk', // strategy for sending data on server: 'always', 'never', 'ifpk' (default)
+
     
     validate: function() { }, //client-side validation. If returns msg - data will not be sent
     success: function(data) { }, //after send callback
+    error: function() { }, //error wnen submitting data
     
    /* can be overriden in input type defaults */
     
