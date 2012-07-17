@@ -92,28 +92,28 @@ $(function(){
     
    $('.myeditable').editable({
       url: 'post.php',
-      pk: function() {return $('#user_id').text();} 
+      pk: function() {return $('#user_id').text();},
+      validate: {
+         username: function(v) {if(v == '') return 'Username is required!'}
+      } 
    });
    
-   $('#save-user-btn').click(function() {
-       var data = {}, $els = $('.myeditable'), errors = [], error;         
-       $els.each(function() {
-             var el = $(this).data('editable');
-             if(error = el.validate()) {
-                 errors.push(el.name + ' - ' + error);
-             } else {
-                 data[el.name] = el.value; 
-             }
-      });
-
-      var $btn = $(this);
-      if(!errors.length) {
-          $.post('new.php', data, function(response) {
+   $('#save-btn').click(function() {
+       var  $btn = $(this),
+            errors = $('.myeditable').editable('validate');
+       if($.isEmptyObject(errors)) {
+           var data = $('.myeditable').editable('getValue');
+           $.post('new.php', data, function(response) {
               $('#user_id').text(response.id); 
               $btn.hide();
+              $btn.parent().find('.alert-error').hide();
               $btn.parent().find('.alert-success').show();
-              $els.editable('markAsSaved');                
-          });
-      }       
-   });    
+              $('.myeditable').editable('markAsSaved');
+          }); 
+       } else {
+          var msg = '<strong>Validation errors!</strong><br>';
+          $.each(errors, function(k, v) { msg += v+'<br>'; });
+          $btn.parent().find('.alert-error').html(msg).show(); 
+       }
+   });  
 });

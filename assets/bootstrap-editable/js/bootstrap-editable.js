@@ -1,6 +1,6 @@
 /* =========================================================
- * bootstrap-editable.js 
- * http://www.eyecon.ro/bootstrap-datepicker
+ * bootstrap-editable.js version 0.1.0
+ * https://github.com/vitalets/bootstrap-editable
  * =========================================================
  * Copyright 2012 Vitaliy Potapov
  *
@@ -34,13 +34,17 @@
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
 
+      //store name
+      this.name = this.settings.name || this.$element.attr('id'); 
+      if(!this.name) $.error('You should define name (or id) for Editable element');     
+      
       //if validate is map take only needed function
-      if(typeof this.settings.validate == 'object' && this.settings.name in this.settings.validate) {
-          this.settings.validate = this.settings.validate[this.settings.name];
+      if(typeof this.settings.validate == 'object' && this.name in this.settings.validate) {
+          this.settings.validate = this.settings.validate[this.name];
       }
-      
+      //apply specific init() if defined
       if(typeof this.settings.init == 'function') this.settings.init.call(this, options);
-      
+                                  
       //error occured while rendering content
       this.errorOnRender = false;
       
@@ -49,9 +53,6 @@
     
       //bind click event
       this.$element.on('click', $.proxy(this.click, this));
-      
-      //store name
-      this.name = this.settings.name;
       
       //set value of element
       if (this.settings.value == undefined) {
@@ -125,7 +126,7 @@
             e.which == 27 && that.hide();
          });
      },
-              
+ 
      submit: function(e) {
           e.stopPropagation();
           e.preventDefault();  
@@ -135,9 +136,6 @@
               value = this.$input.val();
           if(typeof this.settings.validate == 'function' && (error = this.settings.validate.call(this, value))) {
               this.enableContent(error);
-              if(this.settings.type == 'text' || this.settings.type == 'textarea') {
-                  this.$input.focus();
-              }
               return;
           }
          
@@ -162,7 +160,7 @@
                   method: 'post',
                   success: function(data) {
                       //check response
-                      if(typeof that.settings.success == 'function' && (error = that.settings.success.call(that, data))) {
+                      if(typeof that.settings.success == 'function' && (error = that.settings.success.apply(that, arguments))) {
                           //show form with error message
                           that.enableContent(error);
                       } else {
@@ -175,7 +173,8 @@
                       }
                   },
                   error: function() {
-                      that.enableContent('Server error'); 
+                      var msg = (typeof that.settings.error == 'function') ? that.settings.error.apply(that, arguments) : null;
+                      that.enableContent(msg || 'Server error'); 
                   }     
               });
           } else { //do not send to server   
@@ -190,9 +189,7 @@
      },
 
      hide: function() { 
-        //  alert(this.$content.html());
           this.$element.popover('hide');
-       //   alert(this.$content.html());
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
      },
@@ -236,12 +233,31 @@
   * ======================= */  
 
   $.fn.editable = function (option) {
+      //special methods returning non-jquery object
+      var result = {};
+      switch(option) {
+         case 'validate':
+           this.each(function () {
+              var $this = $(this), data = $this.data('editable'), error;
+              if(data && (error = data.validate())) result[data.name] = error;
+           });
+           return result;    
+
+         case 'getValue':
+           this.each(function () {
+              var $this = $(this), data = $this.data('editable');
+              if(data) result[data.name] = data.value;
+           });
+           return result;    
+      }
+
+      //return jquery object
       return this.each(function () {
           var $this = $(this)
           , data = $this.data('editable')
           , options = typeof option == 'object' && option;
           if (!data) $this.data('editable', (data = new Editable(this, options)));
-          if (typeof option == 'string') data[option](); 
+          if (typeof option == 'string') data[option]();
       });      
   }
   
@@ -257,9 +273,11 @@
     value: null,  //real value, not shown. Especially usefull for select
     params: null,   //additional params to submit
     send: 'ifpk', // strategy for sending data on server: 'always', 'never', 'ifpk' (default)
+
     
     validate: function() { }, //client-side validation. If returns msg - data will not be sent
     success: function(data) { }, //after send callback
+    error: function() { }, //error wnen submitting data
     
    /* can be overriden in input type defaults */
     
@@ -267,7 +285,7 @@
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
                            '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn"><i class="icon-ban-circle"></i></button>'+
-                           '<span class="help-block" style="clear: both"></span>'+
+                           '<span class="help-block"></span>'+
                        '</div>'+
                   '</form>',
     loading: '<div class="editable-loading"></div>',    
