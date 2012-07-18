@@ -15,5 +15,3 @@ sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" css/*.css
 sed -i "s/v[0-9]\+\.[0-9]\+\.[0-9]\+/v$1/g" ../gh-pages/index.html
 
 git commit -a -m'Bump version to $1'
-
-echo "Bumped version number to $1"
