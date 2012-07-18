@@ -16,5 +16,12 @@ $(function () {
         responseText: 'Internal Server Error'
     });   
     
+    $.mockjax({
+        url: 'post-resp.php',
+        response: function(settings) {
+            this.responseText = settings;  
+        }
+    });    
+    
     
 });

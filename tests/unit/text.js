@@ -131,6 +131,36 @@ $(function () {
         
       })   
    
+      asyncTest("should submit all required params", function () {
+        var e = $('<a href="#" data-pk="1" data-url="post-resp.php">abc</a>').appendTo(fx).editable({
+             name: 'username',
+             params: {
+                q: 2 
+             },
+             success: function(resp) {   
+                 equal(resp.dataType, 'json', 'dataType ok');
+                 equal(resp.data.pk, 1, 'pk ok');
+                 equal(resp.data.name, 'username', 'name ok');
+                 equal(resp.data.value, newText, 'value ok');
+                 equal(resp.data.q, 2, 'additional params ok');
+             } 
+          }),  
+          newText = 'cd<e>;"'
+
+        e.click()
+        var p = e.data('popover').$tip;
+
+        ok(p.find('input[type=text]').length, 'input exists')
+        p.find('input').val(newText);
+        p.find('form').submit(); 
+        
+        setTimeout(function() {
+           e.remove();    
+           start();  
+        }, timeout);             
+        
+      })              
+            
             
      
      asyncTest("should show emptytext if entered text is empty", function () {
