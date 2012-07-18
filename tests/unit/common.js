@@ -1,6 +1,8 @@
 $(function () {
     
    $.support.transition = false;
+   
+   $.fn.editable.defaults.name = 'name1';
     
     module("common")
     

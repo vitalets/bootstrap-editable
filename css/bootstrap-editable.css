@@ -1,4 +1,9 @@
-a.editable, a.editable:hover {
+/* =========================================================
+ * bootstrap-editable.css version 1.0.0
+ * https://github.com/vitalets/bootstrap-editable
+ * ========================================================= */
+
+ a.editable, a.editable:hover {
   text-decoration: none;
   border-bottom: dashed 1px #0088cc;
 }
