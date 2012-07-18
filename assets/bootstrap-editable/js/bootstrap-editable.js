@@ -1,5 +1,5 @@
 /* =========================================================
- * bootstrap-editable.js version 1.0.1
+ * bootstrap-editable.js version 1.0.2
  * https://github.com/vitalets/bootstrap-editable
  * =========================================================
  * Copyright 2012 Vitaliy Potapov
@@ -86,6 +86,9 @@
      },
      
      startShow: function () {
+          //hide other popovers if shown
+          $('.popover').find('form').find('button[type=button]').click();
+         
           this.$element.popover('show');
           this.$element.addClass('editable-open');  
           this.errorOnRender = false;
@@ -347,6 +350,7 @@
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
+                      data: {name: this.name},
                       dataType: 'json',
                       success: function(data) {
                           that.settings.source = data;
