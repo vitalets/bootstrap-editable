@@ -11,4 +11,7 @@ fi
 sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" js/*.js
 sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" css/*.css
 
+#update version in download button
+sed -i "s/v[0-9]\+\.[0-9]\+\.[0-9]\+/v$1/g" ../gh-pages/index.html
+
 echo "Bumped version number to $1"

@@ -1,5 +1,5 @@
 /* =========================================================
- * bootstrap-editable.js version 0.1.0
+ * bootstrap-editable.js version 1.0.0
  * https://github.com/vitalets/bootstrap-editable
  * =========================================================
  * Copyright 2012 Vitaliy Potapov
