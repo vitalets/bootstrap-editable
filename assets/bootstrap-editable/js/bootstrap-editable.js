@@ -1,5 +1,5 @@
 /* =========================================================
- * bootstrap-editable.js version 1.0.0
+ * bootstrap-editable.js version 1.0.1
  * https://github.com/vitalets/bootstrap-editable
  * =========================================================
  * Copyright 2012 Vitaliy Potapov
@@ -159,8 +159,9 @@
               var url = (typeof this.settings.url == 'function') ? this.settings.url.call(this) : this.settings.url;
               $.ajax({
                   url: url, 
-                  params: params, 
-                  method: 'post',
+                  data: params, 
+                  type: 'post',
+                  dataType: 'json',
                   success: function(data) {
                       //check response
                       if(typeof that.settings.success == 'function' && (error = that.settings.success.apply(that, arguments))) {
@@ -345,7 +346,8 @@
               if(typeof this.settings.source == 'string' ) { //ajax loading from server
                   $.ajax({
                       url: this.settings.source, 
-                      method: 'get',
+                      type: 'get',
+                      dataType: 'json',
                       success: function(data) {
                           that.settings.source = data;
                           setOptions(data);
