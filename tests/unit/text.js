@@ -131,7 +131,6 @@ $(function () {
         
       })   
    
-   
             
      
      asyncTest("should show emptytext if entered text is empty", function () {
@@ -157,7 +156,10 @@ $(function () {
        
      asyncTest("should show error when server-side error", function () {
             var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
-              url: 'error.php'  
+              url: 'error.php',
+              error: function(xhr) {
+                  if(xhr.status == 500) return 'Internal server error';
+              }  
             }),
             newText = 'cde';
 
@@ -170,7 +172,7 @@ $(function () {
             setTimeout(function() {
                ok(p.is(':visible'), 'popover visible')
                ok(p.find('.error').length, 'class "error" exists')
-               ok(p.find('.help-block').text().length, 'error msg exists')               
+               equals(p.find('.help-block').text(), 'Internal server error', 'error shown')               
                
                p.find('button[type=button]').click(); 
                ok(!p.is(':visible'), 'popover was removed')
