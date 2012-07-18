@@ -1,1 +1,4 @@
 /tests export-ignore
+.gitattributes export-ignore
+bump-version export-ignore
+update-pages export-ignore
