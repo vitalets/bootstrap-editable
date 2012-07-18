@@ -86,6 +86,9 @@
      },
      
      startShow: function () {
+          //hide other popovers if shown
+          $('.popover').find('form').find('button[type=button]').click();
+         
           this.$element.popover('show');
           this.$element.addClass('editable-open');  
           this.errorOnRender = false;
