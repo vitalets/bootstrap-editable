@@ -12,6 +12,7 @@ sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" js/*.js
 sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+$/version $1/g" css/*.css
 
 #update version in download button
-sed -i "s/v[0-9]\+\.[0-9]\+\.[0-9]\+/v$1/g" ../gh-pages/index.html
+sed -i "s/bootstrap-editable\/zipball\/[0-9]\+\.[0-9]\+\.[0-9]\+/bootstrap-editable\/zipball\/$1/g" ../gh-pages/index.html
+sed -i "s/Download stable (v[0-9]\+\.[0-9]\+\.[0-9]\+)/Download stable (v$1)/g" ../gh-pages/index.html
 
-git commit -a -m'Bump version to $1'
+git commit -a -m"Bump version to $1"
