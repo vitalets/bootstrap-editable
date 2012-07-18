@@ -350,6 +350,7 @@
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
+                      data: {name: this.name},
                       dataType: 'json',
                       success: function(data) {
                           that.settings.source = data;

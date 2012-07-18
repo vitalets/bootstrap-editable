@@ -160,8 +160,6 @@ $(function () {
         }, timeout);             
         
       })              
-            
-            
      
      asyncTest("should show emptytext if entered text is empty", function () {
             var emptytext = 'blabla',
