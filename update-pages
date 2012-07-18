@@ -4,5 +4,4 @@
 git archive HEAD css js img | tar -x -C ../gh-pages/assets/bootstrap-editable
 #git archive --format=zip -o ../gh-pages/assets/bootstrap-editable.zip HEAD
 
-
 echo gh-pages updated with newest version!
