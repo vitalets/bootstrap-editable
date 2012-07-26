@@ -11,7 +11,7 @@ $(function () {
         var p = e.data('popover').$tip;
         ok(p.find('.ui-datepicker').length, 'ui-datepicker exists')
         ok(p.find('.editable-popover-date').length, 'class editable-popover-date exists')    
-        equals( $.datepicker.formatDate('dd.mm.yy', e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct')
+        equal( $.datepicker.formatDate('dd.mm.yy', e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct')
         p.find('button[type=button]').click();
         ok(!p.is(':visible'), 'popover closed');
       })     
@@ -29,7 +29,7 @@ $(function () {
         e.click();
         var p = e.data('popover').$tip;
         ok(!p.find('select.ui-datepicker-year').length, 'select for year not exist')    
-        equals( $.datepicker.formatDate(format, e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct')
+        equal( $.datepicker.formatDate(format, e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct')
         p.find('button[type=button]').click();
         ok(!p.is(':visible'), 'popover closed');
       })        
@@ -38,7 +38,7 @@ $(function () {
         var e = $('<a href="#" data-type="date"></a>').appendTo('#qunit-fixture').editable()
         e.click()
         var p = e.data('popover').$tip;
-        equals( p.find('.ui-datepicker').find('a.ui-state-active').text(), $.datepicker.formatDate('d', new Date()), 'day = today')
+        equal( p.find('.ui-datepicker').find('a.ui-state-active').text(), $.datepicker.formatDate('d', new Date()), 'day = today')
         p.find('button[type=button]').click();
         ok(!p.is(':visible'), 'popover closed');      
       })
@@ -57,14 +57,14 @@ $(function () {
 
         e.click();
         var p = e.data('popover').$tip;
-        equals( $.datepicker.formatDate('dd.mm.yy', e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct');
+        equal( $.datepicker.formatDate('dd.mm.yy', e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct');
         p.find('.ui-datepicker').find('a.ui-state-active').parent().next().click();
         p.find('form').submit(); 
         
         setTimeout(function() {
            ok(!p.is(':visible'), 'popover closed')
-           equals(e.data('editable').value, nextDate, 'new date saved to value')
-           equals(e.text(), nextDate, 'new text shown')            
+           equal(e.data('editable').value, nextDate, 'new date saved to value')
+           equal(e.text(), nextDate, 'new text shown')            
            e.remove();    
            start();  
         }, timeout);                              

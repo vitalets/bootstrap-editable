@@ -32,13 +32,13 @@ $(function () {
         ok(p.find('input[type=text]').length, 'input exists')
         equal(p.find('input[type=text]').val(), 'abc' , 'input contain correct value')
         p.find('input').val(newText);
-        p.find('form').submit(); 
+        p.find('button[type=submit]').click(); 
         ok(p.find('.editable-loading').is(':visible'), 'loading class is visible');
         
         setTimeout(function() {
            ok(!p.is(':visible'), 'popover closed')
-           equals(e.data('editable').value, newText, 'new text saved to value')
-           equals(e.text(), newText, 'new text shown') 
+           equal(e.data('editable').value, newText, 'new text saved to value')
+           equal(e.text(), newText, 'new text shown') 
            e.remove();    
            start();  
         }, timeout);                     
@@ -58,7 +58,7 @@ $(function () {
         setTimeout(function() {
            ok(p.is(':visible'), 'popover still shown');  
            ok(p.find('.error').length, 'class "error" exists');
-           equals(p.find('.help-block').text(), 'required', 'error msg shown');   
+           equal(p.find('.help-block').text(), 'required', 'error msg shown');   
            p.find('button[type=button]').click(); 
            ok(!p.is(':visible'), 'popover was removed');
            e.remove();    
@@ -88,7 +88,7 @@ $(function () {
         p.find('form').submit(); 
         ok(p.is(':visible'), 'popover still shown');  
         ok(p.find('.error').length, 'class "error" exists');
-        equals(p.find('.help-block').text(), 'required1', 'error msg shown');   
+        equal(p.find('.help-block').text(), 'required1', 'error msg shown');   
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');
         
@@ -99,7 +99,7 @@ $(function () {
         p.find('form').submit(); 
         ok(p.is(':visible'), 'popover still shown');  
         ok(p.find('.error').length, 'class "error" exists');
-        equals(p.find('.help-block').text(), 'required2', 'error msg shown');   
+        equal(p.find('.help-block').text(), 'required2', 'error msg shown');   
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');        
      })        
@@ -122,7 +122,7 @@ $(function () {
         setTimeout(function() {
            ok(p.is(':visible'), 'popover still shown');  
            ok(p.find('.error').length, 'class "error" exists');
-           equals(p.find('.help-block').text(), 'error', 'error msg shown');   
+           equal(p.find('.help-block').text(), 'error', 'error msg shown');   
            p.find('button[type=button]').click(); 
            ok(!p.is(':visible'), 'popover was removed');
            e.remove();    
@@ -174,8 +174,8 @@ $(function () {
             
             setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, newText, 'value is empty')
-               equals(e.text(), emptytext, 'emptytext shown')                 
+               equal(e.data('editable').value, newText, 'value is empty')
+               equal(e.text(), emptytext, 'emptytext shown')                 
                e.remove();    
                start();  
             }, timeout);            
@@ -200,7 +200,7 @@ $(function () {
             setTimeout(function() {
                ok(p.is(':visible'), 'popover visible')
                ok(p.find('.error').length, 'class "error" exists')
-               equals(p.find('.help-block').text(), 'Internal server error', 'error shown')               
+               equal(p.find('.help-block').text(), 'Internal server error', 'error shown')               
                
                p.find('button[type=button]').click(); 
                ok(!p.is(':visible'), 'popover was removed')
@@ -226,8 +226,8 @@ $(function () {
             p.find('form').submit(); 
             
             ok(!p.is(':visible'), 'popover was removed')
-            equals(e.data('editable').value, newText, 'new text saved to value')
-            equals(e.text(), newText, 'new text shown')
+            equal(e.data('editable').value, newText, 'new text saved to value')
+            equal(e.text(), newText, 'new text shown')
             ok(e.hasClass('editable-changed'), 'has class editable-changed')
       })   
 })    

@@ -1,5 +1,5 @@
 /**
- * QUnit - A JavaScript Unit Testing Framework
+ * QUnit v1.4.0 - A JavaScript Unit Testing Framework
  *
  * http://docs.jquery.com/QUnit
  *
@@ -52,6 +52,10 @@
 #qunit-header a:hover,
 #qunit-header a:focus {
 	color: #fff;
+}
+
+#qunit-header label {
+	display: inline-block;
 }
 
 #qunit-banner {
@@ -223,10 +227,6 @@
 	position: absolute;
 	top: -10000px;
 	left: -10000px;
-}
-
-/** Runoff */
-
-#qunit-fixture {
-  display:none;
+	width: 1000px;
+	height: 1000px;
 }

@@ -34,15 +34,15 @@ $(function () {
         ok(p.is(':visible'), 'popover visible');
         ok(p.find('textarea').length, 'textarea exists');
         ok(p.find('.editable-popover-textarea').length, 'class editable-popover-textarea exists');
-        equals(p.find('textarea').val(), e.data('editable').value, 'textrea val equals text');         
+        equal(p.find('textarea').val(), e.data('editable').value, 'textrea val equal text');         
         
         p.find('textarea').val(v2);
         p.find('form').submit(); 
         
         setTimeout(function() {
            ok(!p.is(':visible'), 'popover closed')
-           equals(e.data('editable').value, v2, 'new text saved to value')
-           equals(e.text().toLowerCase(), v2.toLowerCase(), 'new text shown') 
+           equal(e.data('editable').value, v2, 'new text saved to value')
+           equal(e.text().toLowerCase(), v2.toLowerCase(), 'new text shown') 
            e.remove();    
            start();  
         }, timeout);                       
@@ -55,19 +55,19 @@ $(function () {
              vnew = "12\n3<b>4\n56\n\n78",
              vnew2 = "12<br>3&lt;b&gt;4<br>56<br><br>78";
 
-        equals(e.data('editable').value, v1, '<br> replaced with new lines');               
+        equal(e.data('editable').value, v1, '<br> replaced with new lines');               
              
         e.click();
         var p = e.data('popover').$tip;
-        equals(p.find('textarea').val(), e.data('editable').value, 'textarea contains correct');
+        equal(p.find('textarea').val(), e.data('editable').value, 'textarea contains correct');
 
         p.find('textarea').val(vnew)
         p.find('form').submit(); 
         
         setTimeout(function() {
            ok(!p.is(':visible'), 'popover closed')
-           equals(e.data('editable').value, vnew, 'new text saved to value')
-           equals(e.html().toLowerCase(), vnew2.toLowerCase(), 'new text shown') 
+           equal(e.data('editable').value, vnew, 'new text saved to value')
+           equal(e.html().toLowerCase(), vnew2.toLowerCase(), 'new text shown') 
            e.remove();    
            start();  
         }, timeout);           

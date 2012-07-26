@@ -122,8 +122,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), groups[selected], 'new text shown') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), groups[selected], 'new text shown') 
                e.remove();    
                start();  
          }, timeout);                              
@@ -149,8 +149,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), e.data('editable').settings.emptytext, 'emptytext shown') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), e.data('editable').settings.emptytext, 'emptytext shown') 
                e.remove();    
                start();  
          }, timeout);     
@@ -176,8 +176,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), groups[selected], 'text shown correctly') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), groups[selected], 'text shown correctly') 
                e.remove();    
                start();  
          }, timeout);   
