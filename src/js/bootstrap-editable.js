@@ -194,6 +194,7 @@
           this.$element.popover('hide');
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
+          this.$element.focus();
      },
      
      enableContent: function(error) {
