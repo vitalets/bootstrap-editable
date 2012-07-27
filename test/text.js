@@ -12,7 +12,22 @@ $(function () {
         ok(!p.find('input[type=text]').val().length, 'input val is empty')
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')    
-      })     
+      })   
+      
+     test("trigger by another element if it set (string)", function () {
+        //trigger setup as text
+        var e = $('<a href="#"></a>').appendTo('#qunit-fixture').editable({
+            trigger: '<i class="icon-pencil"></i>'
+        }),
+        t = e.siblings('.icon-pencil');
+        
+        ok(t.length, 'additional element shown');
+        t.click();
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        t.click();
+        ok(!p.is(':visible'), 'popover was removed') 
+     })    
      
      module("text-submit") 
      

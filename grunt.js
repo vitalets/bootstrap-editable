@@ -89,7 +89,9 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  //grunt.registerTask('default', 'lint qunit concat min');
-  grunt.registerTask('default', 'clean lint concat min copy compress');
+  grunt.registerTask('default', 'lint qunit');
+  
+  // build
+  grunt.registerTask('build', 'clean lint concat min copy compress');
 
 };
