@@ -346,7 +346,7 @@
                   }
               }
 
-              if(typeof this.settings.source == 'string' ) { //ajax loading from server
+              if(typeof this.settings.source == 'string' && this.settings.source[0] !== '{' ) { //ajax loading from server
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
@@ -363,6 +363,9 @@
                       }
                   });
               } else {
+                  if (typeof this.settings.source == 'string') {
+                      this.settings.source = eval('e='+this.settings.source);
+                  }
                   setOptions(this.settings.source);
                   this.endShow();
               }
