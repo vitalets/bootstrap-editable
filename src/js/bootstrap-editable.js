@@ -376,26 +376,34 @@
                   }
               }
 
-              if(typeof this.settings.source == 'string' && this.settings.source[0] !== '{' ) { //ajax loading from server
-                  $.ajax({
-                      url: this.settings.source, 
-                      type: 'get',
-                      data: {name: this.name},
-                      dataType: 'json',
-                      success: function(data) {
-                          that.settings.source = data;
-                          setOptions(data);
-                          that.endShow();
-                      },
-                      error: function() {
-                          that.errorOnRender = 'Error when loading options';
-                          that.endShow();
+              if(typeof this.settings.source === 'string') { 
+                  if(this.settings.source.length > 0 && this.settings.source[0] === '{') { //options in HTML inline json as string
+                      try {
+                         this.settings.source = $.parseJSON(this.settings.source);
+                         setOptions(this.settings.source);
+                      } catch(e) { 
+                         this.errorOnRender = e.name+': '+e.message;
+                      } finally {
+                         this.endShow();                         
                       }
-                  });
-              } else {
-                  if (typeof this.settings.source == 'string') {
-                      this.settings.source = eval('e='+this.settings.source);
+                  } else { //options loading from server
+                      $.ajax({
+                          url: this.settings.source, 
+                          type: 'get',
+                          data: {name: this.name},
+                          dataType: 'json',
+                          success: function(data) {
+                              that.settings.source = data;
+                              setOptions(data);
+                              that.endShow();
+                          },
+                          error: function() {
+                              that.errorOnRender = 'Error when loading options';
+                              that.endShow();
+                          }
+                      });
                   }
+              } else { //options as json
                   setOptions(this.settings.source);
                   this.endShow();
               }
