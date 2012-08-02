@@ -62,7 +62,7 @@ $(function(){
         }   
     });    
     
-    $('#status').editable({
+    $('#status, #action').editable({
  
     });   
     
@@ -78,7 +78,7 @@ $(function(){
         url: 'error.php'  
     });     
     
-    $('#comments').editable(); 
+    $('#comments, #note').editable(); 
     
     /* creating new record example */
   

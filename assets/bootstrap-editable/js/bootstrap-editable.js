@@ -24,7 +24,7 @@
           
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
-
+      
       //store name
       this.name = this.$element.attr('name') || this.$element.attr('id') || this.settings.name; 
       if(!this.name) {
@@ -39,6 +39,20 @@
       if(typeof this.settings.init === 'function') {
           this.settings.init.call(this, options);
       }
+      
+      //set trigger element
+      if(this.settings.trigger) {
+          this.$trigger = $(this.settings.trigger);
+          //insert in DOM if needed
+          if(!this.$trigger.parent().length) {
+              this.$element.after(this.$trigger);
+          }
+  
+          //prevent tabstop on container element
+          this.$element.attr('tabindex', -1);
+      } else {
+          this.$trigger = this.$element;
+      }      
                                   
       //error occured while rendering content
       this.errorOnRender = false;
@@ -47,7 +61,7 @@
       this.$element.addClass('editable');
     
       //bind click event
-      this.$element.on('click', $.proxy(this.click, this));
+      this.$trigger.on('click', $.proxy(this.click, this));
       
       //set value of element
       if (this.settings.value === undefined || this.settings.value === null) {
@@ -75,13 +89,17 @@
                   content: this.settings.loading,
                   template: '<div class="popover"><div class="arrow"></div><div class="popover-inner '+this.settings.popoverClass+'"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
               }); 
-          }
+          } 
 
-          this.startShow.call(this);
+          if(this.$element.data('popover').tip().is(':visible')) {
+             this.hide(); 
+          } else {
+             this.startShow();
+          }
      },
      
      startShow: function () {
-          //hide other popovers if shown
+          //hide all other popovers if shown
           $('.popover').find('form').find('button[type=button]').click();
          
           this.$element.popover('show');
@@ -103,12 +121,12 @@
          
          if(this.errorOnRender) {
              this.$input.attr('disabled', true);
-             $tip.find('button[type=submit]').attr('disabled', true);
+             $tip.find('button.btn-primary').attr('disabled', true);
              $tip.find('form').submit(function() {return false;}); 
              this.enableContent(this.errorOnRender);
          } else {
              this.$input.removeAttr('disabled');
-             $tip.find('button[type=submit]').removeAttr('disabled');             
+             $tip.find('button.btn-primary').removeAttr('disabled');             
              //bind form submit
              $tip.find('form').submit($.proxy(this.submit, this));  
              //show content (and hide loading)
@@ -118,7 +136,7 @@
          }
          
          //bind popover hide on button
-         $tip.find('button[type=button]').click($.proxy(this.hide, this));          
+         $tip.find('button.editable-cancel').click($.proxy(this.hide, this));          
          //bind popover hide on escape
          $(document).on('keyup.editable', function ( e ) {
             if(e.which === 27) {
@@ -200,7 +218,7 @@
           this.$element.popover('hide');
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
-          this.$element.focus();
+          this.$trigger.focus();
      },
      
      enableContent: function(error) {
@@ -364,7 +382,7 @@
                   }
               }
 
-              if(typeof this.settings.source === 'string' ) { //ajax loading from server
+              if(typeof this.settings.source === 'string') { //options loading from server
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
@@ -380,7 +398,7 @@
                           that.endShow();
                       }
                   });
-              } else {
+              } else { //options as json
                   setOptions(this.settings.source);
                   this.endShow();
               }

@@ -114,6 +114,11 @@
                                         <td><span class="muted">Select, loaded from json</span></td>
                                     </tr>
                                     <tr>         
+                                        <td>Action</td>
+                                        <td><a href="#" id="action" data-type="select" data-name="action" data-pk="1" data-value="1" data-source='{"0": "None", "1":"Insert", "2": "Update", "3": "Delete"}' data-original-title="Select action">Insert</a></td>
+                                        <td><span class="muted">Select, loaded from inline HTML</span></td>
+                                    </tr>                                     
+                                    <tr>         
                                         <td>Group</td>
                                         <td><a href="#" id="group" data-type="select" data-name="group" data-pk="1" data-value="5" data-source="groups.php" data-original-title="Select group">Admin</a></td>
                                         <td><span class="muted">Select, loaded from server</span></td>
@@ -122,7 +127,7 @@
                                         <td>Status</td>
                                         <td><a href="#" id="status" data-type="select" data-name="status" data-pk="1" data-value="0" data-source="status.php" data-original-title="Select status">Active</a></td>
                                         <td><span class="muted">Select, loaded from server (error)</span></td>
-                                    </tr>                                       
+                                    </tr>       
                                     <tr>         
                                         <td>Date of birth</td>
                                         <td><a href="#" id="dob" data-type="date" data-format1="dd.mm.yy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
@@ -137,6 +142,11 @@
                                         <td>Comments</td>
                                         <td><a href="#" id="comments" data-type="textarea" data-pk="1" data-name="comments" data-original-title="Enter comments">awesome<br>user!</a></td>
                                         <td><span class="muted">Textarea</span></td>
+                                    </tr>                                     
+                                    <tr>         
+                                        <td>Note</td>
+                                        <td><a href="#" id="note" data-pk="1" data-name="note" data-trigger="#pencil" data-original-title="Enter note"></a><a href="#" id="pencil" style="float: right"><i class="icon-pencil"></i></a></td>
+                                        <td><span class="muted">Text, triggered by another element</span></td>
                                     </tr>                                                                                            
                                                                                                         
                                 </tbody>
@@ -146,21 +156,21 @@
 
                         <hr>
                         <h2>Getting started</h2>
-                        <p>Include required files on you page</p>
+                        <p>Include required files on you page (assuming everuthing in <i>libs</i> folder)</p>
                         <p>jQuery & Bootstrap</p>
                         <pre class="prettyprint linenums">
-&lt;link href=&quot;vendor/bootstrap/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;vendor/jquery/jquery-1.7.1.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;vendor/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</pre> 
+&lt;link href=&quot;libs/bootstrap/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;libs/jquery/jquery-1.7.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;libs/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</pre> 
                         <p>jQuery UI + Bootstrap theme (for datepicker only)</p>
                         <pre class="prettyprint linenums">
-&lt;link href=&quot;vendor/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;link href=&quot;vendor/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;vendor/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js&quot;&gt;&lt;/script&gt;</pre>                         
+&lt;link href=&quot;libs/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link href=&quot;libs/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;libs/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js&quot;&gt;&lt;/script&gt;</pre>                         
                         <p>Bootstrap-editable</p>
                         <pre class="prettyprint linenums">
-&lt;link href=&quot;css/bootstrap-editable.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;js/bootstrap-editable.js&quot;&gt;&lt;/script&gt;
+&lt;link href=&quot;libs/bootstrap-editable/css/bootstrap-editable.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;libs/bootstrap-editable/js/bootstrap-editable.js&quot;&gt;&lt;/script&gt;
 </pre>                        
                         
                         <h2>Usage and markup</h2>
@@ -247,13 +257,18 @@
                                     <td>null</td>
                                     <td>url to submit data. Request contains next fields: pk, name, value and params</td>
                                 </tr>
-                                
                                 <tr>
                                     <td>emptytext</td>
                                     <td>string</td>
                                     <td>'Empty'</td>
                                     <td>text shown on empty elements</td>
                                 </tr>
+                                <tr>
+                                    <td>trigger</td>
+                                    <td>string | jQuery</td>
+                                    <td>null</td>
+                                    <td>element that triggers popover by click. Can be CSS selector or HTML. if null - text itself used as trigger. E.g. <code>data-trigger="#pencil"</code></td>
+                                </tr>                                
                                 <tr>
                                     <td>send</td>
                                     <td>string</td>
@@ -329,7 +344,7 @@ validate: {
                                     <td>string | object</td>
                                     <td>null</td>
                                     <td>source for data in select element. If string - considered url for ajax call to load items, otherwise should be json. 
-                                    If JSON used in <code>data-source</code> attribute, please use <i>double quotes</i> according to <a herf="http://api.jquery.com/data/#data-html5" target="_blank">valid JSON syntax</a>, e.g.<br>
+                                    If JSON used in <code>data-source</code> attribute, please use <i>double quotes</i> according to <a href="http://api.jquery.com/data/#data-html5" target="_blank">valid JSON syntax</a>, e.g.<br>
                                     <code>data-source='{"M": "male", "F": "female"}'</code>
                                     </td>
                                     
@@ -396,7 +411,7 @@ fullname: "John"
 $('.myeditable').editable({
     url: 'post.php',
     send: 'ifpk',
-    pk: function() {return $('#user_id').text();},
+    pk: function() {return $('#user_id').text();}, //link to hidden element that stores ID 
     validate: {
         username: function(v) {if(v == '') return 'Username is required!'}
     } 
@@ -445,12 +460,12 @@ $('.myeditable').editable({
                      
                         <pre class="prettyprint linenums">
 $('#save-btn').click(function() {
-       var errors = $('.myeditable').editable('validate');
+       var errors = $('.myeditable').editable('validate'); //run validation for all values
        if($.isEmptyObject(errors)) {
-           var data = $('.myeditable').editable('getValue');
+           var data = $('.myeditable').editable('getValue'); //get values
            $.post('new.php', data, function(response) {
               $('#user_id').text(response.id); 
-              $('.myeditable').editable('markAsSaved');
+              $('.myeditable').editable('markAsSaved'); //mark fields as saved
               ...
           }); 
        } else {
