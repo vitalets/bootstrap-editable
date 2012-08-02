@@ -1,0 +1,18 @@
+#clear
+rm -rf assets/bootstrap-editable/*
+#copy lib
+cp -R ../lib/dist/bootstrap-editable/* assets/bootstrap-editable
+#copy zip
+cp -R ../lib/dist/*.zip assets/bootstrap-editable
+
+#extract version
+filename=$(ls assets/bootstrap-editable/boot*.zip)
+version=$(expr "$filename" : '.*\(v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*') 
+
+#href
+sed -i "s/bootstrap\-editable\-v[0-9]\+\.[0-9]\+\.[0-9]\+/bootstrap-editable-$version/g" index.html
+
+#button text
+sed -i "s/stable (v[0-9]\+\.[0-9]\+\.[0-9]\+)/stable ($version)/g" index.html
+
+echo "gh-pages updated ($version)"

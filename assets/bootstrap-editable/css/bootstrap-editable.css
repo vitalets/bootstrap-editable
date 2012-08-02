@@ -1,9 +1,10 @@
-/* =========================================================
- * bootstrap-editable.css version 1.0.2
- * https://github.com/vitalets/bootstrap-editable
- * ========================================================= */
+/*! Bootstrap Editable - v1.0.4 
+* In-place editing with Bootstrap Form and Popover
+* https://github.com/vitalets/bootstrap-editable
 
- a.editable, a.editable:hover {
+* Copyright (c) 2012 Vitaliy Potapov; Licensed MIT, GPL */
+
+a.editable, a.editable:hover {
   text-decoration: none;
   border-bottom: dashed 1px #0088cc;
 }

@@ -62,7 +62,7 @@ $(function(){
         }   
     });    
     
-    $('#status').editable({
+    $('#status, #action').editable({
  
     });   
     
@@ -78,7 +78,7 @@ $(function(){
         url: 'error.php'  
     });     
     
-    $('#comments').editable(); 
+    $('#comments, #note').editable(); 
     
     /* creating new record example */
   
@@ -92,7 +92,7 @@ $(function(){
     
    $('.myeditable').editable({
       url: 'post.php',
-      pk: function() {return $('#user_id').text();},
+      pk: '#user_id',
       validate: {
          username: function(v) {if(v == '') return 'Username is required!'}
       } 
