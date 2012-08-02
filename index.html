@@ -333,7 +333,11 @@ validate: {
                                     <td>source</td>
                                     <td>string | object</td>
                                     <td>null</td>
-                                    <td>source for data in select element. If string - considered url for ajax call, otherwise should be json</td>
+                                    <td>source for data in select element. If string - considered url for ajax call to load items, otherwise should be json. 
+                                    If JSON used in <code>data-source</code> attribute, please use <i>double quotes</i> according to <a herf="http://api.jquery.com/data/#data-html5" target="_blank">valid JSON syntax</a>, e.g.<br>
+                                    <code>data-source='{"M": "male", "F": "female"}'</code>
+                                    </td>
+                                    
                                 </tr>     
                             </tbody>
                            </table>                         
@@ -367,8 +371,8 @@ validate: {
                         <h3>Methods</h3>
                         <h4>$().editable(options)</h4>
                         <p>Initializes an editable.</p>
-                        
-                        <p><span class="muted">Next methods are mainly for <strong>creating new records</strong> (details in next section)</span></p>
+                         <br>
+                        <p><span class="muted">Below methods are mainly for <strong>creating new records</strong> (details in next section)</span></p>
                         <h4>$().editable('validate')</h4>
                         <p>Calls validate method for one or several editable elements. Returns object with names and validation messages, e.g.:</p>
                         <pre class="prettyprint linenums">{
