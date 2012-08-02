@@ -1,31 +1,22 @@
-/* =========================================================
- * bootstrap-editable.js version 1.0.2
- * https://github.com/vitalets/bootstrap-editable
- * =========================================================
- * Copyright 2012 Vitaliy Potapov
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================= */
- 
-!function( $ ) {
+/*! Bootstrap Editable - v1.0.3 
+* In-place editing with Bootstrap Form and Popover
+* https://github.com/vitalets/bootstrap-editable
+
+* Copyright (c) 2012 Vitaliy Potapov; Licensed MIT, GPL */
+
+(function( $ ) {
    
   //Editable object 
   var Editable = function ( element, options ) {
       this.$element = $(element);
 
       //if exists 'placement' or 'title' options, copy them to data attributes to aplly for popover 
-      if(options && options.placement && !this.$element.data('placement')) this.$element.attr('data-placement', options.placement);
-      if(options && options.title && !this.$element.data('original-title')) this.$element.attr('data-original-title', options.title);
+      if(options && options.placement && !this.$element.data('placement')) {
+          this.$element.attr('data-placement', options.placement);
+      }
+      if(options && options.title && !this.$element.data('original-title')) {
+          this.$element.attr('data-original-title', options.title);
+      }
       
      //detect type
       var type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type),
@@ -35,15 +26,19 @@
       this.settings = $.extend({}, $.fn.editable.defaults, typeDefaults, options, this.$element.data());
 
       //store name
-      this.name = this.settings.name || this.$element.attr('id'); 
-      if(!this.name) $.error('You should define name (or id) for Editable element');     
+      this.name = this.$element.attr('name') || this.$element.attr('id') || this.settings.name; 
+      if(!this.name) {
+        $.error('You should define name (or id) for Editable element');     
+      }
       
       //if validate is map take only needed function
-      if(typeof this.settings.validate == 'object' && this.name in this.settings.validate) {
+      if(typeof this.settings.validate === 'object' && this.name in this.settings.validate) {
           this.settings.validate = this.settings.validate[this.name];
       }
       //apply specific init() if defined
-      if(typeof this.settings.init == 'function') this.settings.init.call(this, options);
+      if(typeof this.settings.init === 'function') {
+          this.settings.init.call(this, options);
+      }
                                   
       //error occured while rendering content
       this.errorOnRender = false;
@@ -55,8 +50,8 @@
       this.$element.on('click', $.proxy(this.click, this));
       
       //set value of element
-      if (this.settings.value == undefined) {
-         this.value = (this.settings.type == 'textarea') ? this.$element.html().replace(/<br\s*\/?>/gi, "\n") : this.$element.text(); 
+      if (this.settings.value === undefined || this.settings.value === null) {
+         this.value = (this.settings.type === 'textarea') ? this.$element.html().replace(/<br\s*\/?>/gi, "\n") : this.$element.text(); 
       } else {
          this.value = this.settings.value; 
       }
@@ -64,7 +59,7 @@
       
       //show emptytext if needed
       this.handleEmpty();
-  }
+  };
   
   Editable.prototype = {
      constructor: Editable,
@@ -126,7 +121,9 @@
          $tip.find('button[type=button]').click($.proxy(this.hide, this));          
          //bind popover hide on escape
          $(document).on('keyup.editable', function ( e ) {
-            e.which == 27 && that.hide();
+            if(e.which === 27) {
+                that.hide();
+            }
          });
      },
               
@@ -137,17 +134,17 @@
           //validation
           var error, 
               value = this.$input.val();
-          if(typeof this.settings.validate == 'function' && (error = this.settings.validate.call(this, value))) {
+          if(typeof this.settings.validate === 'function' && (error = this.settings.validate.call(this, value))) {
               this.enableContent(error);
-              if(this.settings.type == 'text' || this.settings.type == 'textarea') {
+              if(this.settings.type === 'text' || this.settings.type === 'textarea') {
                   this.$input.focus();
               }
               return;
           }
          
           //getting primary key
-          var pk = (typeof this.settings.pk == 'function') ? this.settings.pk.call(this) : this.settings.pk;
-          var send = (this.settings.url != undefined) && ((this.settings.send == 'always') || (this.settings.send == 'ifpk' && pk));
+          var pk = (typeof this.settings.pk === 'function') ? this.settings.pk.call(this) : this.settings.pk;
+          var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'ifpk' && pk));
           
           if(send) { //send to server
               var params = $.extend({}, this.settings.params, {value: value}),
@@ -157,9 +154,13 @@
               this.enableLoading();
                             
               //adding name and pk    
-              if(pk) params.pk = pk;   
-              if(this.settings.name) params.name = this.settings.name;   
-              var url = (typeof this.settings.url == 'function') ? this.settings.url.call(this) : this.settings.url;
+              if(pk) {
+                  params.pk = pk;   
+              }
+              if(this.settings.name) {
+                  params.name = this.settings.name;   
+              }
+              var url = (typeof this.settings.url === 'function') ? this.settings.url.call(this) : this.settings.url;
               $.ajax({
                   url: url, 
                   data: params, 
@@ -167,7 +168,7 @@
                   dataType: 'json',
                   success: function(data) {
                       //check response
-                      if(typeof that.settings.success == 'function' && (error = that.settings.success.apply(that, arguments))) {
+                      if(typeof that.settings.success === 'function' && (error = that.settings.success.apply(that, arguments))) {
                           //show form with error message
                           that.enableContent(error);
                       } else {
@@ -180,7 +181,7 @@
                       }
                   },
                   error: function() {
-                      var msg = (typeof that.settings.error == 'function') ? that.settings.error.apply(that, arguments) : null;
+                      var msg = (typeof that.settings.error === 'function') ? that.settings.error.apply(that, arguments) : null;
                       that.enableContent(msg || 'Server error'); 
                   }     
               });
@@ -199,10 +200,11 @@
           this.$element.popover('hide');
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
+          this.$element.focus();
      },
      
      enableContent: function(error) {
-         if(error != undefined && error.length > 0) {
+         if(error !== undefined && error.length > 0) {
              this.$content.find('div.control-group').addClass('error').find('span.help-block').html(error);
          } else {
              this.$content.find('div.control-group').removeClass('error').find('span.help-block').html('');
@@ -218,22 +220,32 @@
      },     
      
      handleEmpty: function() {
-        (this.$element.text() == '') ? this.$element.addClass('editable-empty').text(this.settings.emptytext) : this.$element.removeClass('editable-empty');
+         if(this.$element.text() === '') {
+             this.$element.addClass('editable-empty').text(this.settings.emptytext);
+         } else {
+             this.$element.removeClass('editable-empty');
+         }
      },
                                                         
      validate: function() {
-        if(typeof this.settings.validate == 'function') return this.settings.validate.call(this, this.value); 
+        if(typeof this.settings.validate === 'function') {
+            return this.settings.validate.call(this, this.value); 
+        }
      },
      
      markAsUnsaved: function() {
-         (this.value != this.lastSavedValue) ? this.$element.addClass('editable-changed') : this.$element.removeClass('editable-changed');  
+        if(this.value !== this.lastSavedValue) {
+            this.$element.addClass('editable-changed');
+        } else {
+            this.$element.removeClass('editable-changed');  
+        }
      },     
      
      markAsSaved: function() {
          this.lastSavedValue = this.value;
          this.$element.removeClass('editable-changed');  
      }
-  }
+  };
      
   
  /* EDITABLE PLUGIN DEFINITION
@@ -246,27 +258,35 @@
          case 'validate':
            this.each(function () {
               var $this = $(this), data = $this.data('editable'), error;
-              if(data && (error = data.validate())) result[data.name] = error;
+              if(data && (error = data.validate())) {
+                  result[data.name] = error;
+              }
            });
            return result;    
 
          case 'getValue':
            this.each(function () {
               var $this = $(this), data = $this.data('editable');
-              if(data) result[data.name] = data.value;
+              if(data) {
+                  result[data.name] = data.value;
+              }
            });
            return result;    
       }
 
       //return jquery object
       return this.each(function () {
-          var $this = $(this)
-          , data = $this.data('editable')
-          , options = typeof option == 'object' && option;
-          if (!data) $this.data('editable', (data = new Editable(this, options)));
-          if (typeof option == 'string') data[option]();
+          var $this = $(this),
+              data = $this.data('editable'),
+              options = typeof option === 'object' && option;
+          if (!data) {
+              $this.data('editable', (data = new Editable(this, options)));
+          }
+          if (typeof option === 'string') {
+              data[option]();
+          }
       });      
-  }
+  };
   
   $.fn.editable.Constructor = Editable;
 
@@ -291,7 +311,7 @@
     popoverClass: 'editable-popover-text', //to define size of popover for correct positioning
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
-                           '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn"><i class="icon-ban-circle"></i></button>'+
+                           '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn editable-cancel"><i class="icon-ban-circle"></i></button>'+
                            '<span class="help-block" style="clear: both"></span>'+
                        '</div>'+
                   '</form>',
@@ -316,8 +336,6 @@
     }
   };
   
-
-  
   //input types
   $.fn.editable.types = {
       //text
@@ -339,14 +357,14 @@
               this.$input = $(this.settings.template);
 
               function setOptions(source) {
-                  if(typeof source == 'object' && source != null) {
+                  if(typeof source === 'object' && source != null) {
                       $.each(source, function(key, value) {   
                           that.$input.append($('<option>', { value : key }).text(value)); 
                       });    
                   }
               }
 
-              if(typeof this.settings.source == 'string' ) { //ajax loading from server
+              if(typeof this.settings.source === 'string' ) { //ajax loading from server
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
@@ -390,7 +408,9 @@
           },
           setText: function() {
               var lines = this.value.split("\n");
-              for(var i = 0; i< lines.length; i++) lines[i] = $('<div>').text(lines[i]).html();
+              for(var i = 0; i< lines.length; i++) {
+                  lines[i] = $('<div>').text(lines[i]).html();
+              }
               var text = lines.join('<br>');
               this.$element.html(text); 
           }
@@ -410,15 +430,17 @@
           },
           init: function(options) {
               //dateFormat can be set from data-format attribute
-              var dateFormat = this.settings.format,
-                  options = options ? options : {};
+              var dateFormat = this.settings.format;
+              options = options ? options : {};
 
               if(dateFormat) {
                   options.datepicker = $.extend({}, options.datepicker, {dateFormat: dateFormat});
               }
 
               //overriding datepicker config
-              if(options.datepicker) this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
+              if(options.datepicker) {
+                  this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
+              }
           },
           render: function() {
               this.$input = $(this.settings.template);      
@@ -448,8 +470,7 @@ function setCursorPosition(pos) {
     }
   });
   return this;
-};
+}
     
   
-}( window.jQuery );  
-    
+}( window.jQuery ));  
