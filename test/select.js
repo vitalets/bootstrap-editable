@@ -78,6 +78,22 @@ $(function () {
         equal(p.find('select').val(), e.data('editable').value, 'selected value correct') 
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');  
+    })     
+    
+     test("load options from html", function () {
+         var e = $('<a href="#" data-type="select" data-value="M" data-source=\'{"L":"Low", "": "None", "M": "Medium", "H": "High"}\'>customer</a>').appendTo('#qunit-fixture').editable({
+             pk: 1
+          }),
+         size = 4;
+
+        e.click()
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        ok(p.find('select').length, 'select exists');
+        equal(p.find('select').find('option').length, size, 'options loaded');
+        equal(p.find('select').val(), e.data('editable').value, 'selected value correct') ;
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');  
     })       
                     
      asyncTest("should show error if options cant be loaded", function () {
@@ -122,8 +138,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), groups[selected], 'new text shown') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), groups[selected], 'new text shown') 
                e.remove();    
                start();  
          }, timeout);                              
@@ -149,8 +165,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), e.data('editable').settings.emptytext, 'emptytext shown') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), e.data('editable').settings.emptytext, 'emptytext shown') 
                e.remove();    
                start();  
          }, timeout);     
@@ -176,8 +192,8 @@ $(function () {
          
          setTimeout(function() {
                ok(!p.is(':visible'), 'popover closed')
-               equals(e.data('editable').value, selected, 'new value saved')
-               equals(e.text(), groups[selected], 'text shown correctly') 
+               equal(e.data('editable').value, selected, 'new value saved')
+               equal(e.text(), groups[selected], 'text shown correctly') 
                e.remove();    
                start();  
          }, timeout);   

@@ -22,6 +22,10 @@ $(function () {
             this.responseText = settings;  
         }
     });    
-    
+
+
+  $.support.transition = false; 
+  //define name to not put it everywhere
+  $.fn.editable.defaults.name = 'name1';   
     
 });

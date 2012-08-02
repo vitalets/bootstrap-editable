@@ -1,0 +1,36 @@
+{
+  "name": "bootstrap-editable",
+  "title": "Bootstrap Editable",
+  "description": "In-place editing with Bootstrap Form and Popover",
+  "version": "1.0.4",
+  "homepage": "https://github.com/vitalets/bootstrap-editable",
+  "author": {
+    "name": "Vitaliy Potapov",
+    "email": "noginsk@rambler.ru"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vitalets/bootstrap-editable.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitalets/bootstrap-editable/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/vitalets/bootstrap-editable/blob/master/LICENSE-MIT"
+    },
+    {
+      "type": "GPL",
+      "url": "https://github.com/vitalets/bootstrap-editable/blob/master/LICENSE-GPL"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">= 1.6"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.11",
+    "grunt-contrib": "0.1.1"
+  },  
+  "keywords": []
+}
