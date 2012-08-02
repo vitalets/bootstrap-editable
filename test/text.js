@@ -14,8 +14,7 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed')    
       })   
       
-     test("trigger by another element if it set (string)", function () {
-        //trigger setup as text
+     test("trigger by another element (string)", function () {
         var e = $('<a href="#"></a>').appendTo('#qunit-fixture').editable({
             trigger: '<i class="icon-pencil"></i>'
         }),
@@ -28,6 +27,18 @@ $(function () {
         t.click();
         ok(!p.is(':visible'), 'popover was removed') 
      })    
+     
+     test("trigger by another element (id)", function () {
+        var t = $('<span id="pencil" class="icon-pencil">qwe</span>').appendTo('#qunit-fixture'),
+            e = $('<a href="#" data-trigger="#pencil"></a>').appendTo('#qunit-fixture').wrap('<div>').editable({});
+        
+        ok(!e.siblings('.icon-pencil').length, 'element not added as already exists');
+        t.click();
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        t.click();
+        ok(!p.is(':visible'), 'popover was removed') 
+     })        
      
      module("text-submit") 
      

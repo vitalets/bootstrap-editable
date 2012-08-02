@@ -37,8 +37,8 @@
       //set trigger element
       if(this.settings.trigger) {
           this.$trigger = $(this.settings.trigger);
-          //for string --> insert in DOM
-          if(typeof this.settings.trigger === 'string') {
+          //insert in DOM if needed
+          if(!this.$trigger.parent().length) {
               this.$element.after(this.$trigger);
           }
   
