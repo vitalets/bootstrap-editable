@@ -92,7 +92,7 @@ $(function(){
     
    $('.myeditable').editable({
       url: 'post.php',
-      pk: function() {return $('#user_id').text();},
+      pk: '#user_id',
       validate: {
          username: function(v) {if(v == '') return 'Username is required!'}
       } 

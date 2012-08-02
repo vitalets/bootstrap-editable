@@ -1,4 +1,4 @@
-/*! Bootstrap Editable - v1.0.3 
+/*! Bootstrap Editable - v1.0.4 
 * In-place editing with Bootstrap Form and Popover
 * https://github.com/vitalets/bootstrap-editable
 
@@ -40,18 +40,18 @@
           this.settings.init.call(this, options);
       }
       
-      //set trigger element
-      if(this.settings.trigger) {
-          this.$trigger = $(this.settings.trigger);
+      //set toggle element
+      if(this.settings.toggle) {
+          this.$toggle = $(this.settings.toggle);
           //insert in DOM if needed
-          if(!this.$trigger.parent().length) {
-              this.$element.after(this.$trigger);
+          if(!this.$toggle.parent().length) {
+              this.$element.after(this.$toggle);
           }
   
           //prevent tabstop on container element
           this.$element.attr('tabindex', -1);
       } else {
-          this.$trigger = this.$element;
+          this.$toggle = this.$element;
       }      
                                   
       //error occured while rendering content
@@ -61,7 +61,7 @@
       this.$element.addClass('editable');
     
       //bind click event
-      this.$trigger.on('click', $.proxy(this.click, this));
+      this.$toggle.on('click', $.proxy(this.click, this));
       
       //set value of element
       if (this.settings.value === undefined || this.settings.value === null) {
@@ -100,7 +100,7 @@
      
      startShow: function () {
           //hide all other popovers if shown
-          $('.popover').find('form').find('button[type=button]').click();
+          $('.popover').find('form').find('button.editable-cancel]').click();
          
           this.$element.popover('show');
           this.$element.addClass('editable-open');  
@@ -151,7 +151,9 @@
           
           //validation
           var error, 
-              value = this.$input.val();
+              value = this.$input.val(),
+              pk;
+              
           if(typeof this.settings.validate === 'function' && (error = this.settings.validate.call(this, value))) {
               this.enableContent(error);
               if(this.settings.type === 'text' || this.settings.type === 'textarea') {
@@ -161,7 +163,13 @@
           }
          
           //getting primary key
-          var pk = (typeof this.settings.pk === 'function') ? this.settings.pk.call(this) : this.settings.pk;
+          if(typeof this.settings.pk === 'function') {
+              pk = this.settings.pk.call(this);
+          } else if(typeof this.settings.pk === 'string' && $(this.settings.pk).length === 1 && $(this.settings.pk).parent().length) { //pk is ID of existing element
+              pk = $(this.settings.pk).text();
+          } else {
+              pk = this.settings.pk;
+          }
           var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'ifpk' && pk));
           
           if(send) { //send to server
@@ -218,7 +226,7 @@
           this.$element.popover('hide');
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
-          this.$trigger.focus();
+          this.$toggle.focus();
      },
      
      enableContent: function(error) {
