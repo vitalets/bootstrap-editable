@@ -1,0 +1,63 @@
+$(function () {         
+  
+   $.support.transition = false;
+   var fx = $('#async-fixture');
+    
+   module("api");
+      
+     test("validate, getValue, mark as saved", function () {
+        var e = $(
+          '<a href="#" data-type="text" id="username">user</a>' + 
+          '<a href="#" data-type="textarea" id="comment">12345</a>' + 
+          '<a href="#" data-type="select" id="sex" data-value="1" data-source=\'{"1":"q", "2":"w"}\'>q</a>' + 
+          '<a href="#" data-type="date" id="dob">12345</a>'
+         ).appendTo('#qunit-fixture');
+        
+        e = $('#qunit-fixture').find('a').editable({
+           validate: {
+                 username: function(value) {
+                     if($.trim(value) !== 'user1') return 'username is required';
+                 },
+                 sex: function(value) {
+                     if($.trim(value) != 2) return 'error';
+                 }
+             }
+        });
+        
+        //check get value
+        var values = e.editable('getValue');
+        equal(values.username, 'user', 'username ok') ;
+        equal(values.comment, '12345', 'comment ok') ;
+        equal(values.sex, 1, 'sex ok') ;
+        equal(values.dob, '12345', 'dob ok') ;
+        
+        //validate
+        var errors = e.editable('validate'); 
+        ok(errors.username && errors.sex && !errors.comment, 'validation failed ok');
+        
+        //enter correct values
+        var e2 = $('#username');
+        e2.click();
+        var p = e2.data('popover').$tip;
+        p.find('input').val('user1');
+        p.find('button.btn-primary').click(); 
+        ok(!p.is(':visible'), 'username changed');         
+        
+        e2 = $('#sex');
+        e2.click();
+        p = e2.data('popover').$tip;
+        p.find('select').val(2);
+        p.find('button.btn-primary').click(); 
+        ok(!p.is(':visible'), 'sex changed');         
+        
+        //validate again
+        var errors = e.editable('validate'); 
+        ok($.isEmptyObject(errors), 'validation ok');  
+        
+        equal(e.filter('.editable-changed').length, 2, 'editable-changed exist');
+        e.editable('markAsSaved');      
+        ok(!e.filter('.editable-changed').length, 'editable-changed not exist');
+    });
+     
+         
+});            
