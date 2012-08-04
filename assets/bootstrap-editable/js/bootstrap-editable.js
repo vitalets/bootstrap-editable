@@ -100,7 +100,7 @@
      
      startShow: function () {
           //hide all other popovers if shown
-          $('.popover').find('form').find('button.editable-cancel]').click();
+          $('.popover').find('form').find('button.editable-cancel').click();
          
           this.$element.popover('show');
           this.$element.addClass('editable-open');  
