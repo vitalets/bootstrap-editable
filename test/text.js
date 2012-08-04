@@ -73,7 +73,7 @@ $(function () {
         }, timeout);                     
       })     
       
-    asyncTest("should load correct value and save new entered text (pk defined as #id)", function () {
+     asyncTest("should load correct value and save new entered text (pk defined as #id)", function () {
         var e = $('<a href="#" data-pk="#pk" data-url="post.php">abc</a>').appendTo(fx).editable({}),  
           t = $('<span id="pk">123</span>'),
           newText = 'cd<e>;"'
@@ -95,8 +95,6 @@ $(function () {
            start();  
         }, timeout);                     
       })       
-      
-      
       
      asyncTest("should show error on validation", function () {
         var e = $('<a href="#">abc</a>').appendTo(fx).editable({
@@ -234,7 +232,6 @@ $(function () {
                start();  
             }, timeout);            
       })  
-           
        
      asyncTest("should show error when server-side error", function () {
             var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
@@ -263,7 +260,6 @@ $(function () {
                start();  
             }, timeout);    
       })                            
-              
 
      module("text-nosend") 
 

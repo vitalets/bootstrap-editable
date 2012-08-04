@@ -1,5 +1,8 @@
 (function($) {
     
+   $.support.transition = false;
+   var fx = $('#async-fixture');    
+    
     module("common");
     
       test("should be defined on jquery object", function () {
@@ -51,5 +54,23 @@
 
         editable.data('popover').$tip.find('button[type=button]').click();
         ok(!editable.data('popover').$tip.is(':visible'), 'popover closed');
-      });       
+      });   
+      
+      test("should close all other popovers on click", function () {
+        var e1 = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo('#qunit-fixture').editable(),  
+            e2 = $('<a href="#" data-pk="1" data-url="post.php">abcd</a>').appendTo('#qunit-fixture').editable();  
+
+        e1.click()
+        var p1 = e1.data('popover').$tip;
+        ok(p1.is(':visible'), 'popover1 visible');
+        
+        e2.click()
+        var p2 = e2.data('popover').$tip;
+        ok(p2.is(':visible'), 'popover2 visible');
+        ok(!p1.is(':visible'), 'popover1 closed');
+        
+        p2.find('button[type=button]').click();
+        ok(!p2.is(':visible'), 'popover2 closed');
+      })       
+          
 }(jQuery));  
