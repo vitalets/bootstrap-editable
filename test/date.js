@@ -43,9 +43,6 @@ $(function () {
         ok(!p.is(':visible'), 'popover closed');      
       })
       
-      
-  module("date-submit")
-  
      asyncTest("should save new entered date (and value)", function () {
         var e = $('<a href="#">15.05.1984</a>').appendTo(fx).editable({
              type: 'date',

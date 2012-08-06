@@ -28,7 +28,7 @@ $(function () {
         responseText: 'Internal Server Error'
     });   
    
-    module("select-load")  
+    module("select")  
 
     test("popover should contain SELECT even if value & source not defined", function () {
         $.support.transition = false
@@ -115,9 +115,6 @@ $(function () {
         }, timeout);                     
     })           
    
- 
-    module("select-submit")
-      
     asyncTest("popover should save new selected value", function () {
          var e = $('<a href="#" data-type="select" data-value="2" data-url="post.php">customer</a>').appendTo(fx).editable({
              pk: 1,

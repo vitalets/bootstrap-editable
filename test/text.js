@@ -3,7 +3,7 @@ $(function () {
    $.support.transition = false;
    var fx = $('#async-fixture');
     
-    module("text-nosubmit")
+    module("text")
       
      test("input should contain '' if element is empty", function () {
         var e = $('<a href="#"></a>').appendTo('#qunit-fixture').editable();
@@ -43,10 +43,10 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed') 
      })        
      
-     module("text-submit") 
-     
      asyncTest("should load correct value and save new entered text (and value)", function () {
-        var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable({
+        var  v = 'ab<b>"',
+             esc_v = $('<div>').text(v).html(),
+             e = $('<a href="#" data-pk="1" data-url="post.php">'+esc_v+'</a>').appendTo(fx).editable({
              success: function(data) {
                  return false;
              } 
@@ -59,7 +59,7 @@ $(function () {
         ok(p.find('.editable-loading').length, 'loading class exists')
         ok(!p.find('.editable-loading').is(':visible'), 'loading class is hidden')
         ok(p.find('input[type=text]').length, 'input exists')
-        equal(p.find('input[type=text]').val(), 'abc' , 'input contain correct value')
+        equal(p.find('input[type=text]').val(), v, 'input contain correct value')
         p.find('input').val(newText);
         p.find('button[type=submit]').click(); 
         ok(p.find('.editable-loading').is(':visible'), 'loading class is visible');
@@ -103,7 +103,8 @@ $(function () {
           newText = '';
 
         e.click();
-        var p = e.data('popover').$tip;
+        var p = e.data('popover').$tip; 
+        ok(p.is(':visible'), 'popover shown');
         p.find('input').val(newText);
         p.find('form').submit(); 
         
@@ -260,8 +261,6 @@ $(function () {
                start();  
             }, timeout);    
       })                            
-
-     module("text-nosend") 
 
      test("if pk = null --> should save new entered text and value, but no ajax", function () {
             var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
