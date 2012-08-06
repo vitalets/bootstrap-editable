@@ -41,7 +41,7 @@ $(function () {
       })  
     
      asyncTest("load options from server", function () {
-        var e = $('<a href="#" data-type="select" data-value="2" data-source="groups.php">customer</a>').appendTo(fx).editable();
+        var e = $('<a href="#" data-type="select" data-name="load-srv" data-value="2" data-source="groups.php">customer</a>').appendTo(fx).editable();
 
         e.click();
         var p = e.data('popover').$tip;    
@@ -123,10 +123,10 @@ $(function () {
 
         e.click()
         var p = e.data('popover').$tip;
-        ok(p.is(':visible'), 'popover visible')
-        ok(p.find('select').length, 'select exists')
-        equal(p.find('select').find('option').length, size, 'options loaded')
-        equal(p.find('select').val(), e.data('editable').value, 'selected value correct') 
+        ok(p.is(':visible'), 'popover visible');
+        ok(p.find('select').length, 'select exists');
+        equal(p.find('select').find('option').length, size, 'options loaded');
+        equal(p.find('select').val(), e.data('editable').value, 'selected value correct');
 
         p.find('select').val(selected);
         p.find('form').submit(); 
@@ -139,8 +139,7 @@ $(function () {
                e.remove();    
                start();  
          }, timeout);                              
-    })                  
-   
+    });                  
    
      asyncTest("if new text is empty --> show emptytext on save", function () {
         var e = $('<a href="#" data-type="select" data-value="2" data-url="post.php">customer</a>').appendTo(fx).editable({
@@ -250,5 +249,42 @@ $(function () {
               start();  
          }, timeout);   
     });       
+     
+     asyncTest("test prepend option (sync & async)", function () {
+        //sync
+         var e = $('<a href="#" data-type="select" data-value="" data-url="post.php">customer</a>').appendTo('#qunit-fixture').editable({
+             pk: 1,
+             source: {q: 'qq', w:'ww'},             
+             prepend: 'empty'
+         });
+
+        e.click()
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        equal(p.find('select').find('option').length, 3, 'options prepended (sync)');
+        equal(p.find('select').val(), '', 'selected value correct');
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');   
+        
+        //async
+         e = $('<a href="#" data-type="select" data-name="prepend-test" data-value="r" data-url="post.php">customer</a>').appendTo(fx).editable({
+             pk: 1,
+             source: 'groups.php',
+             prepend: {r: 'abc'}
+        });
+        
+        e.click()
+        p = e.data('popover').$tip;
+         
+         setTimeout(function() {
+            ok(p.is(':visible'), 'popover visible');
+            equal(p.find('select').find('option').length, size+1, 'options prepended (async)');
+            equal(p.find('select').val(), 'r', 'selected value correct'); 
+            p.find('button[type=button]').click(); 
+            ok(!p.is(':visible'), 'popover was removed');  
+            e.remove();    
+            start();   
+         }, timeout);                              
+    });                       
      
 });

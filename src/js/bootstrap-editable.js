@@ -394,7 +394,7 @@
       select: {
           template: '<select class="span2"></select>',
           source: null,
-                    
+          prepend: false,          
           onSourceReady: function(success, error) {
               if(typeof this.settings.source === 'string') { 
                   var cacheID = this.settings.source+'-'+this.name,
@@ -412,16 +412,27 @@
                       data: {name: this.name},
                       dataType: 'json',
                       success: $.proxy(function(data) {
-                          $(document).data(cacheID, data);                          
-                          this.settings.source = data;
+                          this.settings.source = this.settings.doPrepend.call(this, data);
+                          $(document).data(cacheID, this.settings.source);                          
                           success.call(this);
                       }, this),
                       error: $.proxy(error, this)
                   });
               } else { //options as json
+                  this.settings.source = this.settings.doPrepend.call(this, this.settings.source);
                   success.call(this);
               }              
-          },   
+          }, 
+          
+          doPrepend: function(data) {
+              if(typeof this.settings.prepend === 'string') {
+                  return $.extend({}, {'': this.settings.prepend}, data);
+              } else if(typeof this.settings.prepend === 'object') {
+                  return $.extend({}, this.settings.prepend, data); 
+              } else {
+                  return data;
+              }                 
+          },  
           
           render: function() {     
               this.$input = $(this.settings.template);  
