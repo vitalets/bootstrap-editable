@@ -31,7 +31,6 @@ $(function () {
     module("select")  
 
     test("popover should contain SELECT even if value & source not defined", function () {
-        $.support.transition = false
         var  e = $('<a href="#" data-type="select">w</a>').appendTo('#qunit-fixture').editable();
         
         e.click();
@@ -42,7 +41,7 @@ $(function () {
       })  
     
      asyncTest("load options from server", function () {
-         var e = $('<a href="#" data-type="select" data-value="2" data-source="groups.php">customer</a>').appendTo(fx).editable();
+        var e = $('<a href="#" data-type="select" data-value="2" data-source="groups.php">customer</a>').appendTo(fx).editable();
 
         e.click();
         var p = e.data('popover').$tip;    
@@ -196,7 +195,7 @@ $(function () {
          }, timeout);   
      });
      
-      asyncTest("cache options request for same selects", function () {
+     asyncTest("cache options request for same selects", function () {
          var e = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
              e1 = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
              req = 0;
@@ -239,5 +238,17 @@ $(function () {
         }, timeout);  
         
      });  
+     
+     asyncTest("test autotext option", function () {
+         var e = $('<a href="#" data-type="select" data-value="3" data-source="groups.php">custfghfhomer</a>').appendTo(fx).editable({
+              autotext: true
+          });
+          
+        setTimeout(function() {
+              equal(e.text(), groups[3], 'text setup ok');
+              e.remove();    
+              start();  
+         }, timeout);   
+    });       
      
 });
