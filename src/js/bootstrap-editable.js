@@ -165,7 +165,7 @@
          
           //getting primary key
           if(typeof this.settings.pk === 'function') {
-              pk = this.settings.pk.call(this);
+              pk = this.settings.pk.call(this.$element);
           } else if(typeof this.settings.pk === 'string' && $(this.settings.pk).length === 1 && $(this.settings.pk).parent().length) { //pk is ID of existing element
               pk = $(this.settings.pk).text();
           } else {
