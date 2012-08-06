@@ -394,15 +394,25 @@
       select: {
           template: '<select class="span2"></select>',
           source: null,
-          
+                    
           onSourceReady: function(success, error) {
-              if(typeof this.settings.source === 'string') { //options loading from server
+              if(typeof this.settings.source === 'string') { 
+                  var cacheID = this.settings.source+'-'+this.name,
+                      cache = $(document).data(cacheID);
+                  //check for cached value    
+                  if(typeof cache === 'object') {
+                     this.settings.source = cache; 
+                     success.call(this);
+                     return;
+                  }
+                  //options loading from server
                   $.ajax({
                       url: this.settings.source, 
                       type: 'get',
                       data: {name: this.name},
                       dataType: 'json',
                       success: $.proxy(function(data) {
+                          $(document).data(cacheID, data);                          
                           this.settings.source = data;
                           success.call(this);
                       }, this),

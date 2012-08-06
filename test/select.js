@@ -194,5 +194,50 @@ $(function () {
                e.remove();    
                start();  
          }, timeout);   
-     })      
-})
+     });
+     
+      asyncTest("cache options request for same selects", function () {
+         var e = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
+             e1 = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
+             req = 0;
+
+        $.mockjax({
+                url: 'groups-cache.php',
+                response: function() {
+                    req++;
+                    this.responseText = groups;
+                }
+         });             
+             
+        e.click();
+        var p = e.data('popover').$tip;
+        
+        setTimeout(function() {
+            ok(p.is(':visible'), 'popover visible');
+            equal(p.find('select').find('option').length, size, 'options loaded');
+            equal(req, 1, 'one request performed');
+            
+            p.find('button[type=button]').click(); 
+            ok(!p.is(':visible'), 'popover was removed');  
+            
+            //click second
+            e1.click();
+            p = e1.data('popover').$tip;
+            
+            setTimeout(function() {
+                ok(p.is(':visible'), 'popover2 visible');
+                equal(p.find('select').find('option').length, size, 'options loaded');
+                equal(req, 1, 'no extra request, options taken from cache');
+                
+                p.find('button[type=button]').click(); 
+                ok(!p.is(':visible'), 'popover was removed');                  
+                
+                e.remove();    
+                e1.remove();    
+                start();  
+            }, timeout);
+        }, timeout);  
+        
+     });  
+     
+});
