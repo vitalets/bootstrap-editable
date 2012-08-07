@@ -210,9 +210,9 @@
                           that.hide();                           
                       }
                   },
-                  error: function() {
+                  error: function(xhr) {
                       var msg = (typeof that.settings.error === 'function') ? that.settings.error.apply(that, arguments) : null;
-                      that.enableContent(msg || 'Server error'); 
+                      that.enableContent(msg || xhr.statusText); 
                   }     
               });
           } else { //do not send to server   
@@ -242,9 +242,9 @@
      */
      enableContent: function(error) {
          if(error !== undefined && error.length > 0) {
-             this.$content.find('div.control-group').addClass('error').find('span.help-block').html(error);
+             this.$content.find('div.control-group').addClass('error').find('span.help-block').text(error);
          } else {
-             this.$content.find('div.control-group').removeClass('error').find('span.help-block').html('');
+             this.$content.find('div.control-group').removeClass('error').find('span.help-block').text('');
          }
          this.$content.show();  
          //hide loading

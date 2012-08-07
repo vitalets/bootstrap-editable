@@ -13,6 +13,7 @@ $(function () {
     $.mockjax({
         url: 'error.php',
         status: 500,
+        statusText: 'customtext',
         responseText: 'Internal Server Error'
     });   
     

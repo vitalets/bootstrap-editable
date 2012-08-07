@@ -232,9 +232,34 @@ $(function () {
                e.remove();    
                start();  
             }, timeout);            
-      })  
+      });  
+     
+     asyncTest("should show statusText on response != 200", function () {
+            var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
+              url: 'error.php'
+            }),
+            newText = 'cde';
+
+            e.click()
+            var p = e.data('popover').$tip;
+            ok(p.find('input').length, 'input exists')
+            p.find('input').val(newText);
+            p.find('form').submit(); 
+            
+            setTimeout(function() {
+               ok(p.is(':visible'), 'popover visible')
+               ok(p.find('.error').length, 'class "error" exists')
+               equal(p.find('.help-block').text(), 'customtext', 'error shown')               
+               
+               p.find('button[type=button]').click(); 
+               ok(!p.is(':visible'), 'popover was removed')
+               
+               e.remove();  
+               start();  
+            }, timeout);    
+      });       
        
-     asyncTest("should show error when server-side error", function () {
+     asyncTest("'error' option on response != 200", function () {
             var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
               url: 'error.php',
               error: function(xhr) {
@@ -260,7 +285,9 @@ $(function () {
                e.remove();  
                start();  
             }, timeout);    
-      })                            
+      });
+      
+                                  
 
      test("if pk = null --> should save new entered text and value, but no ajax", function () {
             var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
