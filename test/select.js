@@ -79,7 +79,7 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed');  
     })     
     
-     test("load options from html", function () {
+     test("load options from html (single quotes)", function () {
          var e = $('<a href="#" data-type="select" data-value="M" data-source=\'{"L":"Low", "": "None", "M": "Medium", "H": "High"}\'>customer</a>').appendTo('#qunit-fixture').editable({
              pk: 1
           }),
@@ -94,6 +94,22 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');  
     })       
+    
+     test("load options from html (double quotes)", function () {
+         var e = $('<a href="#" data-type="select" data-value="M" data-source="{\'L\':\'Low\', \'\': \'None\', \'M\': \'Medium\', \'H\': \'High\'}">customer</a>').appendTo('#qunit-fixture').editable({
+             pk: 1
+          }),
+         size = 4;
+
+        e.click()
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        ok(p.find('select').length, 'select exists');
+        equal(p.find('select').find('option').length, size, 'options loaded');
+        equal(p.find('select').val(), e.data('editable').value, 'selected value correct') ;
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');  
+    })      
                     
      asyncTest("should show error if options cant be loaded", function () {
         var e = $('<a href="#" data-type="select" data-value="2" data-source="groups-error.php">customer</a>').appendTo(fx).editable();

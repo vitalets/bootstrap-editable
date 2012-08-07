@@ -177,6 +177,12 @@
           var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'ifpk' && pk));
           
           if(send) { //send to server
+          
+              //try parse json in single quotes
+              if(typeof this.settings.params === 'string') {
+                 this.settings.params = tryParseJson(this.settings.params);
+              }
+          
               var params = $.extend({}, this.settings.params, {value: value}),
                   that = this;
                 
@@ -404,6 +410,11 @@
           source: null,
           prepend: false,          
           onSourceReady: function(success, error) {
+              // try parse json in single quotes (for double quotes qjuery does automatically)
+              if(typeof this.settings.source === 'string') {
+                 this.settings.source = tryParseJson(this.settings.source);
+              }
+              
               if(typeof this.settings.source === 'string') { 
                   var cacheID = this.settings.source+'-'+this.name,
                       cache = $(document).data(cacheID);
@@ -559,6 +570,19 @@ function setCursorPosition(pos) {
   });
   return this;
 }
-    
+
+/**
+* function to parse JSON in *single* quotes. (jquery automatically parse only double quotes)
+* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}"
+* for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery   
+*/
+function tryParseJson(s) {   
+    if(typeof s === 'string' && s.length && s.match(/^\{.*\}$/)) {
+        return (new Function( 'return ' + s ))();
+    } else {
+        return s;
+    }  
+}
+
   
 }( window.jQuery ));  

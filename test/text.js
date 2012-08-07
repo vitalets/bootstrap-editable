@@ -46,12 +46,21 @@ $(function () {
      asyncTest("should load correct value and save new entered text (and value)", function () {
         var  v = 'ab<b>"',
              esc_v = $('<div>').text(v).html(),
-             e = $('<a href="#" data-pk="1" data-url="post.php">'+esc_v+'</a>').appendTo(fx).editable({
+             e = $('<a href="#" data-pk="1" data-name="text1" data-url="post-text.php" data-params="{\'q\': \'w\'}">'+esc_v+'</a>').appendTo(fx).editable({
              success: function(data) {
                  return false;
              } 
           }),  
-          newText = 'cd<e>;"'
+          data,
+          newText = 'cd<e>;"';
+        
+          $.mockjax({
+              url: 'post-text.php',
+              response: function(settings) {
+                  data = settings.data;
+              }
+          });
+          
 
         e.click()
         var p = e.data('popover').$tip;
@@ -65,9 +74,15 @@ $(function () {
         ok(p.find('.editable-loading').is(':visible'), 'loading class is visible');
         
         setTimeout(function() {
-           ok(!p.is(':visible'), 'popover closed')
-           equal(e.data('editable').value, newText, 'new text saved to value')
-           equal(e.text(), newText, 'new text shown') 
+           ok(!p.is(':visible'), 'popover closed');
+           equal(e.data('editable').value, newText, 'new text saved to value');
+           equal(e.text(), newText, 'new text shown'); 
+           ok(data, 'ajax performed');
+           equal(data.name, 'text1', 'name sent');
+           equal(data.pk, 1, 'pk sent');
+           equal(data.value, newText, 'value sent');
+           equal(data.q, 'w', 'params sent');
+           
            e.remove();    
            start();  
         }, timeout);                     
