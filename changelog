@@ -1,0 +1,24 @@
+Bootstrap-editable change log
+=============================
+
+
+Version 1.0.5 Aug 8, 2012
+-----------------------
+#18: In submit method value should be set by getInputValue (@vitalets)
+#17: Show response text in error when HTTP != 200 (@vitalets)
+#16: SELECT: set link text according to value (@vitalets)
+#14: Disable focus management ()
+#13: Json in html data-* attributes (@vitalets)
+#12: When text contains escaped html it is processed incorrectly (@vitalets)
+#11: Add to dist all required libs (jquery, bootstrap, jquery-ui + theme) (@vitalets)
+#10: SELECT: cache and share source data between selects (@vitalets)
+#9: Pk function in element context (@vitalets)
+#8: Method to customize text render (@vitalets)
+#7: Add empty value to SELECT list (@vitalets)
+
+
+Version 1.0.4 Aug 2, 2012
+-----------------------
+#4: Arrange build on Grunt.js (@vitalets)
+#3: Tabbular input without mouse (@vitalets)
+#1: Trigger popover by click on another element (@vitalets)

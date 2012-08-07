@@ -107,7 +107,7 @@
           this.$element.popover('show');
           this.$element.addClass('editable-open');  
           this.errorOnRender = false;
-          this.settings.render.call(this); 
+          this.settings.renderInput.call(this); 
      },     
  
      endShow: function() {
@@ -362,7 +362,7 @@
     
     validate: function(value) { }, //client-side validation. If returns msg - data will not be sent
     success: function(data) { }, //after send callback
-    error: function(xhr) { } //error wnen submitting data    
+    error: function(xhr) { }  //error wnen submitting data    
   };
   
   //input types
@@ -370,7 +370,7 @@
       //for all types
       defaults: {
             // this function called every time popover shown. Should set value of this.$input
-            render: function() {                  
+            renderInput: function() {                  
                 this.$input = $(this.settings.template);
                 this.endShow();
             }, 
@@ -453,7 +453,7 @@
               }                 
           },  
           
-          render: function() {     
+          renderInput: function() {     
               this.$input = $(this.settings.template);  
               this.settings.onSourceReady.call(this,
               function(){
@@ -541,7 +541,7 @@
                   this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
               }
           },
-          render: function() {
+          renderInput: function() {
               this.$input = $(this.settings.template);      
               this.$input.datepicker(this.settings.datepicker);
               this.endShow();
