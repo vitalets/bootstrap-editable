@@ -71,17 +71,26 @@ module.exports = function(grunt) {
             options: {
                flatten: true
             }
-        }
+        },
+        libs: {
+            files: {
+                '<%= dist %>/libs': ['libs/bootstrap/**', 'libs/jquery/**', 'libs/jquery-ui/**']
+            },
+            options: {
+               basePath: 'libs', 
+               flatten: false
+            }
+        }        
     },
     compress: {
         zip: {
             options: {
                 mode: "zip",
                 //TODO: unfortunatly here <%= dist_source %> and <config:dist_source> does not work
-                basePath: "dist/bootstrap-editable"
+                basePath: "dist"
                },
             files: {
-                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist_source %>/**"
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist %>/**"
             }
         }
     },    
@@ -93,5 +102,6 @@ module.exports = function(grunt) {
   
   // build
   grunt.registerTask('build', 'clean lint qunit concat min copy compress');
-
+  
+ //to run particular task use ":", e.g. copy:libs 
 };
