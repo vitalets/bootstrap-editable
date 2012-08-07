@@ -278,5 +278,6 @@ $(function () {
             equal(e.data('editable').value, newText, 'new text saved to value')
             equal(e.text(), newText, 'new text shown')
             ok(e.hasClass('editable-changed'), 'has class editable-changed')
-      })   
+      });
+         
 })    

@@ -91,7 +91,7 @@
                   template: '<div class="popover"><div class="arrow"></div><div class="popover-inner '+this.settings.popoverClass+'"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
               }); 
           } 
-
+          
           if(this.$element.data('popover').tip().is(':visible')) {
              this.hide(); 
           } else {
@@ -139,12 +139,15 @@
          
          //bind popover hide on button
          $tip.find('button.editable-cancel').click($.proxy(this.hide, this));          
+         
          //bind popover hide on escape
-         $(document).on('keyup.editable', $.proxy(function(e) {
+         var that = this;
+         $(document).on('keyup.editable', function(e) {
              if(e.which === 27) {
-                 this.hide();
+                 e.stopPropagation();
+                 that.hide();
              }
-         }), this);
+         });         
      },
               
      submit: function(e) {
@@ -227,7 +230,11 @@
           this.$element.popover('hide');
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
-          this.$toggle.focus();
+          
+          //returning focus on element if needed
+          if(this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
+              this.$toggle.focus();
+          }
      },
      
      /**
@@ -337,6 +344,7 @@
     params: null,   //additional params to submit
     send: 'ifpk', // strategy for sending data on server: 'always', 'never', 'ifpk' (default)
     autotext: false, //if true -> element text will be automatically set by provided value. Useful for select element
+    enablefocus: true, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
     popoverClass: 'editable-popover-text', //to define size of popover for correct positioning
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
