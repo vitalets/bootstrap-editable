@@ -18,8 +18,6 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed')         
       })
      
-      module("textarea-submit")
-      
      asyncTest("should load correct value and save new entered text (and value)", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php">'+v1+'</a>').appendTo(fx).editable({
              type: 'textarea',
@@ -48,10 +46,10 @@ $(function () {
         }, timeout);                       
       })            
   
-     asyncTest("should replace &lt;br&gt; with newline (on show) and back (on save)", function () {
-        var  v = '12<br>34<br />56',
+     asyncTest("should replace <br> with newline (on show) and back (on save)", function () {
+        var  v = '12<br>3&lt;i&gt;4<br />56',
              e = $('<a href="#" data-type="textarea" data-pk="1" data-url="post.php">'+v+'</a>').appendTo(fx).editable(),
-             v1 = "12\n34\n56",
+             v1 = '12\n3<i>4\n56',
              vnew = "12\n3<b>4\n56\n\n78",
              vnew2 = "12<br>3&lt;b&gt;4<br>56<br><br>78";
 
@@ -59,7 +57,7 @@ $(function () {
              
         e.click();
         var p = e.data('popover').$tip;
-        equal(p.find('textarea').val(), e.data('editable').value, 'textarea contains correct');
+        equal(p.find('textarea').val(), e.data('editable').value, 'textarea contains correct value');
 
         p.find('textarea').val(vnew)
         p.find('form').submit(); 

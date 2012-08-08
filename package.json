@@ -2,7 +2,7 @@
   "name": "bootstrap-editable",
   "title": "Bootstrap Editable",
   "description": "In-place editing with Bootstrap Form and Popover",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "homepage": "https://github.com/vitalets/bootstrap-editable",
   "author": {
     "name": "Vitaliy Potapov",
@@ -30,7 +30,9 @@
   },
   "devDependencies": {
     "grunt": "~0.3.11",
-    "grunt-contrib": "0.1.1"
+    "grunt-contrib": "0.1.1",
+    "github": "0.1.4",
+    "moment": "1.7.0"
   },  
   "keywords": []
 }

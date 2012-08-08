@@ -30,15 +30,17 @@
       });
       
       test("should store name, value and lastSavedValue", function () {
-        var editable = $('<a href="#123" data-name="abc" data-value="123">qwe</a>').appendTo('#qunit-fixture').editable(),
-            e2 = $('<a href="#">qwe</a>').appendTo('#qunit-fixture').editable();
-          
+        var v = 'abr><"&',
+            esc_v = $('<div>').html(v).text(),
+            editable = $('<a href="#123" data-name="abc" data-value="123">qwe</a>').appendTo('#qunit-fixture').editable(),
+            e2 = $('<a href="#">'+esc_v+'</a>').appendTo('#qunit-fixture').editable();
+       
         equal(editable.data('editable').name, 'abc', 'name exists');
         equal(editable.data('editable').value, '123', 'value exists');
         equal(editable.data('editable').lastSavedValue, '123', 'lastSavedValue exists');
         
-        equal(e2.data('editable').value, 'qwe', 'value taken from text');     
-        equal(e2.data('editable').lastSavedValue, 'qwe', 'lastSavedValue taken from text');     
+        equal(e2.data('editable').value, v, 'value taken from elem content correctly');     
+        equal(e2.data('editable').lastSavedValue, v, 'lastSavedValue taken from text correctly');     
       }); 
       
       test("should take popover's placement and title from json options", function () {
@@ -71,6 +73,36 @@
         
         p2.find('button[type=button]').click();
         ok(!p2.is(':visible'), 'popover2 closed');
-      })       
+      });
+      
+       test("enablefocus option", function () {
+            // focusing not passed in phantomjs
+            if($.browser.webkit) {
+                ok(true, 'skipped in PhantomJS');
+                return;
+            }
+            
+            var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
+              enablefocus: true
+            }),
+             e1 = $('<a href="#">abcd</a>').appendTo('#qunit-fixture').editable({
+              enablefocus: false
+            });            
+            
+            e.click()
+            var p = e.data('popover').$tip;
+            ok(p.is(':visible'), 'popover 1 visible');
+            p.find('button[type=button]').click();
+            ok(!p.is(':visible'), 'popover closed');            
+            ok(e.is(':focus'), 'element 1 is focused');            
+            
+            e1.click()
+            p = e1.data('popover').$tip;
+            ok(p.is(':visible'), 'popover 2 visible');
+            p.find('button[type=button]').click();
+            ok(!p.is(':visible'), 'popover closed');            
+            ok(!e1.is(':focus'), 'element 2 is not focused');            
+      });
+ 
           
 }(jQuery));  

@@ -1,8 +1,10 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
-  grunt.loadNpmTasks('grunt-contrib');  
-    
+  grunt.loadNpmTasks('grunt-contrib');
+  
+  grunt.loadTasks('tasks/');
+             
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
@@ -25,6 +27,10 @@ module.exports = function(grunt) {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/css/<%= pkg.name %>.css>'],
         dest: '<%= dist_source %>/css/<%= pkg.name %>.css'
       }
+    },
+    changelog: {
+       user: 'vitalets',
+       repo: 'bootstrap-editable'
     },
     min: {
       dist: {
@@ -56,7 +62,8 @@ module.exports = function(grunt) {
         undef: true,
         boss: true,
         eqnull: true,
-        browser: true
+        browser: true,
+        evil: true  //allow eval
       },
       globals: {
         jQuery: true
@@ -66,22 +73,31 @@ module.exports = function(grunt) {
         dist: {
             files: {
                 '<%= dist_source %>/img' : 'src/img/*',
-                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md']
+                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG']
             },
             options: {
                flatten: true
             }
-        }
+        },
+        libs: {
+            files: {
+                '<%= dist %>/libs': ['libs/bootstrap/**', 'libs/jquery/**', 'libs/jquery-ui/**']
+            },
+            options: {
+               basePath: 'libs', 
+               flatten: false
+            }
+        }        
     },
     compress: {
         zip: {
             options: {
                 mode: "zip",
                 //TODO: unfortunatly here <%= dist_source %> and <config:dist_source> does not work
-                basePath: "dist/bootstrap-editable"
+                basePath: "dist"
                },
             files: {
-                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist_source %>/**"
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist %>/**"
             }
         }
     },    
@@ -93,5 +109,6 @@ module.exports = function(grunt) {
   
   // build
   grunt.registerTask('build', 'clean lint qunit concat min copy compress');
-
+  
+ //to run particular task use ":", e.g. copy:libs 
 };

@@ -3,7 +3,7 @@ $(function () {
    $.support.transition = false;
    var fx = $('#async-fixture');
     
-    module("text-nosubmit")
+    module("text")
       
      test("input should contain '' if element is empty", function () {
         var e = $('<a href="#"></a>').appendTo('#qunit-fixture').editable();
@@ -43,15 +43,24 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed') 
      })        
      
-     module("text-submit") 
-     
      asyncTest("should load correct value and save new entered text (and value)", function () {
-        var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable({
+        var  v = 'ab<b>"',
+             esc_v = $('<div>').text(v).html(),
+             e = $('<a href="#" data-pk="1" data-name="text1" data-url="post-text.php" data-params="{\'q\': \'w\'}">'+esc_v+'</a>').appendTo(fx).editable({
              success: function(data) {
                  return false;
              } 
           }),  
-          newText = 'cd<e>;"'
+          data,
+          newText = 'cd<e>;"';
+        
+          $.mockjax({
+              url: 'post-text.php',
+              response: function(settings) {
+                  data = settings.data;
+              }
+          });
+          
 
         e.click()
         var p = e.data('popover').$tip;
@@ -59,15 +68,21 @@ $(function () {
         ok(p.find('.editable-loading').length, 'loading class exists')
         ok(!p.find('.editable-loading').is(':visible'), 'loading class is hidden')
         ok(p.find('input[type=text]').length, 'input exists')
-        equal(p.find('input[type=text]').val(), 'abc' , 'input contain correct value')
+        equal(p.find('input[type=text]').val(), v, 'input contain correct value')
         p.find('input').val(newText);
         p.find('button[type=submit]').click(); 
         ok(p.find('.editable-loading').is(':visible'), 'loading class is visible');
         
         setTimeout(function() {
-           ok(!p.is(':visible'), 'popover closed')
-           equal(e.data('editable').value, newText, 'new text saved to value')
-           equal(e.text(), newText, 'new text shown') 
+           ok(!p.is(':visible'), 'popover closed');
+           equal(e.data('editable').value, newText, 'new text saved to value');
+           equal(e.text(), newText, 'new text shown'); 
+           ok(data, 'ajax performed');
+           equal(data.name, 'text1', 'name sent');
+           equal(data.pk, 1, 'pk sent');
+           equal(data.value, newText, 'value sent');
+           equal(data.q, 'w', 'params sent');
+           
            e.remove();    
            start();  
         }, timeout);                     
@@ -103,7 +118,8 @@ $(function () {
           newText = '';
 
         e.click();
-        var p = e.data('popover').$tip;
+        var p = e.data('popover').$tip; 
+        ok(p.is(':visible'), 'popover shown');
         p.find('input').val(newText);
         p.find('form').submit(); 
         
@@ -231,9 +247,34 @@ $(function () {
                e.remove();    
                start();  
             }, timeout);            
-      })  
+      });  
+     
+     asyncTest("should show statusText on response != 200", function () {
+            var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
+              url: 'error.php'
+            }),
+            newText = 'cde';
+
+            e.click()
+            var p = e.data('popover').$tip;
+            ok(p.find('input').length, 'input exists')
+            p.find('input').val(newText);
+            p.find('form').submit(); 
+            
+            setTimeout(function() {
+               ok(p.is(':visible'), 'popover visible')
+               ok(p.find('.error').length, 'class "error" exists')
+               equal(p.find('.help-block').text(), 'customtext', 'error shown')               
+               
+               p.find('button[type=button]').click(); 
+               ok(!p.is(':visible'), 'popover was removed')
+               
+               e.remove();  
+               start();  
+            }, timeout);    
+      });       
        
-     asyncTest("should show error when server-side error", function () {
+     asyncTest("'error' option on response != 200", function () {
             var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
               url: 'error.php',
               error: function(xhr) {
@@ -259,9 +300,9 @@ $(function () {
                e.remove();  
                start();  
             }, timeout);    
-      })                            
-
-     module("text-nosend") 
+      });
+      
+                                  
 
      test("if pk = null --> should save new entered text and value, but no ajax", function () {
             var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
@@ -279,5 +320,6 @@ $(function () {
             equal(e.data('editable').value, newText, 'new text saved to value')
             equal(e.text(), newText, 'new text shown')
             ok(e.hasClass('editable-changed'), 'has class editable-changed')
-      })   
+      });
+         
 })    
