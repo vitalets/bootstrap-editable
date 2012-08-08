@@ -9,10 +9,10 @@ cp -R ../lib/dist/*.zip assets/bootstrap-editable
 filename=$(ls assets/bootstrap-editable/boot*.zip)
 version=$(expr "$filename" : '.*\(v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*') 
 
-#href
+#replace version in href
 sed -i "s/bootstrap\-editable\-v[0-9]\+\.[0-9]\+\.[0-9]\+/bootstrap-editable-$version/g" index.html
 
-#button text
+#replace version in button text
 sed -i "s/stable (v[0-9]\+\.[0-9]\+\.[0-9]\+)/stable ($version)/g" index.html
 
 echo "gh-pages updated ($version)"

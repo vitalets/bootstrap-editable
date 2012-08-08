@@ -12,7 +12,8 @@ $(function(){
     $.mockjax({
         url: 'error.php',
         status: 500,
-        responseText: 'Internal Server Error'
+        statusText: 'Internal Server Error',
+        responseText: 'Error'
     });
     
     $.mockjax({
@@ -56,7 +57,6 @@ $(function(){
     
     $('#sex').editable({
         source:{
-            2 : '', 
             0: 'Male',
             1: 'Female'
         }   

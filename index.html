@@ -78,7 +78,7 @@
                             <li>validation on client and server-side</li>
                             <li>keyboard events (escape/enter)</li>                            
                         </ul>   
-                        <p><a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.0.4.zip" class="btn btn-primary">Download stable (v1.0.4)</a></p>
+                        <p><a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.0.5.zip" class="btn btn-primary">Download stable (v1.0.5)</a></p>
                         <br>
                         <h3>Requirements</h3>
                         <ul>
@@ -110,7 +110,7 @@
                                     </tr>  
                                    <tr>         
                                         <td>Sex</td>
-                                        <td><a href="#" id="sex" data-type="select" data-name="sex" data-pk="1" data-original-title="Select sex"></a></td>
+                                        <td><a href="#" id="sex" data-type="select" data-name="sex" data-pk="1" data-prepend="Not set" data-original-title="Select sex"></a></td>
                                         <td><span class="muted">Select, loaded from json</span></td>
                                     </tr>
                                     <tr>         
@@ -276,6 +276,12 @@
                                     <td>strategy for sending data on server - ifpk | always | never. 'ifpk' = data will be sent only if <strong>pk</strong> defined</td>
                                 </tr>
                                 <tr>
+                                    <td>enablefocus</td>
+                                    <td>bool</td>
+                                    <td>true</td>
+                                    <td>wether to return focus on element after popover is closed. It's more functional, but focused links may look not pretty</td>
+                                </tr>                                
+                                <tr>
                                     <td>validate</td>
                                     <td>function | object</td>
                                     <td>null</td>
@@ -344,11 +350,21 @@ validate: {
                                     <td>string | object</td>
                                     <td>null</td>
                                     <td>source for data in select element. If string - considered url for ajax call to load items, otherwise should be json. 
-                                    If JSON used in <code>data-source</code> attribute, please use <i>double quotes</i> according to <a href="http://api.jquery.com/data/#data-html5" target="_blank">valid JSON syntax</a>, e.g.<br>
-                                    <code>data-source='{"M": "male", "F": "female"}'</code>
+                                    E.g. <code>data-source="{'M': 'male', 'F': 'female'}"</code>
                                     </td>
-                                    
                                 </tr>     
+                                <tr>
+                                    <td>autotext</td>
+                                    <td>bool</td>
+                                    <td>false</td>
+                                    <td>if <code>true</code> element's content will be overwritten by text according to value (during initialization)</td>
+                                </tr>   
+                                <tr>
+                                    <td>prepend</td>
+                                    <td>string | object</td>
+                                    <td>false</td>
+                                    <td>allows to prepend values in select list.<br>E.g. <code>prepend: 'Not set'</code> - new value <code>{'': 'Not set'}</code> will be automatically inserted at the begining of select list</td>
+                                </tr>                                                               
                             </tbody>
                            </table>                         
                

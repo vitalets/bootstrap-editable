@@ -4,7 +4,7 @@ In-place editing with Bootstrap Form and Popover
 
 ## Demo & Documentation
 
-*http://vitalets.github.com/bootstrap-editable*
+**http://vitalets.github.com/bootstrap-editable**
 
 ## Contributing
 Please make all pull requests against `dev` branch. Thanks!
