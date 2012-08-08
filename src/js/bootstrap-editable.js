@@ -154,7 +154,9 @@
           e.stopPropagation();
           e.preventDefault();  
           
-          var error, pk, value = this.settings.getInputValue.call(this);
+          var error, pk, params,
+              that = this,
+              value = this.settings.getInputValue.call(this);
 
           //validation              
           if(error = this.validate(value)) {
@@ -179,12 +181,10 @@
           if(send) { //send to server
           
               //try parse json in single quotes
-              if(typeof this.settings.params === 'string') {
-                 this.settings.params = tryParseJson(this.settings.params);
-              }
-          
-              var params = $.extend({}, this.settings.params, {value: value}),
-                  that = this;
+              this.settings.params = tryParseJson(this.settings.params, true);
+              
+              params = (typeof this.settings.params === 'string') ? {params: this.settings.params} : $.extend({}, this.settings.params);
+              params.value = value;
                 
               //hide form, show loading
               this.enableLoading();
@@ -411,8 +411,11 @@
           prepend: false,          
           onSourceReady: function(success, error) {
               // try parse json in single quotes (for double quotes qjuery does automatically)
-              if(typeof this.settings.source === 'string') {
-                 this.settings.source = tryParseJson(this.settings.source);
+              try {
+                  this.settings.source = tryParseJson(this.settings.source, false);
+              } catch(e) {
+                  error.call(this);
+                  return;
               }
               
               if(typeof this.settings.source === 'string') { 
@@ -444,6 +447,8 @@
           }, 
           
           doPrepend: function(data) {
+              this.settings.prepend = tryParseJson(this.settings.prepend, true);
+              
               if(typeof this.settings.prepend === 'string') {
                   return $.extend({}, {'': this.settings.prepend}, data);
               } else if(typeof this.settings.prepend === 'object') {
@@ -576,12 +581,21 @@ function setCursorPosition(pos) {
 * That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}"
 * for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery   
 */
-function tryParseJson(s) {   
-    if(typeof s === 'string' && s.length && s.match(/^\{.*\}$/)) {
-        return (new Function( 'return ' + s ))();
-    } else {
-        return s;
-    }  
+function tryParseJson(s, safe) {   
+     if(typeof s === 'string' && s.length && s.match(/^\{.*\}$/)) {
+          if(safe) {
+              try {
+                  s = (new Function( 'return ' + s ))();
+              } catch(e) {}
+              finally {
+                  return s;
+              }
+          } else {
+              s = (new Function( 'return ' + s ))();  
+          }
+     } 
+    
+     return s;
 }
 
   
