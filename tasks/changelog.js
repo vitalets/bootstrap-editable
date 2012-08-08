@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
       var options = grunt.config(this.name);
       
-      if(!options.dest) options.dest = 'changelog';
+      if(!options.dest) options.dest = 'CHANGELOG';
       
       var GitHubApi = require("github");
       var github = new GitHubApi({
