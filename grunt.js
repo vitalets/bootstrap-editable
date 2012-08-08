@@ -2,65 +2,8 @@
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib');
-         
-  grunt.registerTask('changelog', 'My super task.', function() {
-      var GitHubApi = require("github");
-      var github = new GitHubApi({
-          version: "3.0.0"
-      });
-
-      var done = this.async();
-      
-      github.issues.getAllMilestones({
-          user: 'vitalets',
-          repo: 'bootstrap-editable',
-          state: 'closed',
-          sort: 'completeness'
-      }, function(err, res) {
-          
-          function writeFile() {
-             var lines = [], line;
-             var moment = require('moment');
-             lines.push('Bootstrap-editable change log'); 
-             lines.push('============================='); 
-             
-             for(var i=0; i<res.length; i++) {  
-                lines.push("\r\n"); 
-                lines.push('Version '+res[i].title + (res[i].due_on ? ' '+moment(res[i].due_on).format('MMM D, YYYY') : '')); 
-                lines.push('-----------------------'); 
-                var issues = res[i].issues;
-                for(var j=0; j<issues.length; j++) {
-                   lines.push('#'+issues[j].number+': '+issues[j].title+' (' + (issues[j].assignee ? ('@'+issues[j].assignee.login) : '') + ')');  
-                }
-             }
-             
-             var fs = require('fs');
-             fs.writeFileSync('changelog', lines.join("\r\n"), 'utf8');
-          }
-          
-          var finished = 0;
-          for(var i=0; i<res.length; i++) {
-              console.log('Requesting '+res[i].title);  
-              github.issues.repoIssues({
-                  user: 'vitalets',
-                  repo: 'bootstrap-editable',
-                  milestone: res[i].number,
-                  state: 'closed'
-              }, (function(r) {
-                   return function(err2, issues) {
-                      r.issues = issues;
-                      finished++;
-                      console.log('loaded issues for ' + r.title + ': '+issues.length);  
-                      if(finished == res.length) {
-                          console.log('Finished: '+finished);
-                          writeFile();
-                          done(true);
-                      }
-                   }
-              })(res[i]));                 
-          }
-      }); 
-  });
+  
+  grunt.loadTasks('tasks/');
              
   // Project configuration.
   grunt.initConfig({
@@ -84,6 +27,10 @@ module.exports = function(grunt) {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/css/<%= pkg.name %>.css>'],
         dest: '<%= dist_source %>/css/<%= pkg.name %>.css'
       }
+    },
+    changelog: {
+       user: 'vitalets',
+       repo: 'bootstrap-editable'
     },
     min: {
       dist: {
