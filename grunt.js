@@ -31,6 +31,7 @@ module.exports = function(grunt) {
     changelog: {
        user: 'vitalets',
        repo: 'bootstrap-editable'
+       //labels: ['enhancement']
     },
     min: {
       dist: {
@@ -97,7 +98,16 @@ module.exports = function(grunt) {
                 basePath: "dist"
                },
             files: {
-                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist %>/**"
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": ["<%= dist_source %>/**", "<%= dist %>/libs/**"]
+            }
+        },
+        tgz: {
+            options: {
+                mode: "tgz",
+                basePath: "dist"
+               },
+            files: {
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.tar.gz": ["<%= dist_source %>/**", "<%= dist %>/libs/**"]
             }
         }
     },    
