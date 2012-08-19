@@ -30,7 +30,8 @@ module.exports = function(grunt) {
     },
     changelog: {
        user: 'vitalets',
-       repo: 'bootstrap-editable'
+       repo: 'bootstrap-editable',
+       dest: 'CHANGELOG.txt'
        //labels: ['enhancement']
     },
     min: {

@@ -249,7 +249,7 @@ $(function () {
             }, timeout);            
       });  
      
-     asyncTest("should show statusText on response != 200", function () {
+     asyncTest("should show responseText on response != 200", function () {
             var e = $('<a href="#" data-pk="1">abc</a>').appendTo(fx).editable({
               url: 'error.php'
             }),

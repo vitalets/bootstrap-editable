@@ -218,7 +218,7 @@
                   },
                   error: function(xhr) {
                       var msg = (typeof that.settings.error === 'function') ? that.settings.error.apply(that, arguments) : null;
-                      that.enableContent(msg || xhr.statusText); 
+                      that.enableContent(msg || xhr.responseText || xhr.statusText); 
                   }     
               });
           } else { //do not send to server   
@@ -350,7 +350,7 @@
     params: null,   //additional params to submit
     send: 'ifpk', // strategy for sending data on server: 'always', 'never', 'ifpk' (default)
     autotext: false, //if true -> element text will be automatically set by provided value. Useful for select element
-    enablefocus: true, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
+    enablefocus: false, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
     popoverClass: 'editable-popover-text', //to define size of popover for correct positioning
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
@@ -440,7 +440,17 @@
                       }, this),
                       error: $.proxy(error, this)
                   });
-              } else { //options as json
+              } else { //options as json/array
+              
+                  //convert array to object
+                  if($.isArray(this.settings.source)) {
+                     var arr = this.settings.source, obj = {};
+                     for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] !== undefined) obj[i] = arr[i];
+                     }
+                     this.settings.source = obj;
+                  }
+              
                   this.settings.source = this.settings.doPrepend.call(this, this.settings.source);
                   success.call(this);
               }              
