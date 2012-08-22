@@ -535,22 +535,23 @@
       requires jQuery UI datepicker under bootstrap theme: http://addyosmani.github.com/jquery-ui-bootstrap/
       */
       date: {
-          template: '<div style="float: left"></div>',
+          template: '<div style="float: left; padding: 0; margin: 0" class="well"></div>',
           popoverClass: 'editable-popover-date',
           datepicker: {
-              dateFormat: 'yy-mm-dd',
-              changeMonth: true,
-              changeYear: true
+              format: 'dd/mm/yyyy',
+              autoclose: false,
+              keyboardNavigation: false
           },
           init: function(options) {
               //dateFormat can be set from data-format attribute
+              /*
               var dateFormat = this.settings.format;
               options = options ? options : {};
 
               if(dateFormat) {
                   options.datepicker = $.extend({}, options.datepicker, {dateFormat: dateFormat});
               }
-
+              */
               //overriding datepicker config
               if(options.datepicker) {
                   this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
@@ -562,8 +563,12 @@
               this.endShow();
           },
           setInputValue: function() {
-              this.$input.datepicker('setDate', this.value);
-          }
+             // this.$input.datepicker('setDate', this.value);
+              this.$input.datepicker('update', this.value);
+          },
+          getInputValue: function() { 
+              return this.$input.data('datepicker').date;
+          }          
       }              
   };  
 
