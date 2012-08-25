@@ -6,9 +6,14 @@ $(function () {
    module("date")
      
     asyncTest("popover should contain datepicker with value and save new entered date", function () {
-        var d = '15/05/1984',
-            e = $('<a href="#" data-type="date">'+d+'</a>').appendTo(fx).editable(),
-            nextD = '16/05/1984';
+        var d = '15.05.1984',
+            e = $('<a href="#" data-type="date" data-weekStart="1">'+d+'</a>').appendTo(fx).editable({
+                format: 'dd.mm.yyyy',
+                datepicker: {
+                    
+                }
+            }),
+            nextD = '16.05.1984';
             
         e.click();
         var p = e.data('popover').$tip;
@@ -17,6 +22,7 @@ $(function () {
         
         equal(e.data('editable').$input.data('datepicker').getFormattedDate(), d, 'day set correct');
         equal(p.find('td.day.active').text(), 15, 'day shown correct');
+        equal(p.find('th.dow').eq(0).text(), 'Mo', 'weekStart correct');
 
         //set new day
         p.find('td.day.active').next().click();
@@ -30,27 +36,6 @@ $(function () {
            start();  
         }, timeout); 
      });  
-     
-     //todo: test options   
-    /*
-     test("check json config options", function () {
-        var format = 'dd.mm.yy',
-            v = '15.05.1984',
-            e = $('<a href="#" data-type="date">'+v+'</a>').appendTo('#qunit-fixture').editable({
-               format: format,
-               datepicker: {
-                  changeYear: false
-               } 
-           });
-
-        e.click();
-        var p = e.data('popover').$tip;
-        ok(!p.find('select.ui-datepicker-year').length, 'select for year not exist')    
-        equal( $.datepicker.formatDate(format, e.data('editable').$input.datepicker( "getDate" )), e.data('editable').value, 'date set correct')
-        p.find('button[type=button]').click();
-        ok(!p.is(':visible'), 'popover closed');
-      })        
-     */
      
      test("input should contain today if element is empty", function () {
         var e = $('<a href="#" data-type="date"></a>').appendTo('#qunit-fixture').editable();
