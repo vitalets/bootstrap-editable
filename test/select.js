@@ -34,7 +34,6 @@ $(function () {
     test("popover should contain SELECT even if value & source not defined", function () {
         var  e = $('<a href="#" data-type="select">w</a>').appendTo('#qunit-fixture').editable();
 
-        console.log(e.data('editable').settings);
         e.click();
         var p = e.data('popover').$tip;
         ok(p.find('select').length, 'select exists')
