@@ -304,22 +304,42 @@ $(function () {
       
                                   
 
-     test("if pk = null --> should save new entered text and value, but no ajax", function () {
+     test("send: 'auto'. if pk = null --> should save new entered text and value, but no ajax", function () {
             var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
-              send: 'ifpk'
+              send: 'auto'
             }),
             newText = 'cde';
 
             e.click()
             var p = e.data('popover').$tip;
-            ok(p.find('input').length, 'input exists')
+            ok(p.find('input').length, 'input exists');
             p.find('input').val(newText);
             p.find('form').submit(); 
             
-            ok(!p.is(':visible'), 'popover was removed')
-            equal(e.data('editable').value, newText, 'new text saved to value')
-            equal(e.text(), newText, 'new text shown')
-            ok(e.hasClass('editable-changed'), 'has class editable-changed')
+            ok(!p.is(':visible'), 'popover was removed');
+            equal(e.data('editable').value, newText, 'new text saved to value');
+            equal(e.text(), newText, 'new text shown');
+            ok(e.hasClass('editable-changed'), 'has class editable-changed');
       });
+      
+     test("send = 'never'. if pk defined --> should save new entered text and value, but no ajax", function () {
+            expect();
+            var e = $('<a href="#">abc</a>').appendTo('#qunit-fixture').editable({
+               pk: 123, 
+               send: 'never'
+            }),
+            newText = 'cde';
+
+            e.click()
+            var p = e.data('popover').$tip;
+            ok(p.find('input').length, 'input exists');
+            p.find('input').val(newText);
+            p.find('form').submit(); 
+            
+            ok(!p.is(':visible'), 'popover was removed');
+            equal(e.data('editable').value, newText, 'new text saved to value');
+            equal(e.text(), newText, 'new text shown');
+            ok(e.hasClass('editable-changed'), 'has class editable-changed');
+      });      
          
 })    

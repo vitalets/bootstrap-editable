@@ -28,12 +28,13 @@ module.exports = function(grunt) {
         dest: '<%= dist_source %>/css/<%= pkg.name %>.css'
       }
     },
+    /* disable that task as it's better to write changelog manualy
     changelog: {
        user: 'vitalets',
        repo: 'bootstrap-editable',
        dest: 'CHANGELOG.txt'
-       //labels: ['enhancement']
     },
+    */
     min: {
       dist: {
         src: ['<banner:meta.banner>', '<config:concat.dist_js.dest>'],

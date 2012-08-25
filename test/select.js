@@ -1,7 +1,8 @@
 $(function () {
 
     $.support.transition = false;
-    var fx = $('#async-fixture');    
+    var sfx = $('#qunit-fixture'),
+        fx = $('#async-fixture');    
     
     var groups =  {
             0: 'Guest',
@@ -32,7 +33,8 @@ $(function () {
 
     test("popover should contain SELECT even if value & source not defined", function () {
         var  e = $('<a href="#" data-type="select">w</a>').appendTo('#qunit-fixture').editable();
-        
+
+        console.log(e.data('editable').settings);
         e.click();
         var p = e.data('popover').$tip;
         ok(p.find('select').length, 'select exists')
@@ -272,17 +274,49 @@ $(function () {
         
      });  
      
-     asyncTest("test autotext option", function () {
-         var e = $('<a href="#" data-type="select" data-value="3" data-source="groups.php">custfghfhomer</a>').appendTo(fx).editable({
-              autotext: true
-          });
+     test("autotext: auto", function () {
+         expect(3);
+             //auto, text->empty, source->array
+         var e = $('<a href="#" data-type="select" data-value="3"></a>').appendTo(sfx).editable({
+                source: groups
+               //autotext: 'auto'  <-- default
+             }),   
+             //auto, text->not empty, source->array
+             e1 = $('<a href="#" data-type="select" data-value="3">blabla</a>').appendTo(sfx).editable({
+                 source: groups,
+                 autotext: 'auto'
+             }),
+             //auto, text->empty, source->url
+             e2 = $('<a href="#" data-type="select" data-value="3" data-source="groups.php"></a>').appendTo(sfx).editable({
+                 autotext: 'auto'
+             });          
+          
+         equal(e.text(), groups[3], 'text setup ok');
+         equal(e1.text(), 'blabla', 'text not changed');
+         equal(e2.text(), e2.data('editable').settings.emptytext, 'text set to emptytext');
+    });    
+    
+     asyncTest("autotext: always (source = url)", function () {
+         expect(1);
+         var e = $('<a href="#" data-type="select" data-value="3" data-source="groups.php">blabla</a>').appendTo(fx).editable({
+               autotext: 'always'  
+             });             
           
         setTimeout(function() {
               equal(e.text(), groups[3], 'text setup ok');
               e.remove();    
               start();  
          }, timeout);   
-    });       
+    });  
+    
+     test("autotext: never", function () {
+         var e = $('<a href="#" data-type="select" data-value="3"></a>').appendTo(sfx).editable({
+                source: groups,
+                autotext: 'never'
+             });   
+             
+         equal(e.text(), e.data('editable').settings.emptytext, 'text set to emptytext');
+    });        
      
      asyncTest("test prepend option (sync & async)", function () {
         //sync
