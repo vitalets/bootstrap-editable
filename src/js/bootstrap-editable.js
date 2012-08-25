@@ -403,7 +403,9 @@
           prepend: false,  
           init: function(options) {
               //if no value provided, do nothng
-              if(this.value === undefined || this.value === null) return;
+              if(this.value === undefined || this.value === null) {
+                  return;
+              }
               
               //set element text by value (depends on autotext option)
               if(this.settings.autotext === 'always') {
@@ -432,7 +434,9 @@
                   var cacheID = this.settings.source+'-'+this.name,
                       cache;
 
-                  if(!$(document).data(cacheID)) $(document).data(cacheID, {});
+                  if(!$(document).data(cacheID)) {
+                      $(document).data(cacheID, {});
+                  }
                   cache = $(document).data(cacheID);
                  
                   //check for cached data
@@ -472,7 +476,9 @@
                   if($.isArray(this.settings.source)) {
                      var arr = this.settings.source, obj = {};
                      for (var i = 0; i < arr.length; i++) {
-                        if (arr[i] !== undefined) obj[i] = arr[i];
+                        if (arr[i] !== undefined) {
+                            obj[i] = arr[i];
+                        }
                      }
                      this.settings.source = obj;
                   }
@@ -638,7 +644,9 @@ function tryParseJson(s, safe) {
 */
 function mergeKeys(objTo, objFrom, keys) {   
      var key, keyLower;
-     if(!$.isArray(keys)) return objTo;
+     if(!$.isArray(keys)) {
+         return objTo;
+     }
      for(var i=0; i<keys.length; i++) {
          key = keys[i];
          if(key in objFrom) {

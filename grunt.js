@@ -47,7 +47,8 @@ module.exports = function(grunt) {
     lint: {
      //TODO: lint tests files
      //files: ['grunt.js', 'src/js/*.js', 'test/**/*.js']     
-      files: ['grunt.js', 'src/js/*.js']
+//      files: ['grunt.js', 'src/js/*.js']
+      files: ['grunt.js', 'src/js/bootstrap-editable.js']
     },
     watch: {
       files: '<config:lint.files>',
