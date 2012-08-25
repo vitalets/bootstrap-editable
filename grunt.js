@@ -77,7 +77,7 @@ module.exports = function(grunt) {
         dist: {
             files: {
                 '<%= dist_source %>/img' : 'src/img/*',
-                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG']
+                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG.txt']
             },
             options: {
                flatten: true
