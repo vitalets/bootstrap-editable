@@ -1,0 +1,3 @@
+cd dist
+rm -rf *.zip
+c:/zip/zip -rT bootstrap-editable-v$1.zip bootstrap-editable libs
