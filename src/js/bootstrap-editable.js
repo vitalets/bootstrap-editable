@@ -160,6 +160,12 @@
               return;
           }
          
+          //if value not changed --> simply close popover
+          if(value == this.value) {
+              this.hide();
+              return;
+          }
+         
           //getting primary key
           if(typeof this.settings.pk === 'function') {
               pk = this.settings.pk.call(this.$element);
@@ -618,7 +624,7 @@ function setCursorPosition(pos) {
 
 /**
 * function to parse JSON in *single* quotes. (jquery automatically parse only double quotes)
-* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}"
+* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}">
 * safe = true --> means no exception will be thrown
 * for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery   
 */

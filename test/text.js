@@ -1,7 +1,8 @@
 $(function () {
 
    $.support.transition = false;
-   var fx = $('#async-fixture');
+   var  sfx = $('#qunit-fixture'),
+        fx = $('#async-fixture');
     
     module("text")
       
@@ -109,7 +110,7 @@ $(function () {
            e.remove();    
            start();  
         }, timeout);                     
-      })       
+      });       
       
      asyncTest("should show error on validation", function () {
         var e = $('<a href="#">abc</a>').appendTo(fx).editable({
@@ -132,7 +133,7 @@ $(function () {
            e.remove();    
            start();   
         }, timeout);                     
-     })      
+     });      
      
      test("test validation map", function () {
         var e = $('<a href="#" class="map" data-name="e">abc</a>').appendTo('#qunit-fixture'),
@@ -170,7 +171,33 @@ $(function () {
         equal(p.find('.help-block').text(), 'required2', 'error msg shown');   
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');        
-     })        
+     });        
+      
+      asyncTest("should not perform request if value not changed", function () {
+        var e = $('<a href="#" data-pk="1" data-url="post-no.php">abc</a>').appendTo(fx).editable(),
+            req = 0;
+
+         $.mockjax({
+                url: 'post-no.php',
+                response: function() {
+                    req++;
+                }
+         });          
+        
+        e.click();
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        p.find('button[type=submit]').click(); 
+                
+        setTimeout(function() {
+           ok(!p.is(':visible'), 'popover closed');
+           equal(req, 0, 'request was not performed');
+           e.remove();    
+           start();  
+        }, timeout);                     
+      });       
+      
+      
       
      asyncTest("should show error if success callback return string", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable({
