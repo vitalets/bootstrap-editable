@@ -229,7 +229,7 @@ $(function () {
          }, timeout);   
      });
      
-     asyncTest("cache options request for same selects", function () {
+     asyncTest("cache request for same selects", function () {
          var e = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
              e1 = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-url="post.php" data-source="groups-cache.php">customer</a>').appendTo(fx).editable(),
              req = 0;
@@ -272,6 +272,39 @@ $(function () {
         }, timeout);  
         
      });  
+     
+    asyncTest("cache simultaneous requests", function () {
+        expect(4);
+        var req = 0;
+        $.mockjax({
+                url: 'groups-cache-sim.php',
+                responseTime: 200,
+                response: function() {
+                    req++;
+                    this.responseText = groups;
+                }
+         });  
+
+         var e = $('<a href="#" data-type="select" data-pk="1" data-value="1" data-autotext="always" data-url="post.php" data-source="groups-cache-sim.php">35</a>').appendTo(fx).editable(),
+             e1 = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-autotext="always" data-url="post.php" data-source="groups-cache-sim.php">35</a>').appendTo(fx).editable(),
+             e2 = $('<a href="#" data-type="select" data-pk="1" data-value="3" data-autotext="always" data-url="post.php" data-source="groups-cache-sim.php">6456</a>').appendTo(fx).editable();
+           
+          setTimeout(function() {
+
+                equal(req, 1, 'one request');
+                equal(e.text(), groups[1], 'text1 correct');
+                equal(e1.text(), groups[2], 'text2 correct');
+                equal(e2.text(), groups[3], 'text3 correct');
+                
+                e.remove();    
+                e1.remove();    
+                e2.remove();    
+                start();  
+           }, 300);
+        
+     });       
+     
+     
      
      test("autotext: auto", function () {
          expect(3);

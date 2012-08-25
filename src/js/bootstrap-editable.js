@@ -431,7 +431,7 @@
 
                   if(!$(document).data(cacheID)) $(document).data(cacheID, {});
                   cache = $(document).data(cacheID);
-
+                 
                   //check for cached data
                   if (cache.loading === false && cache.source && typeof cache.source === 'object') { //take source from cache
                       this.settings.source = cache.source;
@@ -447,7 +447,7 @@
                       cache.loading = true;
                       cache.callbacks = [];
                   }
-
+                    
                   //options loading from server
                   $.ajax({
                       url: this.settings.source, 
