@@ -433,7 +433,7 @@
                   cache = $(document).data(cacheID);
 
                   //check for cached data
-                  if (cache.loading === false && cache.source && typeof cache.source === 'object') { //take data from cache
+                  if (cache.loading === false && cache.source && typeof cache.source === 'object') { //take source from cache
                       this.settings.source = cache.source;
                       success.call(this);
                       return;
@@ -518,7 +518,7 @@
                   if(typeof this.settings.source === 'object' && this.value in this.settings.source) {
                       this.$element.text(this.settings.source[this.value]);
                   } else {
-                      this.$element.text('Undefined!');
+                      this.$element.text('undefined');
                   }
               },
               function(){
