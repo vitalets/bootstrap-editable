@@ -1,3 +1,9 @@
+if [ $# -eq 0 ]
+then
+echo "You should provide version"
+exit 1
+fi
+
 cd dist
 rm -rf *.zip
-c:/zip/zip -rT bootstrap-editable-v$1.zip bootstrap-editable libs
+zip -rT bootstrap-editable-v$1.zip bootstrap-editable libs
