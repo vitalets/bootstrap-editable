@@ -13,11 +13,6 @@
         <![endif]-->
 
         <script src="assets/jquery/jquery-1.7.1.min.js"></script>  
-         
-        <script src="assets/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js"></script>   
-        <link href="assets/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet">
-        <link href="assets/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css" rel="stylesheet">
-        
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>    
         <script src="assets/prettify/prettify.js"></script>
         <script src="assets/mockjax/jquery.mockjax.js"></script>
@@ -56,7 +51,10 @@
                 <!-- twitter -->
                  <form action="" class="pull-right" style="margin: 5px 0 0">
                  <a href="https://twitter.com/share" class="twitter-share-button" data-text="Editable for Bootstrap: In-place editing with Bootstrap Form and Popover" data-via="vitpotapov" data-size="large">Tweet</a>
-                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                 <script>!function(d,s,id){
+                      if(window.location.href.substr(0, 16) == 'http://localhost') return;
+                      var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}
+                 }(document,"script","twitter-wjs");</script>
                  </form>                
               </div><!--/.nav-collapse -->
             </div>
@@ -73,21 +71,22 @@
                         <h3>About</h3>
                         <p>Invokes in-place editing feature to any element of your page</p>
                         <ul>
-                            <li>based on Bootstrap form and popover</li>
+                            <li>based on <a href="http://twitter.github.com/bootstrap" target="_blank">Bootstrap</a> form and popover</li>
                             <li>supported types: text, textarea, select, date</li>
                             <li>validation on client and server-side</li>
                             <li>keyboard events (escape/enter)</li>                            
                         </ul>   
                         <p style="text-align: center">
-                           <a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.0.5.zip" class="btn btn-primary">Download stable (v1.0.5)</a>
+                           <a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.1.0.zip" class="btn btn-primary">Download stable (v1.1.0)</a>
                            <br><a href="assets/bootstrap-editable/CHANGELOG.txt" style="font-size: 0.85em">release notes</a>
                         </p>
                         <br>
-                        <h3>Requirements</h3>
-                        <ul>
-                            <li><a href="http://twitter.github.com/bootstrap" taget="_blank">Twitter Bootstrap 2</a></li>
-                            <li><a href="http://addyosmani.github.com/jquery-ui-bootstrap" taget="_blank">jQuery UI + Bootstrap theme</a><br>(for datepicker only)</li>
-                        </ul> 
+                        <h3>News</h3>
+                        <p><i>25/08/12</i><br>
+                           Version 1.1.0 released! <br>
+                           Major change is replacement of jQuery-UI datepicker with <a href="http://vitalets.github.com/bootstrap-datepicker/" target="_blank">bootstrap-datepicker</a>.<br>
+                           Please note that it's not compatible with previous 1.0.5.
+                        </p>
                     </div>
                     
                     <div class="span9">
@@ -159,17 +158,13 @@
 
                         <hr>
                         <h2>Getting started</h2>
-                        <p>Include required files on you page (assuming everything in <i>libs</i> folder)</p>
+                        <p>Include required files: </p>
                         <p>jQuery & Bootstrap</p>
                         <pre class="prettyprint linenums">
 &lt;link href=&quot;libs/bootstrap/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;libs/jquery/jquery-1.7.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;libs/jquery/jquery-1.7.2.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;libs/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</pre> 
-                        <p>jQuery UI + Bootstrap theme (for datepicker only)</p>
-                        <pre class="prettyprint linenums">
-&lt;link href=&quot;libs/jquery-ui/bootstrap-theme/jquery-ui-1.8.16.custom.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;link href=&quot;libs/jquery-ui/bootstrap-theme/jquery.ui.1.8.16.ie.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;libs/jquery-ui/jquery-ui-1.8.21.datepicker-only.min.js&quot;&gt;&lt;/script&gt;</pre>                         
+                                                 
                         <p>Bootstrap-editable</p>
                         <pre class="prettyprint linenums">
 &lt;link href=&quot;libs/bootstrap-editable/css/bootstrap-editable.css&quot; rel=&quot;stylesheet&quot;&gt;
@@ -178,35 +173,55 @@
                         
                         <h2>Usage and markup</h2>
                         <p>You can activate editable on your page easily with special markup and a few line of javascript.
-                        Options can be defined via either <code>data-*</code> attributes or json options.
-                        </p> 
-                        <h3>Text and textarea</h3>
-                        <p> Just set <code>data-type</code>, <code>data-pk</code>, <code>data-name</code> and <code>data-url</code> of <code>&lt;A&gt;</code> element. </p>  
-                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot; data-type=&quot;text&quot; data-pk=&quot;1&quot; data-name=&quot;username&quot; data-url=&quot;post.php&quot; data-original-title=&quot;Enter username&quot;&gt;superuser&lt;/a&gt;</pre> 
-                        <pre class="prettyprint linenums">$('#username').editable();</pre>
-                        <p>Alternatively, you can set all the same options via javascript</p>
+                        Options can be defined via either <code>data-*</code> attributes or json options.</p> 
+                        <p>Below you will find examples of each type and then detailed list of all options.</p>
+                        <h3>Text</h3>
+                        <p> Just create <code>&lt;A&gt;</code> element</p>
                         <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot;&gt;superuser&lt;/a&gt;</pre> 
+                        <p>and apply <code>editable()</code> method</p>
                         <pre class="prettyprint linenums">$('#username').editable({
-                           type: 'text',
-                           pk: 1,
-                           name: 'username',
-                           url: 'post.php',  
+                           type:  'text',
+                           pk:    1,
+                           name:  'username',
+                           url:   'post.php',  
                            title: 'Enter username'
                         });</pre> 
+                       
+                        <p>Alternatively, you can set all the same options via <code>data-*</code> attributes</p>  
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot; data-type=&quot;text&quot; data-pk=&quot;1&quot; data-name=&quot;username&quot; data-url=&quot;post.php&quot; data-original-title=&quot;Enter username&quot;&gt;superuser&lt;/a&gt;</pre> 
+                        <pre class="prettyprint linenums">$('#username').editable();</pre>
+
                         <div class="alert alert-info">
-                            <strong>Tip! </strong>Usually URL for submit is the same for all fields. You can define it in defaults:
+                            <strong>Tip! </strong>If <code>url</code> for submit is equal for all fields you can define it via defaults: <br>
                             <code>$.fn.editable.defaults.url = 'post.php';</code>
                         </div>    
                         
+                        <h3>Textarea</h3>
+                        <p>Very similar to <i>text</i>, just set <code>type</code> to <i>textarea</i></p>
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;comments&quot;&gt;awesome!&lt;/a&gt;</pre> 
+                        <pre class="prettyprint linenums">$('#comments').editable({
+                           type:  'textarea',
+                           pk:    1,
+                           name:  'comments',
+                           url:   'post.php',  
+                           title: 'Enter comments'
+                        });</pre>
+                        
                         <h3>Select</h3>
-                        <p>For 'select' element additionally set <code>data-source</code> and <code>data-value</code></p>
+                        <p>For <i>select</i> element additionally set <code>data-source</code> and <code>data-value</code></p>
                         <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;group&quot; data-type=&quot;select&quot; data-name=&quot;group&quot; data-pk=&quot;1&quot; data-value=&quot;5&quot; data-source=&quot;groups.php&quot; data-original-title=&quot;Select group&quot;&gt;Admin&lt;/a&gt;</pre>
                         <pre class="prettyprint linenums">$('#group').editable();</pre>  
                       
                         <h3>Date</h3>
-                        <p>Date is based on <a href="http://addyosmani.github.com/jquery-ui-bootstrap" taget="_blank">jQuery UI datepicker with Bootstrap theme</a>. You can set <code>data-format</code> to control format of date</p>
-                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;dob&quot; data-type=&quot;date&quot; data-format=&quot;dd.mm.yy&quot; data-placement=&quot;bottom&quot; data-pk=&quot;1&quot; data-name=&quot;dob&quot; data-original-title=&quot;Select Date of birth&quot;&gt;15.05.1984&lt;/a&gt;</pre>
-                        <pre class="prettyprint linenums">$('#dob').editable();</pre>
+                        <p>Date is based on <a href="http://vitalets.github.com/bootstrap-datepicker/" taget="_blank">bootstrap-datepicker</a> and included into library</p>
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;dob&quot; data-format=&quot;dd.mm.yyyy&quot;&gt;15.05.1984&lt;/a&gt;</pre>
+                        <pre class="prettyprint linenums">$('#dob').editable({
+                           type:  'date',
+                           pk:    1,
+                           name:  'dob',
+                           url:   'post.php',  
+                           title: 'Select Date of birth'
+                        });</pre> 
                                                            
                         <h2>Options</h2>
                         <p>List of all possible options</p>
@@ -230,13 +245,13 @@
                                     <td>name</td>
                                     <td>string</td>
                                     <td>null</td>
-                                    <td>name of field, required. If not set, will be taken from <b>ID</b> attribute.</td>
+                                    <td>name of field, required. If not set, will be taken from <b>id</b> attribute.</td>
                                 </tr> 
                                 <tr>
                                     <td>pk</td>
                                     <td>string | function</td>
                                     <td>null</td>
-                                    <td>primary key of editable object (e.g. record id in database). Use function to get id dynamically, e.g.:<br>
+                                    <td>primary key of editable object (e.g. record id in database). Can be css selector or function to get id dynamically, e.g.:<br>
                                        <pre class="prettyprint linenums">function() {
     return $('#user_id').text();
 }</pre>
@@ -245,8 +260,8 @@
                                 <tr>
                                     <td>value</td>
                                     <td>string</td>
-                                    <td>$(element).text()</td>
-                                    <td>initial value. Should be defined for 'select' type to store selected ID</td>
+                                    <td>element's text</td>
+                                    <td>initial value. Should be defined for <i>select</i> type to store id of shown text</td>
                                 </tr>                                                                                          
                                 <tr>
                                     <td>params</td>
@@ -258,7 +273,7 @@
                                     <td>url</td>
                                     <td>string</td>
                                     <td>null</td>
-                                    <td>url to submit data. Request contains next fields: pk, name, value and params</td>
+                                    <td>url to submit data via ajax. Sending pk, name, value and params</td>
                                 </tr>
                                 <tr>
                                     <td>emptytext</td>
@@ -275,20 +290,20 @@
                                 <tr>
                                     <td>send</td>
                                     <td>string</td>
-                                    <td>'ifpk'</td>
-                                    <td>strategy for sending data on server - ifpk | always | never. 'ifpk' = data will be sent only if <strong>pk</strong> defined</td>
+                                    <td>'auto'</td>
+                                    <td>strategy for sending data on server - auto | always | never. <br>'auto' = data will be sent only if <strong>pk</strong> defined, otherwise will be stored in element</td>
                                 </tr>
                                 <tr>
                                     <td>enablefocus</td>
                                     <td>bool</td>
-                                    <td>true</td>
-                                    <td>wether to return focus on element after popover is closed. It's more functional, but focused links may look not pretty</td>
+                                    <td>false</td>
+                                    <td>wether to return focus on element after popover is closed. This allows fully keyboard input, but focused links may look not pretty</td>
                                 </tr>                                
                                 <tr>
                                     <td>validate</td>
                                     <td>function | object</td>
                                     <td>null</td>
-                                    <td>client-side validation. If function returns string - means validation not passed and string showed as error. 
+                                    <td>function for client-side validation. If returns string - means validation not passed and string showed as error. 
                                         E.g.:
                                         <pre class="prettyprint linenums">validate: function(value) {
   if($.trim(value) == '') 
@@ -307,11 +322,13 @@ validate: {
                                     <td>success</td>
                                     <td>function</td>
                                     <td>null</td>
-                                    <td>called after success submit. If returns string - means error occured and string showed as error. Parameters equals to <code>$.ajax()</code> success callback.
+                                    <td>called after success submit. If returns string - means error occured and string is shown as error. Parameters equals to <code>$.ajax()</code> success callback. Can be used to deal with json returned from server.
                                     E.g.:
                                         <pre class="prettyprint linenums">function(data) {
     if(typeof data == 'object' && !data.success) return data.msg;  
-}</pre></td>
+}</pre>
+By default any submit request returning http status = 200 considered successful, and status != 200 considered error.
+</td>
                                     </td>
                                 </tr>
                                 
@@ -319,10 +336,12 @@ validate: {
                                     <td>error</td>
                                     <td>function</td>
                                     <td>null</td>
-                                    <td>called on ajax error when submitting data. If returns string - it will be shown as error message. Parameters equals to <code>$.ajax()</code> error callback. E.g.:
+                                    <td>called on ajax error when submitting data. If returns string - it will be shown as error message. Parameters equals to <code>$.ajax()</code> error callback. Can be used for special error handling. E.g.:
                                         <pre class="prettyprint linenums">function(xhr) {
     if(xhr.status == 500) return 'Internal server error';  
-}</pre></td>
+}</pre>
+By default response text will be shown as error message.
+</td>
                                     </td>
                                 </tr>                                
                                 
@@ -352,21 +371,27 @@ validate: {
                                     <td>source</td>
                                     <td>string | object</td>
                                     <td>null</td>
-                                    <td>source for data in select element. If string - considered url for ajax call to load items, otherwise should be json. 
-                                    E.g. <code>data-source="{'M': 'male', 'F': 'female'}"</code>
+                                    <td>source for data in select element. If string - considered url for ajax to load items. Otherwise should be json. 
+                                    E.g. <code>data-source="groups.php"</code> or <br><code>data-source="{'M': 'male', 'F': 'female'}"</code>  
                                     </td>
                                 </tr>     
                                 <tr>
                                     <td>autotext</td>
-                                    <td>bool</td>
-                                    <td>false</td>
-                                    <td>if <code>true</code> element's content will be overwritten by text according to value (during initialization)</td>
+                                    <td>string</td>
+                                    <td>auto</td>
+                                    <td>can be auto|always|never. Allows automatically set element's text based on it's value and source. E.g.:
+                                    <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;group&quot; data-type=&quot;select&quot; data-value=&quot;1&quot; data-source=&quot;{1: 'User', 2: 'Admin'}&quot; &gt;&lt;/a&gt;</pre>
+                                    Content of element above is empty, but when apply <i>editable</i> it will be set to <i>Admin</i>
+                                    <pre class="prettyprint linenums">$('#group').editable();</pre>  
+                                    <code>auto</code> means text will be set only if element is empty and <i>source</i> defined as object (no extra request).<br>
+                                    <code>always|never</code> means always(never) try to set element's text<br>
+                                    </td>
                                 </tr>   
                                 <tr>
                                     <td>prepend</td>
                                     <td>string | object</td>
                                     <td>false</td>
-                                    <td>allows to prepend values in select list.<br>E.g. <code>prepend: 'Not set'</code> - new value <code>{'': 'Not set'}</code> will be automatically inserted at the begining of select list</td>
+                                    <td>allows to prepend values in select list.<br>E.g. if set <code>prepend: 'Not defined'</code> then new value <code>{'': 'Not defined'}</code> will be automatically inserted at the begining of select list</td>
                                 </tr>                                                               
                             </tbody>
                            </table>                         
@@ -385,62 +410,80 @@ validate: {
                                 <tr>
                                     <td>format</td>
                                     <td>string</td>
-                                    <td>yy-mm-dd</td>
-                                    <td>date format. It overwrites datepicker's dateFormat</td>
+                                    <td>dd/mm/yyyy</td>
+                                    <td>date format, combination of d, dd, m, mm, yy, yyy. </td>
+                                </tr> 
+                                 <tr>
+                                    <td>weekStart</td>
+                                    <td>integer</td>
+                                    <td>0</td>
+                                    <td>day of the week start. 0 for Sunday - 6 for Saturday</td>
                                 </tr>   
+                                 <tr>
+                                    <td>startView</td>
+                                    <td>string</td>
+                                    <td>0, 'month'</td>
+                                    <td>The view that the datepicker should show when it is opened. Accepts values of 0 or 'month' for month view (the default), 1 or 'year' for the 12-month overview, and 2 or 'decade' for the 10-year overview. Useful for date-of-birth datepickers</td>
+                                </tr>                                  
                                 <tr>
                                     <td>datepicker</td>
                                     <td>object</td>
-                                    <td>{ <br>dateFormat: 'yy-mm-dd',<br> changeMonth: true, <br>changeYear: true<br>}</td>
-                                    <td>configuration for jQuery UI datepicker. </td>
+                                    <td>null</td>
+                                    <td>Full <a href="http://vitalets.github.com/bootstrap-datepicker/" target="_blank">configuration</a> of datepicker. Some most used options from here are dublicated above for convenience</td>
                                 </tr>     
                             </tbody>
                            </table>                         
                         
-                        <h3>Methods</h3>
+                        <h2>Events</h2>
+                        <p>No events defined for this component.</p>                        
+                        
+                        <h2>Methods</h2>
                         <h4>$().editable(options)</h4>
                         <p>Initializes an editable.</p>
                          <br>
                         <p><span class="muted">Below methods are mainly for <strong>creating new records</strong> (details in next section)</span></p>
                         <h4>$().editable('validate')</h4>
-                        <p>Calls validate method for one or several editable elements. Returns object with names and validation messages, e.g.:</p>
-                        <pre class="prettyprint linenums">{
-username: "username is requied",
-fullname: "fullname should be minimum 3 letters length"
-}</pre>
+                        <p>Will call validate method for each editable in array. Returns object with names and validation messages, e.g.:</p>
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('validate');
+/* possible result:
+{
+    username: "username is requied",
+    fullname: "fullname should be minimum 3 letters length"
+}
+*/</pre>
                         <h4>$().editable('getValue')</h4>
-                        <p>Returns values for one or several editable elements, e.g.:</p>
-                        <pre class="prettyprint linenums">{
-username: "superuser",
-fullname: "John"
-}</pre>
+                        <p>Returns current values for one or several editable elements, e.g.:</p>
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('validate');
+/* possible result:
+{
+    username: "superuser",
+    fullname: "John"
+}
+*/</pre>
 
                         <h4>$().editable('markAsSaved')</h4>
-                        <p>Mark editable as saved to server (removes class "editable-changed", etc).</p>
-
-                        <h3>Events</h3>
-                        <p>No events defined for this component.</p>
+                        <p>Mark editable as saved to server (removes class "editable-changed" and updates <i>lastSavedValue</i> of editable).</p>
                         
                         <h2>Creating new record</h2> 
-                        <p>When creating <strong>new record</strong> it's primary key (record id) is undefined and in-place-editing has no related object on backend.
-                        The approach is to store values in html until record will be created. After then editable works as usual.
-                        For that reason there is <code>send = 'ifpk'</code> option. You can create hidden element to store ID and point to it in related editable fields, e.g.:</p>
+                        <p>When creating <strong>new record</strong> it's primary key (record id) is <i>undefined</i> and in-place-editing has no related object on backend.
+                        In that case editable will store new value in itself and will not submit anything to server (this managed by <code>send='auto'</code> option).
+                        But when object has been created, editable should work as usual. One approach is to create hidden element to store primary key and link it with editables, e.g.:</p>
                         <pre class="prettyprint linenums">&lt;span style=&quot;display: none&quot; id=&quot;user_id&quot;&gt;&lt;/span&gt;</pre>
                         <pre class="prettyprint linenums">
 $('.myeditable').editable({
     url: 'post.php',
-    send: 'ifpk',
-    pk: '#user_id', //link to hidden element that stores ID as inner text 
+    send: 'auto',   // (by default)
+    pk: '#user_id', // link to hidden element that stores pk as inner text 
     validate: {
         username: function(v) {if(v == '') return 'Username is required!'}
     } 
 });</pre>
-                        <p>Initially <strong>#user_id</strong> is empty - no requests will be submited to server, values will be stored in html and marked with css class <i>editable-changed</i><br>
+                        <p>Initially <strong>#user_id</strong> is empty - no requests will be submited to server, but values will be stored and editables will be marked with css class <i>editable-changed</i><br>
                         <strong>Live example:</strong></p>                                       
                         
                         <div>
                         <div class="alert alert-success hide">
-                            <strong>User created!</strong> To modify data just click on values.
+                            <strong>User created!</strong> Primary key is written into <i>#user_id</i> and editables will work as usual
                         </div>
                         <div class="alert alert-error hide">
                         </div> 
@@ -472,27 +515,27 @@ $('.myeditable').editable({
                         <button id="save-btn" class="btn btn-primary">Create user!</button>
                     </div>                         
                      <br>
-                     <p>When you click on <i>create user</i> button, validation will run for all values and if correct - submit to server. 
+                     <p>When you click on <i>create user</i> button, validation runs for all fields and if no errors - submit to server. 
                      To perform these actions easily there are three methods <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code><br>
                      E.g.   
                      </p>
                      
                         <pre class="prettyprint linenums">
 $('#save-btn').click(function() {
-       var errors = $('.myeditable').editable('validate'); //run validation for all values
-       if($.isEmptyObject(errors)) {
-           var data = $('.myeditable').editable('getValue'); //get values
-           $.post('new.php', data, function(response) {
-              $('#user_id').text(response.id); 
-              $('.myeditable').editable('markAsSaved'); //mark fields as saved
-              ...
-          }); 
-       } else {
-          var msg = 'Validation errors! ';
-          $.each(errors, function(k, v) { msg += v+"&lt;br&gt;"; });
-          $('.alert-error').html(msg).show(); 
-          ...
-       }
+    var errors = $('.myeditable').editable('validate'); //run validation for all values
+    if($.isEmptyObject(errors)) {
+        var data = $('.myeditable').editable('getValue'); //get values
+        $.post('new.php', data, function(response) {
+            $('#user_id').text(response.id); 
+            $('.myeditable').editable('markAsSaved'); //on success mark fields as saved
+            ...
+        }); 
+    } else {
+        var msg = 'Validation errors! ';
+        $.each(errors, function(k, v) { msg += v+"&lt;br&gt;"; });
+        $('.alert-error').html(msg).show(); 
+        ...
+    }
 });</pre>
           
             <p>If you find bug or have an idea please feel free to <a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">write me on github</a>.</p>
@@ -513,6 +556,8 @@ $('#save-btn').click(function() {
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function (d, w, c) {
+    if(window.location.href.substr(0, 16) == 'http://localhost') return;
+    
     (w[c] = w[c] || []).push(function() {
         try {
             w.yaCounter16259926 = new Ya.Metrika({id:16259926, enableAll: true});

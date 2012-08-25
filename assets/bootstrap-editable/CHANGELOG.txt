@@ -1,25 +1,52 @@
-bootstrap-editable change log
+Bootstrap-editable change log
 =============================
+
+Version 1.1.0 (work in progress)
+----------------------------
+Enh #5: Replace jQuery-ui datepicker with bootstrap-datepicker (@vitalets)
+Enh #22: Select: convert 'source' from native array to object (@vitalets)
+Enh #21: Default value of 'enablefocus' set to false (@vitalets)
+Enh #20: More RESTful: when http status != 200 popover shows responseText (@vitalets)
 
 
 Version 1.0.5 Aug 8, 2012
 ----------------------------
-[bug] #18: In submit method value should be set by getInputValue (@vitalets)
-[enhancement] #17: Show response text in error when HTTP != 200 (@vitalets)
-[enhancement] #16: SELECT: set link text according to value (@vitalets)
-[enhancement] #15: Generate release notes (@vitalets)
-[enhancement] #14: Disable focus management (@vitalets)
-[enhancement] #13: Json in html data-* attributes (@vitalets)
-[bug] #12: When text contains escaped html it is processed incorrectly (@vitalets)
-[enhancement] #11: Add to dist all required libs (jquery, bootstrap, jquery-ui + theme) (@vitalets)
-[enhancement] #10: SELECT: cache and share source data between selects (@vitalets)
-[enhancement] #9: Pk function in element context (@vitalets)
-[enhancement] #8: Method to customize text render (@vitalets)
-[enhancement] #7: Add empty value to SELECT list (@vitalets)
+Bug #18: In submit method value should be set by getInputValue (@vitalets)
+Enh #17: Show response text in error when HTTP != 200 (@vitalets)
+Enh #16: SELECT: set link text according to value (@vitalets)
+Enh #15: Generate release notes (@vitalets)
+Enh #14: Disable focus management (@vitalets)
+Enh #13: Json in html data-* attributes (@vitalets)
+Bug #12: When text contains escaped html it is processed incorrectly (@vitalets)
+Enh #11: Add to dist all required libs (jquery, bootstrap, jquery-ui + theme) (@vitalets)
+Enh #10: SELECT: cache and share source data between selects (@vitalets)
+Enh #9: Pk function in element context (@vitalets)
+Enh #8: Method to customize text render (@vitalets)
+Enh #7: Add empty value to SELECT list (@vitalets)
 
 
 Version 1.0.4 Aug 2, 2012
 ----------------------------
-[enhancement] #4: Arrange build on Grunt.js (@vitalets)
-[enhancement] #3: Tabbular input without mouse (@vitalets)
-[enhancement] #1: Trigger popover by click on another element (@vitalets)
+Enh #1: Trigger popover by click on another element (@vitalets)
+Enh #6: Allow inline source for select (@fdev)
+
+
+Version 1.0.3 Jul 20, 2012
+----------------------------
+Enh #3: Tabbular input without mouse (@vitalets)
+Enh #4: Arrange build on Grunt.js (@vitalets)
+                          
+                            
+Version 1.0.2 Jul 19, 2012
+----------------------------
+Enh: Close all popovers when openning new one (@vitalets)      
+                     
+                                                              
+Version 1.0.1 Jul 18, 2012
+----------------------------
+Bug: Ajax not sent properly (@vitalets)
+
+
+Version 1.0.0 Jul 18, 2012
+----------------------------
+Initial release     

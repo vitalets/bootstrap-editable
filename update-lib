@@ -4,8 +4,6 @@ rm -rf assets/bootstrap-editable/*
 cp -R ../lib/dist/bootstrap-editable/* assets/bootstrap-editable
 #copy zip
 cp -R ../lib/dist/*.zip assets/bootstrap-editable
-#copy tar.gz
-cp -R ../lib/dist/*.tar.gz assets/bootstrap-editable
 
 #extract version
 filename=$(ls assets/bootstrap-editable/boot*.zip)
