@@ -561,33 +561,17 @@
       date: {
           template: '<div style="float: left; padding: 0; margin: 0" class="well"></div>',
           popoverClass: 'editable-popover-date',
+          format: 'dd/mm/yyyy',
           datepicker: {
-              format: 'dd/mm/yyyy',
               autoclose: false,
               keyboardNavigation: false
           },
           init: function(options) {
-              //todo: set input popular options directly from data-* attributes..
-              /*
-              var params = ['format', 'weekStart', 'startView'];
-              for(var i=0; i<params.length; i++) {
-                  if(this.settings[params[i]]) {
-
-                  }
-              }
-              */
-              /*
-              var dateFormat = this.settings.format;
-              options = options ? options : {};
-
-              if(dateFormat) {
-                  options.datepicker = $.extend({}, options.datepicker, {dateFormat: dateFormat});
-              }
-              */
-              //overriding datepicker config
-              if(options.datepicker) {
-                  this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
-              }
+              //set popular options directly from settings or data-* attributes
+              var directOptions = mergeKeys({}, this.settings, ['format', 'weekStart', 'startView']);
+              
+              //overriding datepicker config (as by default jQuery merge is not recursive)
+              this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, directOptions, options.datepicker);   
           },
           renderInput: function() {
               this.$input = $(this.settings.template);      
@@ -646,5 +630,27 @@ function tryParseJson(s, safe) {
      return s;
 }
 
+/**
+* function merges only specified keys
+*/
+function mergeKeys(objTo, objFrom, keys) {   
+     var key, keyLower;
+     if(!$.isArray(keys)) return objTo;
+     for(var i=0; i<keys.length; i++) {
+         key = keys[i];
+         if(key in objFrom) {
+            objTo[key] = objFrom[key];
+            continue;
+         }
+         //note, that when getting data-* attributes via $.data() it's converted it to lowercase. 
+         //details: http://stackoverflow.com/questions/7602565/using-data-attributes-with-jquery         
+         //workaround is code below. 
+         keyLower = key.toLowerCase();
+         if(keyLower in objFrom) {
+            objTo[key] = objFrom[keyLower];
+         }
+     }
+     return objTo;
+}
   
 }( window.jQuery ));  
