@@ -518,7 +518,8 @@
                   if(typeof this.settings.source === 'object' && this.value in this.settings.source) {
                       this.$element.text(this.settings.source[this.value]);
                   } else {
-                      this.$element.text('undefined');
+                      //set empty string when key not found in source
+                      this.$element.text('');
                   }
               },
               function(){
