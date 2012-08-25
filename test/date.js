@@ -7,7 +7,7 @@ $(function () {
      
     asyncTest("popover should contain datepicker with value and save new entered date", function () {
         var d = '15.05.1984',
-            e = $('<a href="#" data-type="date" data-weekStart="1">'+d+'</a>').appendTo(fx).editable({
+            e = $('<a href="#" data-type="date" data-weekstart="1">'+d+'</a>').appendTo(fx).editable({
                 format: 'dd.mm.yyyy',
                 datepicker: {
                     
