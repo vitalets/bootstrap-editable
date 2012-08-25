@@ -402,6 +402,9 @@
           source: null,
           prepend: false,  
           init: function(options) {
+              //if no value provided, do nothng
+              if(this.value === undefined || this.value === null) return;
+              
               //set element text by value (depends on autotext option)
               if(this.settings.autotext === 'always') {
                   this.settings.setTextByValue.call(this);
