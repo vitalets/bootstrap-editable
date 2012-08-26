@@ -435,7 +435,23 @@ By default response text will be shown as error message.
                            </table>                         
                         
                         <h2>Events</h2>
-                        <p>No events defined for this component.</p>                        
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 150px;">Event</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>update</td>
+                                    <td>This event is fired when the editable has been successfully updated with new value.</td>
+                                </tr>
+                            </tbody>
+                        </table> 
+<pre class="prettyprint linenums">$('#username').on('update', function() {
+    alert('new value: ' + $(this).data('editable').value);
+});</pre>                                           
                         
                         <h2>Methods</h2>
                         <h4>$().editable(options)</h4>
