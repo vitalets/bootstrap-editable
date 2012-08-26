@@ -25,7 +25,7 @@
       this.settings = $.extend({}, $.fn.editable.defaults, $.fn.editable.types.defaults, typeDefaults, options, this.$element.data());
       
       //store name
-      this.name = this.$element.attr('name') || this.$element.attr('id') || this.settings.name; 
+      this.name = this.settings.name || this.$element.attr('id'); 
       if(!this.name) {
         $.error('You should define name (or id) for Editable element');     
       }
@@ -57,14 +57,14 @@
           if(!this.$toggle.parent().length) {
               this.$element.after(this.$toggle);
           }
-          //prevent tabstop on container element
+          //prevent tabstop on element
           this.$element.attr('tabindex', -1);
       } else {
           this.$toggle = this.$element;
+          
+          //add editable class
+          this.$element.addClass('editable');          
       }      
-      
-      //add editable class
-      this.$element.addClass('editable');
     
       //bind click event
       this.$toggle.on('click', $.proxy(this.click, this));
@@ -165,6 +165,14 @@
               return;
           }
          
+          //if value not changed --> simply close popover
+          /*jslint eqeqeq: false*/
+          if(value == this.value) {
+              this.hide();
+              return;
+          }
+          /*jslint eqeqeq: true*/
+          
           //getting primary key
           if(typeof this.settings.pk === 'function') {
               pk = this.settings.pk.call(this.$element);
@@ -181,6 +189,7 @@
               this.settings.params = tryParseJson(this.settings.params, true);
               
               params = (typeof this.settings.params === 'string') ? {params: this.settings.params} : $.extend({}, this.settings.params);
+              params.name = this.name;                 
               params.value = value;
                 
               //hide form, show loading
@@ -190,9 +199,7 @@
               if(pk) {
                   params.pk = pk;   
               }
-              if(this.settings.name) {
-                  params.name = this.settings.name;   
-              }
+
               var url = (typeof this.settings.url === 'function') ? this.settings.url.call(this) : this.settings.url;
               $.ajax({
                   url: url, 
@@ -210,7 +217,8 @@
                           that.settings.setTextByValue.call(that);
                           that.markAsSaved();
                           that.handleEmpty();      
-                          that.hide();                           
+                          that.hide();
+                          that.$element.trigger('update');                           
                       }
                   },
                   error: function(xhr) {
@@ -226,6 +234,7 @@
               this.markAsUnsaved();
               this.handleEmpty();   
               this.hide();
+              this.$element.trigger('update');
           }
      },
 
@@ -234,7 +243,7 @@
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
           
-          //returning focus on element if needed
+          //returning focus on element or on toggle element
           if(this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
               this.$toggle.focus();
           }
@@ -263,6 +272,9 @@
      },     
      
      handleEmpty: function() {
+         if(!this.$element.hasClass('editable')) {
+             return;
+         }
          if(this.$element.text() === '') {
              this.$element.addClass('editable-empty').text(this.settings.emptytext);
          } else {
@@ -623,7 +635,7 @@ function setCursorPosition(pos) {
 
 /**
 * function to parse JSON in *single* quotes. (jquery automatically parse only double quotes)
-* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}"
+* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}">
 * safe = true --> means no exception will be thrown
 * for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery   
 */
@@ -631,13 +643,17 @@ function tryParseJson(s, safe) {
      if(typeof s === 'string' && s.length && s.match(/^\{.*\}$/)) {
           if(safe) {
               try {
+                  /*jslint evil: true*/
                   s = (new Function( 'return ' + s ))();
+                  /*jslint evil: false*/
               } catch(e) {}
               finally {
                   return s;
               }
           } else {
+              /*jslint evil: true*/
               s = (new Function( 'return ' + s ))();  
+             /*jslint evil: false*/
           }
      } 
     
