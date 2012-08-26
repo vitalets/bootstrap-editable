@@ -26,6 +26,7 @@ $(function () {
         
         //check get value
         var values = e.editable('getValue');
+        console.log();
         equal(values.username, 'user', 'username ok') ;
         equal(values.comment, '12345', 'comment ok') ;
         equal(values.sex, 1, 'sex ok') ;
@@ -61,8 +62,8 @@ $(function () {
      
       asyncTest("'update' event", function () {
         expect(2);
-        var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable(),
-            e_nopk = $('<a href="#" data-url="post.php">abc</a>').appendTo(fx).editable(),
+        var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo(fx).editable(),
+            e_nopk = $('<a href="#" data-url="post.php" data-name="text1">abc</a>').appendTo(fx).editable(),
             newVal = 'xyt';
         
         e.on('update', function() {

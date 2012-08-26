@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         boss: true,
         eqnull: true,
         browser: true,
-        evil: true  //allow eval
+        evil: false  //allow eval
       },
       globals: {
         jQuery: true

@@ -29,7 +29,14 @@ $(function () {
         responseText: 'Internal Server Error'
     });   
    
-    module("select")  
+    module("select", {
+        setup: function(){
+            $.fn.editable.defaults.name = 'name1';
+        },
+        teardown: function(){
+            $.fn.editable.defaults.name = undefined;
+        }
+    });  
 
     test("popover should contain SELECT even if value & source not defined", function () {
         var  e = $('<a href="#" data-type="select">w</a>').appendTo('#qunit-fixture').editable();

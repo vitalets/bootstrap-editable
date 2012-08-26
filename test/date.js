@@ -3,7 +3,14 @@ $(function () {
    $.support.transition = false;
    var fx = $('#async-fixture');
     
-   module("date")
+   module("date", {
+        setup: function(){
+            $.fn.editable.defaults.name = 'name1';
+        },
+        teardown: function(){
+            $.fn.editable.defaults.name = undefined;
+        }
+    });
      
     asyncTest("popover should contain datepicker with value and save new entered date", function () {
         var d = '15.05.1984',
