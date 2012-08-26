@@ -5,7 +5,14 @@ $(function () {
        v1 = 'abb&c"',
        v2 = "a!b<b>'c";
     
-   module("textarea")
+   module("textarea", {
+        setup: function(){
+            $.fn.editable.defaults.name = 'name1';
+        },
+        teardown: function(){
+            $.fn.editable.defaults.name = undefined;
+        }
+    });
       
      test("textarea should contain '' if element is empty", function () {
         var e = $('<a href="#" data-type="textarea"></a>').appendTo('#qunit-fixture').editable()

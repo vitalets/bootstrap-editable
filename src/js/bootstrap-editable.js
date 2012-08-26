@@ -20,7 +20,7 @@
       this.settings = $.extend({}, $.fn.editable.defaults, $.fn.editable.types.defaults, typeDefaults, options, this.$element.data());
       
       //store name
-      this.name = this.$element.attr('name') || this.$element.attr('id') || this.settings.name; 
+      this.name = this.settings.name || this.$element.attr('id'); 
       if(!this.name) {
         $.error('You should define name (or id) for Editable element');     
       }
@@ -29,6 +29,17 @@
       if(typeof this.settings.validate === 'object' && this.name in this.settings.validate) {
           this.settings.validate = this.settings.validate[this.name];
       }
+      
+      //set value from settings or by element text
+      if (this.settings.value === undefined || this.settings.value === null) {
+         this.settings.setValueByText.call(this);
+      } else {
+         this.value = this.settings.value; 
+      }
+      
+      //also storing last saved value (initially equals to value)
+      this.lastSavedValue = this.value;       
+      
       //apply specific init() if defined
       if(typeof this.settings.init === 'function') {
           this.settings.init.call(this, options);
@@ -41,36 +52,17 @@
           if(!this.$toggle.parent().length) {
               this.$element.after(this.$toggle);
           }
-  
-          //prevent tabstop on container element
+          //prevent tabstop on element
           this.$element.attr('tabindex', -1);
       } else {
           this.$toggle = this.$element;
+          
+          //add editable class
+          this.$element.addClass('editable');          
       }      
-                                  
-      //error occured while rendering content
-      this.errorOnRender = false;
-      
-      //add editable class
-      this.$element.addClass('editable');
     
       //bind click event
       this.$toggle.on('click', $.proxy(this.click, this));
-      
-      //set value from settings or by element text
-      if (this.settings.value === undefined || this.settings.value === null) {
-         this.settings.setValueByText.call(this);
-      } else {
-         this.value = this.settings.value; 
-      }
-      
-      //also storing last saved value (initially equals to value)
-      this.lastSavedValue = this.value; 
-      
-      //set element text by value (if option autotext = true)
-      if(this.settings.autotext) {
-          this.settings.setTextByValue.call(this);
-      }
       
       //show emptytext if visible text is empty
       this.handleEmpty();
@@ -168,6 +160,14 @@
               return;
           }
          
+          //if value not changed --> simply close popover
+          /*jslint eqeqeq: false*/
+          if(value == this.value) {
+              this.hide();
+              return;
+          }
+          /*jslint eqeqeq: true*/
+          
           //getting primary key
           if(typeof this.settings.pk === 'function') {
               pk = this.settings.pk.call(this.$element);
@@ -176,7 +176,7 @@
           } else {
               pk = this.settings.pk;
           }
-          var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'ifpk' && pk));
+          var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'auto' && pk) || (this.settings.send === 'ifpk' /* deprecated */ && pk));
           
           if(send) { //send to server
           
@@ -184,6 +184,7 @@
               this.settings.params = tryParseJson(this.settings.params, true);
               
               params = (typeof this.settings.params === 'string') ? {params: this.settings.params} : $.extend({}, this.settings.params);
+              params.name = this.name;                 
               params.value = value;
                 
               //hide form, show loading
@@ -193,9 +194,7 @@
               if(pk) {
                   params.pk = pk;   
               }
-              if(this.settings.name) {
-                  params.name = this.settings.name;   
-              }
+
               var url = (typeof this.settings.url === 'function') ? this.settings.url.call(this) : this.settings.url;
               $.ajax({
                   url: url, 
@@ -213,12 +212,13 @@
                           that.settings.setTextByValue.call(that);
                           that.markAsSaved();
                           that.handleEmpty();      
-                          that.hide();                           
+                          that.hide();
+                          that.$element.trigger('update');                           
                       }
                   },
                   error: function(xhr) {
                       var msg = (typeof that.settings.error === 'function') ? that.settings.error.apply(that, arguments) : null;
-                      that.enableContent(msg || xhr.statusText); 
+                      that.enableContent(msg || xhr.responseText || xhr.statusText); 
                   }     
               });
           } else { //do not send to server   
@@ -229,6 +229,7 @@
               this.markAsUnsaved();
               this.handleEmpty();   
               this.hide();
+              this.$element.trigger('update');
           }
      },
 
@@ -237,7 +238,7 @@
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
           
-          //returning focus on element if needed
+          //returning focus on element or on toggle element
           if(this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
               this.$toggle.focus();
           }
@@ -266,6 +267,9 @@
      },     
      
      handleEmpty: function() {
+         if(!this.$element.hasClass('editable')) {
+             return;
+         }
          if(this.$element.text() === '') {
              this.$element.addClass('editable-empty').text(this.settings.emptytext);
          } else {
@@ -348,9 +352,9 @@
     value: null,  //real value, not shown. Especially usefull for select
     emptytext: 'Empty', //text shown on empty element
     params: null,   //additional params to submit
-    send: 'ifpk', // strategy for sending data on server: 'always', 'never', 'ifpk' (default)
-    autotext: false, //if true -> element text will be automatically set by provided value. Useful for select element
-    enablefocus: true, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
+    send: 'auto', // strategy for sending data on server: 'always', 'never', 'auto' (default). 'auto' = 'ifpk' (deprecated)
+    autotext: 'auto', //can be auto|never|always. Useful for select element: if 'auto' -> element text will be automatically set by provided value and source (in case source is object so no extra request will be performed).
+    enablefocus: false, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
     popoverClass: 'editable-popover-text', //to define size of popover for correct positioning
     formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
                        '<div class="control-group">'+
@@ -408,9 +412,29 @@
       select: {
           template: '<select class="span2"></select>',
           source: null,
-          prepend: false,          
+          prepend: false,  
+          init: function(options) {
+              //if no value provided, do nothng
+              if(this.value === undefined || this.value === null) {
+                  return;
+              }
+              
+              //set element text by value (depends on autotext option)
+              if(this.settings.autotext === 'always') {
+                  this.settings.setTextByValue.call(this);
+                  return;
+              }
+              
+              var isEmpty = !this.$element.html().length;
+              if(this.settings.autotext === 'auto' && isEmpty) {
+                  this.settings.source = tryParseJson(this.settings.source, true);
+                  if(this.settings.source && typeof this.settings.source === 'object') {
+                     this.settings.setTextByValue.call(this);
+                  }
+              }
+          },        
           onSourceReady: function(success, error) {
-              // try parse json in single quotes (for double quotes qjuery does automatically)
+              // try parse json in single quotes (for double quotes jquery does automatically)
               try {
                   this.settings.source = tryParseJson(this.settings.source, false);
               } catch(e) {
@@ -420,13 +444,29 @@
               
               if(typeof this.settings.source === 'string') { 
                   var cacheID = this.settings.source+'-'+this.name,
-                      cache = $(document).data(cacheID);
-                  //check for cached value    
-                  if(typeof cache === 'object') {
-                     this.settings.source = cache; 
-                     success.call(this);
-                     return;
+                      cache;
+
+                  if(!$(document).data(cacheID)) {
+                      $(document).data(cacheID, {});
                   }
+                  cache = $(document).data(cacheID);
+                 
+                  //check for cached data
+                  if (cache.loading === false && cache.source && typeof cache.source === 'object') { //take source from cache
+                      this.settings.source = cache.source;
+                      success.call(this);
+                      return;
+                  } else if (cache.loading === true) { //cache is loading, put callback in stack to be called later
+                      cache.callbacks.push($.proxy(function () {
+                          this.settings.source = cache.source;
+                          success.call(this);
+                      }, this));
+                      return;
+                  } else if (cache.loading === undefined) { //no cache, activate it
+                      cache.loading = true;
+                      cache.callbacks = [];
+                  }
+                    
                   //options loading from server
                   $.ajax({
                       url: this.settings.source, 
@@ -435,12 +475,26 @@
                       dataType: 'json',
                       success: $.proxy(function(data) {
                           this.settings.source = this.settings.doPrepend.call(this, data);
-                          $(document).data(cacheID, this.settings.source);                          
+                          cache.loading = false;
+                          cache.source = this.settings.source;
                           success.call(this);
+                          $.each(cache.callbacks, function(){ this.call(); }); //run callbacks for other fields
                       }, this),
                       error: $.proxy(error, this)
                   });
-              } else { //options as json
+              } else { //options as json/array
+              
+                  //convert regular array to object
+                  if($.isArray(this.settings.source)) {
+                     var arr = this.settings.source, obj = {};
+                     for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] !== undefined) {
+                            obj[i] = arr[i];
+                        }
+                     }
+                     this.settings.source = obj;
+                  }
+              
                   this.settings.source = this.settings.doPrepend.call(this, this.settings.source);
                   success.call(this);
               }              
@@ -482,10 +536,11 @@
           setTextByValue: function() {
               this.settings.onSourceReady.call(this,
               function(){
-                  if(this.value in this.settings.source) {
+                  if(typeof this.settings.source === 'object' && this.value in this.settings.source) {
                       this.$element.text(this.settings.source[this.value]);
                   } else {
-                      this.$element.text('Undefined!');
+                      //set empty string when key not found in source
+                      this.$element.text('');
                   }
               },
               function(){
@@ -522,29 +577,22 @@
       
      /*
       date
-      requires jQuery UI datepicker under bootstrap theme: http://addyosmani.github.com/jquery-ui-bootstrap/
+      based on fork: https://github.com/vitalets/bootstrap-datepicker
       */
       date: {
-          template: '<div style="float: left"></div>',
+          template: '<div style="float: left; padding: 0; margin: 0" class="well"></div>',
           popoverClass: 'editable-popover-date',
+          format: 'dd/mm/yyyy',
           datepicker: {
-              dateFormat: 'yy-mm-dd',
-              changeMonth: true,
-              changeYear: true
+              autoclose: false,
+              keyboardNavigation: false
           },
           init: function(options) {
-              //dateFormat can be set from data-format attribute
-              var dateFormat = this.settings.format;
-              options = options ? options : {};
-
-              if(dateFormat) {
-                  options.datepicker = $.extend({}, options.datepicker, {dateFormat: dateFormat});
-              }
-
-              //overriding datepicker config
-              if(options.datepicker) {
-                  this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, options.datepicker);   
-              }
+              //set popular options directly from settings or data-* attributes
+              var directOptions = mergeKeys({}, this.settings, ['format', 'weekStart', 'startView']);
+              
+              //overriding datepicker config (as by default jQuery merge is not recursive)
+              this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, directOptions, options.datepicker);   
           },
           renderInput: function() {
               this.$input = $(this.settings.template);      
@@ -552,8 +600,12 @@
               this.endShow();
           },
           setInputValue: function() {
-              this.$input.datepicker('setDate', this.value);
-          }
+              this.$input.datepicker('update', this.value);
+          },
+          getInputValue: function() {
+              var dp = this.$input.data('datepicker');
+              return dp.getFormattedDate();
+          }          
       }              
   };  
 
@@ -578,25 +630,54 @@ function setCursorPosition(pos) {
 
 /**
 * function to parse JSON in *single* quotes. (jquery automatically parse only double quotes)
-* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}"
+* That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}">
+* safe = true --> means no exception will be thrown
 * for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery   
 */
 function tryParseJson(s, safe) {   
      if(typeof s === 'string' && s.length && s.match(/^\{.*\}$/)) {
           if(safe) {
               try {
+                  /*jslint evil: true*/
                   s = (new Function( 'return ' + s ))();
+                  /*jslint evil: false*/
               } catch(e) {}
               finally {
                   return s;
               }
           } else {
+              /*jslint evil: true*/
               s = (new Function( 'return ' + s ))();  
+             /*jslint evil: false*/
           }
      } 
     
      return s;
 }
 
+/**
+* function merges only specified keys
+*/
+function mergeKeys(objTo, objFrom, keys) {   
+     var key, keyLower;
+     if(!$.isArray(keys)) {
+         return objTo;
+     }
+     for(var i=0; i<keys.length; i++) {
+         key = keys[i];
+         if(key in objFrom) {
+            objTo[key] = objFrom[key];
+            continue;
+         }
+         //note, that when getting data-* attributes via $.data() it's converted it to lowercase. 
+         //details: http://stackoverflow.com/questions/7602565/using-data-attributes-with-jquery         
+         //workaround is code below. 
+         keyLower = key.toLowerCase();
+         if(keyLower in objFrom) {
+            objTo[key] = objFrom[keyLower];
+         }
+     }
+     return objTo;
+}
   
 }( window.jQuery ));  

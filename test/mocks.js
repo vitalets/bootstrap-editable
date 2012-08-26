@@ -13,8 +13,8 @@ $(function () {
     $.mockjax({
         url: 'error.php',
         status: 500,
-        statusText: 'customtext',
-        responseText: 'Internal Server Error'
+        statusText: 'Internal Server Error',
+        responseText: 'customtext'
     });   
     
     $.mockjax({
@@ -27,6 +27,6 @@ $(function () {
 
   $.support.transition = false; 
   //define name to not put it everywhere
-  $.fn.editable.defaults.name = 'name1';   
+  //$.fn.editable.defaults.name = 'name1';   
     
 });

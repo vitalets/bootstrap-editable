@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib');
   
-  grunt.loadTasks('tasks/');
+  //grunt.loadTasks('tasks/');
              
   // Project configuration.
   grunt.initConfig({
@@ -13,25 +13,28 @@ module.exports = function(grunt) {
     meta: {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> \n' +
         '* <%= pkg.description %>\n' +
-        '* <%= pkg.homepage %>\n\n' +
+        '* <%= pkg.homepage %>\n' +
         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     clean: ['<config:dist>'],
     concat: {
       dist_js: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:src/js/<%= pkg.name %>.js>'],
+        src: ['<banner:meta.banner>', '<file_strip_banner:src/js/bootstrap-editable.js>', '<file_strip_banner:src/js/bootstrap-datepicker.js>'],
         dest: '<%= dist_source %>/js/<%= pkg.name %>.js'
       },
       dist_css: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:src/css/<%= pkg.name %>.css>'],
+        src: ['<banner:meta.banner>', '<file_strip_banner:src/css/bootstrap-editable.css>', '<file_strip_banner:src/css/datepicker.css>'],
         dest: '<%= dist_source %>/css/<%= pkg.name %>.css'
       }
     },
+    /* disable that task as it's better to write changelog manualy
     changelog: {
        user: 'vitalets',
-       repo: 'bootstrap-editable'
+       repo: 'bootstrap-editable',
+       dest: 'CHANGELOG.txt'
     },
+    */
     min: {
       dist: {
         src: ['<banner:meta.banner>', '<config:concat.dist_js.dest>'],
@@ -44,7 +47,8 @@ module.exports = function(grunt) {
     lint: {
      //TODO: lint tests files
      //files: ['grunt.js', 'src/js/*.js', 'test/**/*.js']     
-      files: ['grunt.js', 'src/js/*.js']
+//      files: ['grunt.js', 'src/js/*.js']
+      files: ['grunt.js', 'src/js/bootstrap-editable.js']
     },
     watch: {
       files: '<config:lint.files>',
@@ -63,7 +67,7 @@ module.exports = function(grunt) {
         boss: true,
         eqnull: true,
         browser: true,
-        evil: true  //allow eval
+        evil: false  //allow eval
       },
       globals: {
         jQuery: true
@@ -73,7 +77,7 @@ module.exports = function(grunt) {
         dist: {
             files: {
                 '<%= dist_source %>/img' : 'src/img/*',
-                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG']
+                '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG.txt']
             },
             options: {
                flatten: true
@@ -81,7 +85,7 @@ module.exports = function(grunt) {
         },
         libs: {
             files: {
-                '<%= dist %>/libs': ['libs/bootstrap/**', 'libs/jquery/**', 'libs/jquery-ui/**']
+                '<%= dist %>/libs': ['libs/bootstrap/**', 'libs/jquery/**']
             },
             options: {
                basePath: 'libs', 
@@ -89,6 +93,9 @@ module.exports = function(grunt) {
             }
         }        
     },
+    //compress does not work properly for MAC OS (see https://github.com/vitalets/bootstrap-editable/issues/19)
+    //zip will be created manually
+    /*
     compress: {
         zip: {
             options: {
@@ -97,10 +104,20 @@ module.exports = function(grunt) {
                 basePath: "dist"
                },
             files: {
-                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": "<%= dist %>/**"
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.zip": ["<%= dist_source %>/ **", "<%= dist %>/libs/ **"]
+            }
+        },
+        tgz: {
+            options: {
+                mode: "tgz",
+                basePath: "dist"
+               },
+            files: {
+                "<%= dist %>/bootstrap-editable-v<%= pkg.version %>.tar.gz": ["<%= dist_source %>/ **", "<%= dist %>/libs/ **"]
             }
         }
-    },    
+    },
+    */    
     uglify: {}
   });
 
@@ -108,7 +125,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', 'lint qunit');
   
   // build
-  grunt.registerTask('build', 'clean lint qunit concat min copy compress');
+  grunt.registerTask('build', 'clean lint qunit concat min copy');
   
  //to run particular task use ":", e.g. copy:libs 
 };

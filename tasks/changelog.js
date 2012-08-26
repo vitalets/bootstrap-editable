@@ -7,6 +7,9 @@ module.exports = function(grunt) {
       var options = grunt.config(this.name);
       
       if(!options.dest) options.dest = 'CHANGELOG';
+      if(!options.labels) options.labels = ['bug', 'enhancement'];
+      
+      console.log('Labels: ' + options.labels);
       
       var GitHubApi = require("github");
       var github = new GitHubApi({
@@ -39,11 +42,22 @@ module.exports = function(grunt) {
                 lines.push("\r\n"); 
                 lines.push('Version '+ms.title + (ms.due_on ? ' '+moment(ms.due_on).format('MMM D, YYYY') : '')); 
                 lines.push('----------------------------'); 
-                
+               
+                var issueLines = [];
                 ms.issues.forEach(function(issue) {
-                    issue.labels.forEach(function(e, i, arr) {arr[i] = e.name});
-                    lines.push('['+issue.labels.join(',') + '] #'+issue.number+': '+issue.title+' (' + (issue.assignee ? ('@'+issue.assignee.login) : '') + ')');  
+                    var labels = [];
+                    issue.labels.forEach(function(e, i, arr) {
+                        if(options.labels.indexOf(e.name) >= 0) {
+                            labels.push(e.name);
+                        }
+                    });
+                    if(labels.length) {
+                        issueLines.push('['+labels.join(',') + '] #'+issue.number+': '+issue.title+' (' + (issue.assignee ? ('@'+issue.assignee.login) : '') + ')');  
+                    }
                 });
+                
+                lines = lines.concat(issueLines);
+                console.log('Loaded issues for ' + ms.title + ': ' + issueLines.length);
              }); 
 
              fs.writeFileSync(options.dest, lines.join("\r\n"), 'utf8');
@@ -60,7 +74,6 @@ module.exports = function(grunt) {
                    return function(err2, issues) {
                       r.issues = issues;
                       finished++;
-                      console.log('Loaded issues for ' + r.title + ': '+issues.length);  
                       if(finished == res.length) {
                           writeFile();
                           done(true);
