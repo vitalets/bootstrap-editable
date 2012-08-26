@@ -77,6 +77,7 @@ module.exports = function(grunt) {
         dist: {
             files: {
                 '<%= dist_source %>/img' : 'src/img/*',
+                '<%= dist_source %>/js/locales' : 'src/js/locales/*',
                 '<%= dist_source %>': ['LICENSE-GPL', 'LICENSE-MIT', 'README.md', 'CHANGELOG.txt']
             },
             options: {
