@@ -211,7 +211,8 @@
                           that.settings.setTextByValue.call(that);
                           that.markAsSaved();
                           that.handleEmpty();      
-                          that.hide();                           
+                          that.hide();
+                          that.$element.trigger('update');                           
                       }
                   },
                   error: function(xhr) {
@@ -227,6 +228,7 @@
               this.markAsUnsaved();
               this.handleEmpty();   
               this.hide();
+              this.$element.trigger('update');
           }
      },
 
@@ -235,7 +237,7 @@
           this.$element.removeClass('editable-open');
           $(document).off('keyup.editable');
           
-          //returning focus on element if needed
+          //returning focus on element or on toggle element
           if(this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
               this.$toggle.focus();
           }

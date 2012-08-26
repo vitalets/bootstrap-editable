@@ -59,5 +59,36 @@ $(function () {
         ok(!e.filter('.editable-changed').length, 'editable-changed not exist');
     });
      
+      asyncTest("'update' event", function () {
+        expect(2);
+        var e = $('<a href="#" data-pk="1" data-url="post.php">abc</a>').appendTo(fx).editable(),
+            e_nopk = $('<a href="#" data-url="post.php">abc</a>').appendTo(fx).editable(),
+            newVal = 'xyt';
+        
+        e.on('update', function() {
+             equal($(this).data('editable').value, newVal, 'triggered update after submit');
+        });
+
+        e_nopk.on('update', function() {
+             equal($(this).data('editable').value, newVal, 'triggered update after no-submit');
+        });
+
+        e_nopk.click();
+        var p = e_nopk.data('popover').$tip;
+        p.find('input').val(newVal);
+        p.find('form').submit();        
+                              
+        e.click();
+        p = e.data('popover').$tip;
+        p.find('input').val(newVal);
+        p.find('form').submit();
+                
+        setTimeout(function() {
+           e.remove();    
+           e_nopk.remove();    
+           start();  
+        }, timeout);                     
+      });     
+     
          
 });            
