@@ -82,7 +82,7 @@
                         </p>
                         <br>
                         <h3>News</h3>
-                        <p><i>insert release date!</i><br>
+                        <p><i>26/08/12</i><br>
                            Version 1.1.0 released! <br>
                            Major change is replacement of jQuery-UI datepicker with <a href="http://vitalets.github.com/bootstrap-datepicker/" target="_blank">bootstrap-datepicker</a>.<br>
                            Please note that it's not compatible with previous 1.0.5.
@@ -132,18 +132,18 @@
                                     </tr>       
                                     <tr>         
                                         <td>Date of birth</td>
-                                        <td><a href="#" id="dob" data-type="date" data-format1="dd.mm.yy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
-                                        <td><span class="muted">Date field, format dd.mm.yy</span></td>
+                                        <td><a href="#" id="dob" data-type="date" data-format="dd.mm.yyyy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
+                                        <td><span class="muted">Date field, format dd.mm.yyyy</span></td>
                                     </tr> 
-                                    <tr>         
-                                        <td>Weight, kg</td>
-                                        <td><a href="#" id="weight" data-type="text" data-pk="1" data-name="weight" data-original-title="Enter your weight in kg">65</a></td>
-                                        <td><span class="muted">Internal server error on submit</span></td>
-                                    </tr>                                      
                                     <tr>         
                                         <td>Comments</td>
                                         <td><a href="#" id="comments" data-type="textarea" data-pk="1" data-name="comments" data-original-title="Enter comments">awesome<br>user!</a></td>
                                         <td><span class="muted">Textarea</span></td>
+                                    </tr>                                     
+                                    <tr>         
+                                        <td>Weight, kg</td>
+                                        <td><a href="#" id="weight" data-type="text" data-pk="1" data-name="weight" data-original-title="Enter your weight in kg">65</a></td>
+                                        <td><span class="muted">Server-side validation error</span></td>
                                     </tr>                                     
                                     <tr>         
                                         <td>Note</td>
@@ -158,8 +158,8 @@
 
                         <hr>
                         <h2>Getting started</h2>
-                        <p>Include required files: </p>
-                        <p>jQuery & Bootstrap</p>
+                        <p>Include required js and css files: </p>
+                        <p>jQuery (1.7.2) & Bootstrap (2.0.4)</p>
                         <pre class="prettyprint linenums">
 &lt;link href=&quot;libs/bootstrap/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;&gt;
 &lt;script src=&quot;libs/jquery/jquery-1.7.2.min.js&quot;&gt;&lt;/script&gt;
@@ -174,7 +174,7 @@
                         <h2>Usage and markup</h2>
                         <p>You can activate editable on your page easily with special markup and a few line of javascript.
                         Options can be defined via either <code>data-*</code> attributes or json options.</p> 
-                        <p>Below you will find examples of each type and then detailed list of all options.</p>
+                        <p>Below you will find examples of each type and detailed list of all options.</p>
                         <h3>Text</h3>
                         <p> Just create <code>&lt;A&gt;</code> element</p>
                         <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot;&gt;superuser&lt;/a&gt;</pre> 

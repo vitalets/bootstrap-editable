@@ -11,9 +11,9 @@ $(function(){
 
     $.mockjax({
         url: 'error.php',
-        status: 500,
-        statusText: 'Internal Server Error',
-        responseText: 'Error'
+        status: 400,
+        statusText: 'Bad Request',
+        responseText: 'Please input correct value'
     });
     
     $.mockjax({
@@ -71,7 +71,7 @@ $(function(){
     });   
 
     $('#dob').editable({
-        format: 'dd.mm.yy'
+       // format: 'dd.mm.yyyy'
     });      
     
     $('#weight').editable({
