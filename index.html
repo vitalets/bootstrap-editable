@@ -82,7 +82,7 @@
                         </p>
                         <br>
                         <h3>News</h3>
-                        <p><i>25/08/12</i><br>
+                        <p><i>insert release date!</i><br>
                            Version 1.1.0 released! <br>
                            Major change is replacement of jQuery-UI datepicker with <a href="http://vitalets.github.com/bootstrap-datepicker/" target="_blank">bootstrap-datepicker</a>.<br>
                            Please note that it's not compatible with previous 1.0.5.
@@ -442,7 +442,7 @@ By default response text will be shown as error message.
                         <p>Initializes an editable.</p>
                          <br>
                         <p><span class="muted">Below methods are mainly for <strong>creating new records</strong> (details in next section)</span></p>
-                        <h4>$().editable('validate')</h4>
+                        <h4>.editable('validate')</h4>
                         <p>Will call validate method for each editable in array. Returns object with names and validation messages, e.g.:</p>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('validate');
 /* possible result:
@@ -451,7 +451,7 @@ By default response text will be shown as error message.
     fullname: "fullname should be minimum 3 letters length"
 }
 */</pre>
-                        <h4>$().editable('getValue')</h4>
+                        <h4>.editable('getValue')</h4>
                         <p>Returns current values for one or several editable elements, e.g.:</p>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('validate');
 /* possible result:
@@ -461,7 +461,7 @@ By default response text will be shown as error message.
 }
 */</pre>
 
-                        <h4>$().editable('markAsSaved')</h4>
+                        <h4>.editable('markAsSaved')</h4>
                         <p>Mark editable as saved to server (removes class "editable-changed" and updates <i>lastSavedValue</i> of editable).</p>
                         
                         <h2>Creating new record</h2> 
