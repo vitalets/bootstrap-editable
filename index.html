@@ -6,6 +6,7 @@
         <title>Editable for Bootstrap</title>
         <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="assets/prettify/prettify-bootstrap.css" rel="stylesheet">
+<!--        <link href="subnav.css" rel="stylesheet">-->
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -14,6 +15,7 @@
 
         <script src="assets/jquery/jquery-1.7.1.min.js"></script>  
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>    
+<!--        <script src="assets/bootstrap/js/bootstrap.js"></script>    -->
         <script src="assets/prettify/prettify.js"></script>
         <script src="assets/mockjax/jquery.mockjax.js"></script>
         
@@ -24,13 +26,18 @@
         
         <style type="text/css">
             body {
-                padding-top: 50px;
+                padding-top: 60px;
                 padding-bottom: 40px;
             }
+            /*
+            section {
+                padding-top: 60px;
+            }
+            */
         </style>        
     </head>
 
-    <body onload="prettyPrint()">
+    <body onload="prettyPrint()" data-spy="scroll" data-target=".subnav" data-offset1="150">
     
     <!--     nav bar-->
      <div class="navbar navbar-fixed-top">
@@ -60,15 +67,27 @@
             </div>
           </div>
         </div>    
+        <!-- subnav -->
+        <!--
+        <div class="subnav subnav-fixed">
+                <ul class="nav nav-pills">
+                    <li><a href="#intro">Intro</a></li>
+                    <li><a href="#example">Example</a></li>
+                    <li><a href="#getstarted">Get started</a></li>
+                    <li><a href="#Markup">Markup</a></li>
+                </ul>
+        </div>
+        -->
                          
         <div class="container">
-            <section id="typeahead">
+<!--                <section id="intro"></section>-->
                 <div class="page-header">
                     <h1>Editable for Bootstrap <small>In-place editing with Bootstrap Form and Popover</small></h1>
                 </div>
+                
                 <div class="row">
                     <div class="span3 columns">
-                        <h3>About</h3>
+                        <h2>About</h2>
                         <p>Invokes in-place editing feature to any element of your page</p>
                         <ul>
                             <li>based on <a href="http://twitter.github.com/bootstrap" target="_blank">Bootstrap</a> form and popover</li>
@@ -81,15 +100,25 @@
                            <br><a href="assets/bootstrap-editable/CHANGELOG.txt" style="font-size: 0.85em">release notes</a>
                         </p>
                         <br>
-                        <h3>News</h3>
+                        <h2>News</h2>
                         <p><i>26/08/12</i><br>
                            Version 1.1.0 released! <br>
                            Major change is replacement of jQuery-UI datepicker with <a href="http://vitalets.github.com/bootstrap-datepicker/" target="_blank">bootstrap-datepicker</a>.<br>
                            Please note that it's not compatible with previous 1.0.5.
                         </p>
+                        <br>
+                        <h2>Why editable?</h2>
+                        <ul>
+                            <li>fast development, no special FORM markup</li>
+                            <li>easy adding / removing fields</li>
+                            <li>unified backend script for data update</li>
+                            <li>editing data directly in table (like Excel)</li>                            
+                        </ul>
+
                     </div>
                     
                     <div class="span9">
+<!--                        <section id="example"></section>-->
                         <h2>Example</h2>
                         <p>Click on fields to edit:</p>
                         <div>
@@ -155,8 +184,8 @@
                             </table>
                             <div><span class="muted">* all ajax requests here are emulated</span></div>
                         </div>
-
                         <hr>
+                                                   
                         <h2>Getting started</h2>
                         <p>Include required js and css files: </p>
                         <p>jQuery (1.7.2) & Bootstrap (2.0.4)</p>
@@ -558,8 +587,7 @@ $('#save-btn').click(function() {
                         
                    </div>
                 </div>
-            </section>
-    
+   
       <hr>   
             
       <footer>
