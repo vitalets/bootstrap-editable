@@ -482,14 +482,24 @@ By default response text will be shown as error message.
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>update</td>
-                                    <td>This event is fired when the editable has been successfully updated with new value.</td>
+                                    <td>init</td>
+                                    <td>fired when editable was initialized. To access editable itself use second parameter:
+<pre class="prettyprint linenums">$('#username').on('init', function(e, editable) {
+    alert('Initialized with value: ' + editable.value);
+});</pre>                                    
+                                    </td>
                                 </tr>
-                            </tbody>
-                        </table> 
+                                <tr>
+                                    <td>update</td>
+                                    <td>fired when editable has been successfully updated with new value:
 <pre class="prettyprint linenums">$('#username').on('update', function() {
     alert('new value: ' + $(this).data('editable').value);
-});</pre>                                           
+});</pre>                                      
+                                    </td>
+                                </tr>                                
+                            </tbody>
+                        </table> 
+                                         
                         
                         <section id="methods"><hr></section>
                         <h2>Methods</h2>
