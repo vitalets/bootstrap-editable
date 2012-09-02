@@ -136,6 +136,24 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');  
     })      
+         
+     test("load options from html (json syntax error)", function () {
+         var e = $('<a href="#" data-type="select" data-value="M" data-source=\'{L :Low, "": "None", "M": "Medium", "H": "High"}\'>customer</a>').appendTo('#qunit-fixture').editable({
+             pk: 1
+          }),
+         size = 4;
+
+        e.click()
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        ok(p.find('select').length, 'select exists');
+        equal(p.find('select').find('option').length, 0, 'options not loaded');
+        ok(p.find('.help-block').text().length, 'message shown');
+
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');  
+    })           
+         
                     
      asyncTest("should show error if options cant be loaded", function () {
         var e = $('<a href="#" data-type="select" data-value="2" data-source="groups-error.php">customer</a>').appendTo(fx).editable();

@@ -26,7 +26,7 @@ $(function () {
         
         //check get value
         var values = e.editable('getValue');
-        console.log();
+
         equal(values.username, 'user', 'username ok') ;
         equal(values.comment, '12345', 'comment ok') ;
         equal(values.sex, 1, 'sex ok') ;
