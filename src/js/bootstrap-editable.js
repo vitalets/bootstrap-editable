@@ -514,10 +514,14 @@
                           this.settings.source = cache.source;
                           success.call(this);
                       }, this));
+                      
+                      //also collecting error callbacks
+                      cache.err_callbacks.push($.proxy(error, this));                      
                       return;
-                  } else if (cache.loading === undefined) { //no cache, activate it
+                  } else { //no cache yet, activate it
                       cache.loading = true;
                       cache.callbacks = [];
+                      cache.err_callbacks = [];
                   }
                     
                   //options loading from server
@@ -533,7 +537,11 @@
                           success.call(this);
                           $.each(cache.callbacks, function(){ this.call(); }); //run callbacks for other fields
                       }, this),
-                      error: $.proxy(error, this)
+                      error: $.proxy(function(){
+                          cache.loading = false;
+                          error.call(this);
+                          $.each(cache.err_callbacks, function(){ this.call(); }); //run callbacks for other fields
+                      }, this)
                   });
               } else { //options as json/array
               
