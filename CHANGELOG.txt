@@ -1,6 +1,13 @@
 Bootstrap-editable change log
 =============================
 
+
+Version 1.1.1 wip
+----------------------------
+todo: event 'init'
+Enh: Popover shows full error message and re-positioned correctly (@vitalets)
+
+
 Version 1.1.0 Aug 26, 2012
 ----------------------------
 Enh #23: Added event 'update' (@vitalets)
