@@ -2,7 +2,7 @@
    
   //Editable object 
   var Editable = function ( element, options ) {
-      var type;
+      var type, typeDefaults;
       this.$element = $(element);
 
       //if exists 'placement' or 'title' options, copy them to data attributes to aplly for popover 
@@ -14,8 +14,8 @@
       }
       
      //detect type
-      type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type),
-          typeDefaults = ($.fn.editable.types[type]) ? $.fn.editable.types[type] : {};
+      type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type);
+      typeDefaults = ($.fn.editable.types[type]) ? $.fn.editable.types[type] : {};
           
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, $.fn.editable.types.defaults, typeDefaults, options, this.$element.data());
@@ -277,7 +277,7 @@
              placement,
              pos, actualWidth, actualHeight, tp; 
              
-        placement = typeof p.options.placement == 'function' ?
+        placement = typeof p.options.placement === 'function' ?
           p.options.placement.call(p, $tip[0], p.$element[0]) :
           p.options.placement;             
          
@@ -289,17 +289,17 @@
 
         switch (inside ? placement.split(' ')[1] : placement) {
           case 'bottom':
-            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
-            break
+            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
           case 'top':
-            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
-            break
+            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
           case 'left':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
-            break
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth};
+            break;
           case 'right':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
-            break
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
+            break;
         }
 
         $tip
