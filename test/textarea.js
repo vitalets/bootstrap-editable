@@ -19,7 +19,6 @@ $(function () {
         e.click()
         var p = e.data('popover').$tip;
         ok(p.find('textarea').length, 'textarea exists')
-        ok(p.find('.editable-popover-textarea').length, 'class editable-popover-textarea exists')
         ok(!p.find('textarea').val().length, 'textrea is empty')        
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')         
@@ -38,7 +37,6 @@ $(function () {
         var p = e.data('popover').$tip;
         ok(p.is(':visible'), 'popover visible');
         ok(p.find('textarea').length, 'textarea exists');
-        ok(p.find('.editable-popover-textarea').length, 'class editable-popover-textarea exists');
         equal(p.find('textarea').val(), e.data('editable').value, 'textrea val equal text');         
         
         p.find('textarea').val(v2);

@@ -25,7 +25,6 @@ $(function () {
         e.click();
         var p = e.data('popover').$tip;
         ok(p.find('.datepicker').is(':visible'), 'datepicker exists');
-        ok(p.find('.editable-popover-date').length, 'class editable-popover-date exists');
         
         equal(e.data('editable').$input.data('datepicker').getFormattedDate(), d, 'day set correct');
         equal(p.find('td.day.active').text(), 15, 'day shown correct');

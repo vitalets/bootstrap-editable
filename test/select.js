@@ -136,6 +136,24 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');  
     })      
+         
+     test("load options from html (json syntax error)", function () {
+         var e = $('<a href="#" data-type="select" data-value="M" data-source=\'{L :Low, "": "None", "M": "Medium", "H": "High"}\'>customer</a>').appendTo('#qunit-fixture').editable({
+             pk: 1
+          }),
+         size = 4;
+
+        e.click()
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover visible');
+        ok(p.find('select').length, 'select exists');
+        equal(p.find('select').find('option').length, 0, 'options not loaded');
+        ok(p.find('.help-block').text().length, 'message shown');
+
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');  
+    })           
+         
                     
      asyncTest("should show error if options cant be loaded", function () {
         var e = $('<a href="#" data-type="select" data-value="2" data-source="groups-error.php">customer</a>').appendTo(fx).editable();
@@ -309,7 +327,39 @@ $(function () {
                 start();  
            }, 300);
         
-     });       
+     });   
+     
+    asyncTest("cache simultaneous requests (loading error)", function () {
+        expect(4);
+        var req = 0;
+        $.mockjax({
+                url: 'groups-cache-sim-err.php',
+                responseTime: 200,
+                status: 500,
+                response: function() {
+                    req++;
+                }
+         });  
+
+         var e = $('<a href="#" data-type="select" data-pk="1" data-value="1" data-autotext="always" data-url="post.php" data-source="groups-cache-sim-err.php">35</a>').appendTo(fx).editable(),
+             e1 = $('<a href="#" data-type="select" data-pk="1" data-value="2" data-autotext="always" data-url="post.php" data-source="groups-cache-sim-err.php">35</a>').appendTo(fx).editable(),
+             e2 = $('<a href="#" data-type="select" data-pk="1" data-value="3" data-autotext="always" data-url="post.php" data-source="groups-cache-sim-err.php">6456</a>').appendTo(fx).editable(),
+             errText = 'Error!';
+           
+          setTimeout(function() {
+
+                equal(req, 1, 'one request');
+                equal(e.text(), errText, 'text1 correct');
+                equal(e1.text(), errText, 'text2 correct');
+                equal(e2.text(), errText, 'text3 correct');
+                
+                e.remove();    
+                e1.remove();    
+                e2.remove();    
+                start();  
+           }, 300);
+        
+     });     
      
      
      

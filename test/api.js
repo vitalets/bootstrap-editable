@@ -26,7 +26,7 @@ $(function () {
         
         //check get value
         var values = e.editable('getValue');
-        console.log();
+
         equal(values.username, 'user', 'username ok') ;
         equal(values.comment, '12345', 'comment ok') ;
         equal(values.sex, 1, 'sex ok') ;
@@ -90,6 +90,17 @@ $(function () {
            start();  
         }, timeout);                     
       });     
+      
+     test("'init' event", function () {
+        expect(1);
+        var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo('#qunit-fixture');
+        
+        e.on('init', function(e, editable) {
+             equal(editable.value, 'abc', 'init triggered, value correct');
+        });
+
+        e.editable();
+      });        
      
          
 });            

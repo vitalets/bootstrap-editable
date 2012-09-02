@@ -2,6 +2,7 @@
    
   //Editable object 
   var Editable = function ( element, options ) {
+      var type, typeDefaults;
       this.$element = $(element);
 
       //if exists 'placement' or 'title' options, copy them to data attributes to aplly for popover 
@@ -13,8 +14,8 @@
       }
       
      //detect type
-      var type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type),
-          typeDefaults = ($.fn.editable.types[type]) ? $.fn.editable.types[type] : {};
+      type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type);
+      typeDefaults = ($.fn.editable.types[type]) ? $.fn.editable.types[type] : {};
           
       //apply options    
       this.settings = $.extend({}, $.fn.editable.defaults, $.fn.editable.types.defaults, typeDefaults, options, this.$element.data());
@@ -66,6 +67,9 @@
       
       //show emptytext if visible text is empty
       this.handleEmpty();
+      
+      //trigger 'init' event 
+      this.$element.trigger('init', this); 
   };
   
   Editable.prototype = {
@@ -79,9 +83,10 @@
               this.$element.popover({
                   trigger: 'manual',
                   placement: 'top',
-                  content: this.settings.loading,
-                  template: '<div class="popover"><div class="arrow"></div><div class="popover-inner '+this.settings.popoverClass+'"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+                  content: this.settings.loading
               }); 
+              
+              this.$element.data('popover').tip().addClass('editable-popover');
           } 
           
           if(this.$element.data('popover').tip().is(':visible')) {
@@ -213,7 +218,7 @@
                           that.markAsSaved();
                           that.handleEmpty();      
                           that.hide();
-                          that.$element.trigger('update');                           
+                          that.$element.trigger('update', that);                           
                       }
                   },
                   error: function(xhr) {
@@ -229,7 +234,7 @@
               this.markAsUnsaved();
               this.handleEmpty();   
               this.hide();
-              this.$element.trigger('update');
+              this.$element.trigger('update', this);
           }
      },
 
@@ -256,12 +261,61 @@
          this.$content.show();  
          //hide loading
          this.$element.data('popover').tip().find('.editable-loading').hide();  
+         
+         //move popover to correct position
+         this.setPosition();
+         
+     },
+     
+     /**
+     * move popover to new position. This function mainly copied from bootstrap-popover.
+     */
+     setPosition: function() {
+        var p = this.$element.data('popover'),
+             $tip = p.tip(),
+             inside = false,
+             placement,
+             pos, actualWidth, actualHeight, tp; 
+             
+        placement = typeof p.options.placement === 'function' ?
+          p.options.placement.call(p, $tip[0], p.$element[0]) :
+          p.options.placement;             
+         
+        pos = p.getPosition(inside);
+
+        actualWidth = $tip[0].offsetWidth;
+        actualHeight = $tip[0].offsetHeight;
+        
+
+        switch (inside ? placement.split(' ')[1] : placement) {
+          case 'bottom':
+            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
+          case 'top':
+            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
+            break;
+          case 'left':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth};
+            break;
+          case 'right':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
+            break;
+        }
+
+        $tip
+          .css(tp)
+          .addClass(placement)
+          .addClass('in');          
      },
 
      /**
      * show loader inside popover
      */
      enableLoading: function() {
+         //enlage loading to whole area of popover
+         var $tip = this.$element.data('popover').$tip;
+         $tip.find('.editable-loading').css({height: this.$content[0].offsetHeight, width: this.$content[0].offsetWidth});
+         
          this.$content.hide();  
          this.$element.data('popover').tip().find('.editable-loading').show();  
      },     
@@ -355,8 +409,7 @@
     send: 'auto', // strategy for sending data on server: 'always', 'never', 'auto' (default). 'auto' = 'ifpk' (deprecated)
     autotext: 'auto', //can be auto|never|always. Useful for select element: if 'auto' -> element text will be automatically set by provided value and source (in case source is object so no extra request will be performed).
     enablefocus: false, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
-    popoverClass: 'editable-popover-text', //to define size of popover for correct positioning
-    formTemplate: '<form class="form-inline" style="margin-bottom: 0" autocomplete="off">'+
+    formTemplate: '<form class="form-inline" autocomplete="off">'+
                        '<div class="control-group">'+
                            '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn editable-cancel"><i class="icon-ban-circle"></i></button>'+
                            '<span class="help-block" style="clear: both"></span>'+
@@ -461,10 +514,14 @@
                           this.settings.source = cache.source;
                           success.call(this);
                       }, this));
+                      
+                      //also collecting error callbacks
+                      cache.err_callbacks.push($.proxy(error, this));                      
                       return;
-                  } else if (cache.loading === undefined) { //no cache, activate it
+                  } else { //no cache yet, activate it
                       cache.loading = true;
                       cache.callbacks = [];
+                      cache.err_callbacks = [];
                   }
                     
                   //options loading from server
@@ -480,7 +537,11 @@
                           success.call(this);
                           $.each(cache.callbacks, function(){ this.call(); }); //run callbacks for other fields
                       }, this),
-                      error: $.proxy(error, this)
+                      error: $.proxy(function(){
+                          cache.loading = false;
+                          error.call(this);
+                          $.each(cache.err_callbacks, function(){ this.call(); }); //run callbacks for other fields
+                      }, this)
                   });
               } else { //options as json/array
               
@@ -551,8 +612,7 @@
 
       //textarea
       textarea: {
-          template: '<textarea class="span4" rows="8"></textarea>',
-          popoverClass: 'editable-popover-textarea', 
+          template: '<textarea class="span3" rows="8"></textarea>',
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.apply(this.$input, [this.$input.val().length]);
@@ -581,7 +641,6 @@
       */
       date: {
           template: '<div style="float: left; padding: 0; margin: 0" class="well"></div>',
-          popoverClass: 'editable-popover-date',
           format: 'dd/mm/yyyy',
           datepicker: {
               autoclose: false,
