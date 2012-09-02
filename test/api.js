@@ -90,6 +90,17 @@ $(function () {
            start();  
         }, timeout);                     
       });     
+      
+     test("'init' event", function () {
+        expect(1);
+        var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo('#qunit-fixture');
+        
+        e.on('init', function(e, editable) {
+             equal(editable.value, 'abc', 'init triggered, value correct');
+        });
+
+        e.editable();
+      });        
      
          
 });            

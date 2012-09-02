@@ -4,8 +4,10 @@ Bootstrap-editable change log
 
 Version 1.1.1 wip
 ----------------------------
-todo: event 'init'
+Enh: Added event 'init' (@vitalets)
 Enh: Popover shows full error message and re-positioned correctly (@vitalets)
+todo -- Bug: Cache for select incorrect when loading options error (@vitalets)
+Enh: Scroll navigation in docs (@vitalets)
 
 
 Version 1.1.0 Aug 26, 2012

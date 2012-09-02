@@ -2,6 +2,7 @@
    
   //Editable object 
   var Editable = function ( element, options ) {
+      var type;
       this.$element = $(element);
 
       //if exists 'placement' or 'title' options, copy them to data attributes to aplly for popover 
@@ -13,7 +14,7 @@
       }
       
      //detect type
-      var type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type),
+      type = (this.$element.data().type || (options && options.type) ||  $.fn.editable.defaults.type),
           typeDefaults = ($.fn.editable.types[type]) ? $.fn.editable.types[type] : {};
           
       //apply options    
@@ -66,6 +67,9 @@
       
       //show emptytext if visible text is empty
       this.handleEmpty();
+      
+      //trigger 'init' event 
+      this.$element.trigger('init', this); 
   };
   
   Editable.prototype = {
@@ -214,7 +218,7 @@
                           that.markAsSaved();
                           that.handleEmpty();      
                           that.hide();
-                          that.$element.trigger('update');                           
+                          that.$element.trigger('update', that);                           
                       }
                   },
                   error: function(xhr) {
@@ -230,7 +234,7 @@
               this.markAsUnsaved();
               this.handleEmpty();   
               this.hide();
-              this.$element.trigger('update');
+              this.$element.trigger('update', this);
           }
      },
 
@@ -264,8 +268,7 @@
      },
      
      /**
-     * move popover to new position. This function mainly copied from bootstrap-popover, but the 
-     * difference is that editable popover does not decreese it's width and height
+     * move popover to new position. This function mainly copied from bootstrap-popover.
      */
      setPosition: function() {
         var p = this.$element.data('popover'),

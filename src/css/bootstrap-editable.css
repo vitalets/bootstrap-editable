@@ -32,7 +32,7 @@ a.editable-changed {
 }
 
 .editable-popover div.control-group,
-.editable-popover span.form,
+.editable-popover form,
 .editable-popover span.help-block {
    margin-bottom: 0;
 }
