@@ -6,7 +6,7 @@
         <title>Editable for Bootstrap</title>
         <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="assets/prettify/prettify-bootstrap.css" rel="stylesheet">
-<!--        <link href="subnav.css" rel="stylesheet">-->
+        <link href="subnav.css" rel="stylesheet">
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -14,8 +14,8 @@
         <![endif]-->
 
         <script src="assets/jquery/jquery-1.7.2.min.js"></script>  
-        <script src="assets/bootstrap/js/bootstrap.min.js"></script>    
-<!--        <script src="assets/bootstrap/js/bootstrap.js"></script>    -->
+<!--        <script src="assets/bootstrap/js/bootstrap.min.js"></script>    -->
+        <script src="assets/bootstrap/js/bootstrap.js"></script>    
         <script src="assets/prettify/prettify.js"></script>
         <script src="assets/mockjax/jquery.mockjax.js"></script>
         
@@ -26,18 +26,25 @@
         
         <style type="text/css">
             body {
-                padding-top: 60px;
+/*                padding-top: 80px;*/
                 padding-bottom: 40px;
             }
-            /*
+             
+            section#example {
+                padding-top: 80px;
+                padding-bottom: 0;
+            } 
+            
             section {
-                padding-top: 60px;
-            }
-            */
+                padding-top: 23px;
+                padding-bottom: 23px;  
+                vertical-align: middle;  
+            }           
+            
         </style>        
     </head>
 
-    <body onload="prettyPrint()" data-spy="scroll" data-target=".subnav" data-offset1="150">
+    <body onload="prettyPrint()" data-spy="scroll" data-target=".subnav" data-offset="50">
     
     <!--     nav bar-->
      <div class="navbar navbar-fixed-top">
@@ -51,7 +58,7 @@
               <a class="brand" href="#">Editable for Bootstrap</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class="active"><a href="#">Docs and examples</a></li>
+                  <li class="active"><a href="#">Documentation</a></li>
                   <li><a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">Feedback / Issues</a></li>
                   <li><a href="http://github.com/vitalets/bootstrap-editable" taget="_blank">Watch on GitHub</a></li>
                 </ul>
@@ -67,20 +74,21 @@
             </div>
           </div>
         </div>    
-        <!-- subnav -->
-        <!--
-        <div class="subnav subnav-fixed">
-                <ul class="nav nav-pills">
-                    <li><a href="#intro">Intro</a></li>
-                    <li><a href="#example">Example</a></li>
-                    <li><a href="#getstarted">Get started</a></li>
-                    <li><a href="#Markup">Markup</a></li>
-                </ul>
-        </div>
-        -->
-                         
+    <!-- subnav -->
+     <div class="subnav subnav-fixed">
+          <ul class="nav nav-pills">
+                  <li><a href="#example">Example & download</a></li>
+                  <li><a href="#getstarted">Getting started</a></li>
+                  <li><a href="#markup">Usage & markup</a></li>
+                  <li><a href="#options">Options</a></li>
+                  <li><a href="#events">Events</a></li>
+                  <li><a href="#methods">Methods</a></li>
+                  <li><a href="#newrecord">Creating new record</a></li>
+            </ul>
+    </div>
+                          
         <div class="container">
-<!--                <section id="intro"></section>-->
+                <section id="example"></section>
                 <div class="page-header">
                     <h1>Editable for Bootstrap <small>In-place editing with Bootstrap Form and Popover</small></h1>
                 </div>
@@ -118,7 +126,6 @@
                     </div>
                     
                     <div class="span9">
-<!--                        <section id="example"></section>-->
                         <h2>Example</h2>
                         <p>Click on fields to edit:</p>
                         <div>
@@ -184,8 +191,7 @@
                             </table>
                             <div><span class="muted">* all ajax requests here are emulated</span></div>
                         </div>
-                        <hr>
-                                                   
+                        <section id="getstarted"><hr></section>
                         <h2>Getting started</h2>
                         <p>Include required js and css files: </p>
                         <p>jQuery (1.7.2) & Bootstrap (2.0.4)</p>
@@ -200,6 +206,7 @@
 &lt;script src=&quot;path/to/bootstrap-editable/js/bootstrap-editable.min.js&quot;&gt;&lt;/script&gt;
 </pre>                        
                         
+                        <section id="markup"><hr></section>
                         <h2>Usage and markup</h2>
                         <p>You can activate editable on your page easily with special markup and a few line of javascript.
                         Options can be defined via either <code>data-*</code> attributes or json options.</p> 
@@ -251,7 +258,8 @@
                            url:   'post.php',  
                            title: 'Select Date of birth'
                         });</pre> 
-                                                           
+                                       
+                        <section id="options"><hr></section>                    
                         <h2>Options</h2>
                         <p>List of all possible options</p>
                         <table class="table table-bordered table-striped">
@@ -463,6 +471,7 @@ By default response text will be shown as error message.
                             </tbody>
                            </table>                         
                         
+                        <section id="events"><hr></section>
                         <h2>Events</h2>
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -482,6 +491,7 @@ By default response text will be shown as error message.
     alert('new value: ' + $(this).data('editable').value);
 });</pre>                                           
                         
+                        <section id="methods"><hr></section>
                         <h2>Methods</h2>
                         <h4>$().editable(options)</h4>
                         <p>Initializes an editable.</p>
@@ -509,6 +519,7 @@ By default response text will be shown as error message.
                         <h4>.editable('markAsSaved')</h4>
                         <p>Mark editable as saved to server (removes class "editable-changed" and updates <i>lastSavedValue</i> of editable).</p>
                         
+                        <section id="newrecord"><hr></section>
                         <h2>Creating new record</h2> 
                         <p>When creating <strong>new record</strong> it's primary key (record id) is <i>undefined</i> and in-place-editing has no related object on backend.
                         In that case editable will store new value in itself and will not submit anything to server (this managed by <code>send='auto'</code> option).
