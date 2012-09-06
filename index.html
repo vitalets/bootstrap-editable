@@ -137,12 +137,12 @@
                                     <tr>         
                                         <td width="30%">Username</td>
                                         <td><a href="#" id="username" data-type="text" data-pk="1" data-name="username" data-original-title="Enter username">superuser</a></td>
-                                        <td width="30%"><span class="muted">Simple text field</span></td>
+                                        <td width="40%"><span class="muted">Simple text field</span></td>
                                     </tr>
                                     <tr>         
                                         <td>First name</td>
-                                        <td><a href="#" id="firstname" data-type="text" data-pk="1" data-name="firstname" data-original-title="Enter your firstname">John</a></td>
-                                        <td><span class="muted">Required text field</span></td>
+                                        <td><a href="#" id="firstname" data-type="text" data-pk="1" data-name="firstname" data-placement="right" data-original-title="Enter your firstname">John</a></td>
+                                        <td><span class="muted">Required text field, placement: right</span></td>
                                     </tr>  
                                     <tr>         
                                         <td>Last name</td>
@@ -334,6 +334,12 @@
                                     <td>strategy for sending data on server - auto | always | never. <br>'auto' = data will be sent only if <strong>pk</strong> defined, otherwise will be stored in element</td>
                                 </tr>
                                 <tr>
+                                    <td>placement</td>
+                                    <td>string | function</td>
+                                    <td>'top'</td>
+                                    <td>how to position the popover - top | bottom | left | right</td>
+                                </tr>                                  
+                                <tr>
                                     <td>enablefocus</td>
                                     <td>bool</td>
                                     <td>false</td>
@@ -349,13 +355,12 @@
   if($.trim(value) == '') 
     return 'This field is required';
 }</pre>
-Definition as object is usefull when applying editable to several elements and difference only in validation. Object structure is <code>name: function</code>, e.g.
+Definition as object is usefull when applying editable to several elements and difference is only in validation. Object structure is <code>name: function</code>, e.g.
 <pre class="prettyprint linenums">
 validate: {
-         username: function(v) {...},
-         fullname: function(v) {...}
-      }
-</pre>
+    username: function(v) {...},
+    fullname: function(v) {...}
+}</pre>
 </td>
                                 </tr>
                                 <tr>
