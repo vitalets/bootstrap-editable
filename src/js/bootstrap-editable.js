@@ -630,9 +630,9 @@
                     this.$input.attr('placeholder', this.settings.placeholder);
                 }
                 
-                //ctrl click handler
+                //ctrl + enter
                 this.$input.keydown(function(e) {
-                    if (e.ctrlKey && e.keyCode === 13) {
+                    if (e.ctrlKey && e.which === 13) {
                         $(this).closest('form').submit();
                     }
                 });
