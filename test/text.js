@@ -19,7 +19,7 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed')    
       })   
       
-     test("placeholder", function () {
+     test("option 'placeholder'", function () {
         var  e = $('<a href="#" id="a" data-placeholder="abc"> </a>').appendTo('#qunit-fixture').editable();
             
         e.click();
@@ -27,7 +27,17 @@ $(function () {
         equal(p.find('input[type=text]').attr('placeholder'), 'abc', 'placeholder exists');
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');
-      });       
+      });   
+      
+     test("option 'inputclass'", function () {
+        var  e = $('<a href="#" id="a" data-inputclass="span4"> </a>').appendTo('#qunit-fixture').editable();
+            
+        e.click();
+        var p = e.data('popover').$tip;
+        ok(p.find('input[type=text]').hasClass('span4'), 'class set correctly');
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');
+      });           
       
       
      test("toggle by another element (string)", function () {

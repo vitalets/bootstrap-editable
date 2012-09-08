@@ -428,11 +428,17 @@
   $.fn.editable.types = {
       //for all types
       defaults: {
+             inputclass: 'span2',
+             placeholder: null,
             // this function called every time popover shown. Should set value of this.$input
             renderInput: function() {                  
                 this.$input = $(this.settings.template);
+                this.$input.addClass(this.settings.inputclass);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
                 this.endShow();
-            }, 
+            },
             setInputValue: function() {           
                 this.$input.val(this.value);
                 this.$input.focus();
@@ -455,15 +461,7 @@
       
       //text
       text: {
-          template: '<input type="text" class="span2">',
-          placeholder: null,
-          renderInput: function() {                  
-                this.$input = $(this.settings.template);
-                if(this.settings.placeholder) {
-                    this.$input.attr('placeholder', this.settings.placeholder);
-                }
-                this.endShow();
-            },          
+          template: '<input type="text">',
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.call(this.$input, this.$input.val().length);
@@ -473,7 +471,7 @@
       
       //select
       select: {
-          template: '<select class="span2"></select>',
+          template: '<select></select>',
           source: null,
           prepend: false,  
           init: function(options) {
@@ -584,7 +582,8 @@
           },  
           
           renderInput: function() {     
-              this.$input = $(this.settings.template);  
+              this.$input = $(this.settings.template); 
+              this.$input.addClass(this.settings.inputclass); 
               this.settings.onSourceReady.call(this,
               function(){
                   if(typeof this.settings.source === 'object' && this.settings.source != null) {
@@ -622,15 +621,8 @@
 
       //textarea
       textarea: {
-          template: '<textarea class="span3" rows="8"></textarea>',
-          placeholder: null,
-          renderInput: function() {                  
-                this.$input = $(this.settings.template);
-                if(this.settings.placeholder) {
-                    this.$input.attr('placeholder', this.settings.placeholder);
-                }
-                this.endShow();
-          },          
+          template: '<textarea rows="8"></textarea>',
+          inputclass: 'span3',
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.apply(this.$input, [this.$input.val().length]);

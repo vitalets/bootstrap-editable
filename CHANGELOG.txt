@@ -3,6 +3,8 @@ Bootstrap-editable change log
 
 Version 1.1.2 wip
 ----------------------------
+Enh #31: Added option 'placeholder' for types 'text' and 'textarea' (@vitalets)
+Enh #30: Added option 'inputclass' to change input's css, default 'span2' (@vitalets)
 Bug: Element's content not trimmed to show emptytext (@vitalets)
 
 Version 1.1.1 Sep 2, 2012
