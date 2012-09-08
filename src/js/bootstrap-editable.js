@@ -428,8 +428,8 @@
   $.fn.editable.types = {
       //for all types
       defaults: {
-             inputclass: 'span2',
-             placeholder: null,
+            inputclass: 'span2',
+            placeholder: null,
             // this function called every time popover shown. Should set value of this.$input
             renderInput: function() {                  
                 this.$input = $(this.settings.template);
@@ -623,6 +623,22 @@
       textarea: {
           template: '<textarea rows="8"></textarea>',
           inputclass: 'span3',
+          renderInput: function() {                  
+                this.$input = $(this.settings.template);
+                this.$input.addClass(this.settings.inputclass);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
+                
+                //ctrl click handler
+                this.$input.keydown(function(e) {
+                    if (e.ctrlKey && e.keyCode === 13) {
+                        $(this).closest('form').submit();
+                    }
+                });
+                
+                this.endShow();
+          },          
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.apply(this.$input, [this.$input.val().length]);
