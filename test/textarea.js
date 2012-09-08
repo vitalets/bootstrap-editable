@@ -23,6 +23,16 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')         
       })
+      
+     test("placeholder", function () {
+        var e = $('<a href="#" data-type="textarea"></a>').appendTo('#qunit-fixture').editable({placeholder: 'abc'})
+        e.click()
+        var p = e.data('popover').$tip;
+        equal(p.find('textarea').attr('placeholder'), 'abc', 'placeholder exists');        
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');         
+      })      
+      
      
      asyncTest("should load correct value and save new entered text (and value)", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php">'+v1+'</a>').appendTo(fx).editable({

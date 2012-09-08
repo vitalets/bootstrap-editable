@@ -456,6 +456,14 @@
       //text
       text: {
           template: '<input type="text" class="span2">',
+          placeholder: null,
+          renderInput: function() {                  
+                this.$input = $(this.settings.template);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
+                this.endShow();
+            },          
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.call(this.$input, this.$input.val().length);
@@ -615,6 +623,14 @@
       //textarea
       textarea: {
           template: '<textarea class="span3" rows="8"></textarea>',
+          placeholder: null,
+          renderInput: function() {                  
+                this.$input = $(this.settings.template);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
+                this.endShow();
+          },          
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.apply(this.$input, [this.$input.val().length]);

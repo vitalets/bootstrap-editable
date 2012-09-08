@@ -19,6 +19,17 @@ $(function () {
         ok(!p.is(':visible'), 'popover was removed')    
       })   
       
+     test("placeholder", function () {
+        var  e = $('<a href="#" id="a" data-placeholder="abc"> </a>').appendTo('#qunit-fixture').editable();
+            
+        e.click();
+        var p = e.data('popover').$tip;
+        equal(p.find('input[type=text]').attr('placeholder'), 'abc', 'placeholder exists');
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');
+      });       
+      
+      
      test("toggle by another element (string)", function () {
         var e = $('<a href="#" id="a"></a>').appendTo('#qunit-fixture').editable({
             toggle: '<i class="icon-pencil"></i>'
