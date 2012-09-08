@@ -23,6 +23,16 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')         
       })
+      
+     test("placeholder", function () {
+        var e = $('<a href="#" data-type="textarea"></a>').appendTo('#qunit-fixture').editable({placeholder: 'abc'})
+        e.click()
+        var p = e.data('popover').$tip;
+        equal(p.find('textarea').attr('placeholder'), 'abc', 'placeholder exists');        
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');         
+      })      
+      
      
      asyncTest("should load correct value and save new entered text (and value)", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php">'+v1+'</a>').appendTo(fx).editable({
@@ -74,6 +84,31 @@ $(function () {
            e.remove();    
            start();  
         }, timeout);           
-    })                     
+    })  
+    
+     asyncTest("submit by ctrl+enter", function () {
+        expect(2);
+        var  v = '12<br>3&lt;i&gt;4<br />56',
+             e = $('<a href="#" data-type="textarea" data-pk="1" data-url="post.php">'+v+'</a>').appendTo(fx).editable(),
+             vnew = 'sdfg',
+             event;
+             
+        e.click();
+        var p = e.data('popover').$tip;
+        p.find('textarea').val(vnew);
+        
+        event = jQuery.Event("keydown");
+        event.ctrlKey = true;
+        event.which = 13;
+
+        p.find('textarea').trigger(event);
+        
+        setTimeout(function() {
+           ok(!p.is(':visible'), 'popover closed');
+           equal(e.data('editable').value, vnew, 'new text saved to value');
+           e.remove();    
+           start();  
+        }, timeout);           
+    })                       
    
 })

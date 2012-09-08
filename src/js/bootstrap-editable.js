@@ -321,10 +321,12 @@
      },     
      
      handleEmpty: function() {
+         //don't have editalbe class --> it's not link --> toggled by another element --> no need to set emptytext
          if(!this.$element.hasClass('editable')) {
              return;
          }
-         if(this.$element.text() === '') {
+         
+         if($.trim(this.$element.text()) === '') {
              this.$element.addClass('editable-empty').text(this.settings.emptytext);
          } else {
              this.$element.removeClass('editable-empty');
@@ -426,11 +428,17 @@
   $.fn.editable.types = {
       //for all types
       defaults: {
+            inputclass: 'span2',
+            placeholder: null,
             // this function called every time popover shown. Should set value of this.$input
             renderInput: function() {                  
                 this.$input = $(this.settings.template);
+                this.$input.addClass(this.settings.inputclass);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
                 this.endShow();
-            }, 
+            },
             setInputValue: function() {           
                 this.$input.val(this.value);
                 this.$input.focus();
@@ -447,13 +455,13 @@
 
             //setting value by element text (init)
             setValueByText: function() {
-                this.value = this.$element.text(); 
+                this.value = $.trim(this.$element.text()); 
             }    
       },
       
       //text
       text: {
-          template: '<input type="text" class="span2">',
+          template: '<input type="text">',
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.call(this.$input, this.$input.val().length);
@@ -463,7 +471,7 @@
       
       //select
       select: {
-          template: '<select class="span2"></select>',
+          template: '<select></select>',
           source: null,
           prepend: false,  
           init: function(options) {
@@ -574,7 +582,8 @@
           },  
           
           renderInput: function() {     
-              this.$input = $(this.settings.template);  
+              this.$input = $(this.settings.template); 
+              this.$input.addClass(this.settings.inputclass); 
               this.settings.onSourceReady.call(this,
               function(){
                   if(typeof this.settings.source === 'object' && this.settings.source != null) {
@@ -612,7 +621,24 @@
 
       //textarea
       textarea: {
-          template: '<textarea class="span3" rows="8"></textarea>',
+          template: '<textarea rows="8"></textarea>',
+          inputclass: 'span3',
+          renderInput: function() {                  
+                this.$input = $(this.settings.template);
+                this.$input.addClass(this.settings.inputclass);
+                if(this.settings.placeholder) {
+                    this.$input.attr('placeholder', this.settings.placeholder);
+                }
+                
+                //ctrl + enter
+                this.$input.keydown(function(e) {
+                    if (e.ctrlKey && e.which === 13) {
+                        $(this).closest('form').submit();
+                    }
+                });
+                
+                this.endShow();
+          },          
           setInputValue: function() {
               this.$input.val(this.value);
               setCursorPosition.apply(this.$input, [this.$input.val().length]);
