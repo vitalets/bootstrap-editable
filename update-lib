@@ -5,9 +5,12 @@ cp -R ../lib/dist/bootstrap-editable/* assets/bootstrap-editable
 #copy zip
 cp -R ../lib/dist/*.zip assets/bootstrap-editable
 
+#extract version - old
+#filename=$(ls assets/bootstrap-editable/boot*.zip)
+#version=$(expr "$filename" : '.*\(v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*') 
+
 #extract version
-filename=$(ls assets/bootstrap-editable/boot*.zip)
-version=$(expr "$filename" : '.*\(v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*') 
+version=$(head -1 assets/bootstrap-editable/js/bootstrap-editable.js | sed -n 's/^.*\(v[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p') 
 
 #replace version in href
 sed -i "s/bootstrap\-editable\-v[0-9]\+\.[0-9]\+\.[0-9]\+/bootstrap-editable-$version/g" index.html
