@@ -59,6 +59,9 @@
 
         //bind click event on toggle
         this.$toggle.on('click', $.proxy(this.click, this));
+        
+        //blocking click event when going from inside popover. all other clicks will close it
+        $('body').on('click.editable', '.editable-popover', function (e) { e.stopPropagation() });
 
         //apply type's specific init()
         $.when(this.settings.init.call(this, options)).then($.proxy(function () {
@@ -152,6 +155,9 @@
                         this.hide();
                     }
                 }, this));
+               
+                //hide popover on external click
+                $(document).on('click.editable', $.proxy(this.hide, this));
             }, this));
         },
 
@@ -269,7 +275,8 @@
             this.$element.popover('hide');
             this.$element.removeClass('editable-open');
             $(document).off('keyup.editable');
-
+            $(document).off('click.editable');
+            
             //returning focus on toggle element
             if (this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
                 this.$toggle.focus();
