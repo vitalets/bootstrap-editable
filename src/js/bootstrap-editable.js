@@ -86,7 +86,6 @@
             if (popover && popover.tip().is(':visible')) {
                 this.hide();
             } else {
-                //this.startShow();
                 this.show();
             }
         },
@@ -182,84 +181,6 @@
                 //saving new value
                 this.save(value);
             }
-
-            /*
-            //getting primary key
-            if (typeof this.settings.pk === 'function') {
-                pk = this.settings.pk.call(this.$element);
-            } else if (typeof this.settings.pk === 'string' && $(this.settings.pk).length === 1 && $(this.settings.pk).parent().length) { //pk is ID of existing element
-                pk = $(this.settings.pk).text();
-            } else {
-                pk = this.settings.pk;
-            }
-            var send = (this.settings.url !== undefined) && ((this.settings.send === 'always') || (this.settings.send === 'auto' && pk) || (this.settings.send === 'ifpk' && pk));
-
-            if (send) { //send to server
-
-                //try parse json in single quotes
-                this.settings.params = tryParseJson(this.settings.params, true);
-
-                params = (typeof this.settings.params === 'string') ? {params:this.settings.params} : $.extend({}, this.settings.params);
-                params.name = this.name;
-                params.value = value;
-
-                //hide form, show loading
-                this.enableLoading();
-
-                //adding name and pk
-                if (pk) {
-                    params.pk = pk;
-                }
-
-                var url = (typeof this.settings.url === 'function') ? this.settings.url.call(this) : this.settings.url;
-                $.ajax({
-                    url:url,
-                    data:params,
-                    type:'post',
-                    dataType:'json',
-                    success:function (data) {
-                        //check response
-                        if (typeof that.settings.success === 'function' && (error = that.settings.success.apply(that, arguments))) {
-                            //show form with error message
-                            that.enableContent(error);
-                        } else {
-                            //set new value and text
-                            that.value = value;
-                            that.settings.setTextByValue.call(that);
-                            that.markAsSaved();
-                            that.handleEmpty();
-                            that.hide();
-
-                            //trigger 'update' event
-                            that.$element.trigger('update', that);
-
-                            //trigger 'render' event with property isInit = false
-                            var event = jQuery.Event("render");
-                            event.isInit = false;
-                            that.$element.trigger(event, that);
-                        }
-                    },
-                    error:function (xhr) {
-                        var msg = (typeof that.settings.error === 'function') ? that.settings.error.apply(that, arguments) : null;
-                        that.enableContent(msg || xhr.responseText || xhr.statusText);
-                    }
-                });
-            } else { //do not send to server
-                //set new value and text
-                this.value = value;
-                this.settings.setTextByValue.call(this);
-                //to show that value modified but not saved
-                this.markAsUnsaved();
-                this.handleEmpty();
-                this.hide();
-                this.$element.trigger('update', this);
-
-                //trigger 'render' event with property isInit = false
-                var event = jQuery.Event("render");
-                event.isInit = false;
-                this.$element.trigger(event, this);
-            }
-            */
         },
 
         save: function(value) {
@@ -506,7 +427,12 @@
         send:'auto', // strategy for sending data on server: 'always', 'never', 'auto' (default). 'auto' = 'ifpk' (deprecated)
         autotext:'auto', //can be auto|never|always. Useful for select element: if 'auto' -> element text will be automatically set by provided value and source (in case source is object so no extra request will be performed).
         enablefocus:false, //wether to return focus on link after popover is closed. It's more functional, but focused links may look not pretty
-        formTemplate:'<form class="form-inline" autocomplete="off">' + '<div class="control-group">' + '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn editable-cancel"><i class="icon-ban-circle"></i></button>' + '<span class="help-block" style="clear: both"></span>' + '</div>' + '</form>',
+        formTemplate:'<form class="form-inline" autocomplete="off">' + 
+                       '<div class="control-group">' + 
+                       '&nbsp;<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i></button>&nbsp;<button type="button" class="btn editable-cancel"><i class="icon-ban-circle"></i></button>' + 
+                       '<span class="help-block" style="clear: both"></span>' + 
+                       '</div>' + 
+                       '</form>',
         loading:'<div class="editable-loading"></div>',
 
         validate:function (value) {
@@ -523,9 +449,7 @@
         defaults:{
             inputclass:'span2',
             placeholder:null,
-            init:function (options) {
-
-            },
+            init:function (options) {},
             // this function called every time popover shown. Should set value of this.$input
             renderInput:function () {
                 this.$input = $(this.settings.template);
