@@ -162,6 +162,14 @@ $(function () {
         }, timeout);                                        
         
      });           
-     
+    
+     test("show / hide methods", function () {
+        var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo('#qunit-fixture').editable();
+        e.editable('show');
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover shown');
+        e.editable('hide');
+        ok(!p.is(':visible'), 'popover closed');
+     });      
          
 });            
