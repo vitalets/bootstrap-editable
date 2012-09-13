@@ -1,6 +1,13 @@
 Bootstrap-editable change log
 =============================
 
+Version 1.1.3 Sep 13, 2012
+----------------------------
+Enh #37: Added event 'render' (@vitalets)
+Enh #34: Clicking outside the popup hides the popup (@vitalets)
+Enh #32: Added methods 'show' and 'hide' to open and close popover manually (@vitalets)
+      
+
 Version 1.1.2 Sep 8, 2012
 ----------------------------
 Enh #31: Added option 'placeholder' for types 'text' and 'textarea' (@vitalets)
