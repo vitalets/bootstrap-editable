@@ -66,7 +66,7 @@
         this.$toggle.on('click', $.proxy(this.click, this));
         
         //blocking click event when going from inside popover. all other clicks will close it
-        $('body').on('click.editable', '.editable-popover', function (e) { e.stopPropagation() });
+        $('body').on('click.editable', '.editable-popover', function (e) { e.stopPropagation(); });
 
         //autotext
         if(!valueSetByText && this.value !== null && this.value !== undefined) {
@@ -96,12 +96,6 @@
               break;
             }
         }
-                     
-        if(doAutotext) {
-           $.when(this.settings.setTextByValue.call(this)).then($.proxy(finalize, this));
-        } else {
-           finalize.call(this); 
-        }
         
         function finalize() {
             //show emptytext if visible text is empty
@@ -114,7 +108,15 @@
             var event = jQuery.Event("render");
             event.isInit = true;
             this.$element.trigger(event, this);
-        }        
+        }           
+                     
+        if(doAutotext) {
+           $.when(this.settings.setTextByValue.call(this)).then($.proxy(finalize, this));
+        } else {
+           finalize.call(this); 
+        }
+        
+             
     };
 
     Editable.prototype = {
@@ -265,7 +267,7 @@
         },
 
         send: function(value) {
-            var send;
+            var send, pk, params;
 
             //getting primary key
             if (typeof this.settings.pk === 'function') {
@@ -752,7 +754,9 @@
             },
             //helper function to convert date between two formats
             converFormat: function(dateStr, formatFrom, formatTo) {
-                if(formatFrom === formatTo) return dateStr; 
+                if(formatFrom === formatTo) {
+                    return dateStr; 
+                }
                 var dpg = $.fn.datepicker.DPGlobal, 
                     dateObj,
                     lang = (this.settings.datepicker && this.settings.datepicker.language) || 'en';
