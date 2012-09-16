@@ -2,7 +2,7 @@
 
     //Editable object
     var Editable = function (element, options) {
-        var type, typeDefaults;
+        var type, typeDefaults, doAutotext = false, valueSetByText = false;
         this.$element = $(element);
 
         //if exists 'placement' or 'title' options, copy them to data attributes to aplly for popover
@@ -20,6 +20,9 @@
         //apply options
         this.settings = $.extend({}, $.fn.editable.defaults, $.fn.editable.types.defaults, typeDefaults, options, this.$element.data());
 
+        //apply type's specific init()
+        this.settings.init.call(this, options);
+        
         //store name
         this.name = this.settings.name || this.$element.attr('id');
         if (!this.name) {
@@ -34,8 +37,10 @@
         //set value from settings or by element text
         if (this.settings.value === undefined || this.settings.value === null) {
             this.settings.setValueByText.call(this);
+            valueSetByText = true;
         } else {
             this.value = this.settings.value;
+            valueSetByText = false;
         }
 
         //also storing last saved value (initially equals to value)
@@ -63,8 +68,42 @@
         //blocking click event when going from inside popover. all other clicks will close it
         $('body').on('click.editable', '.editable-popover', function (e) { e.stopPropagation() });
 
-        //apply type's specific init()
-        $.when(this.settings.init.call(this, options)).then($.proxy(function () {
+        //autotext
+        if(!valueSetByText && this.value !== null && this.value !== undefined) {
+            switch(this.settings.autotext) {
+              case 'always':
+                doAutotext = true; 
+              break;
+              
+              case 'never':
+                doAutotext = false; 
+              break;
+              
+              case 'auto':
+                if(this.$element.html().length) {
+                   doAutotext = false; 
+                } else {
+                   //for SELECT do not use autotext when source is url and autotext = 'auto' (to prevent extra request)
+                   if (type === 'select') {
+                       this.settings.source = tryParseJson(this.settings.source, true);
+                       if (this.settings.source && typeof this.settings.source === 'object') {
+                           doAutotext = true; 
+                       }
+                   } else {
+                      doAutotext = true; 
+                   }                   
+                }
+              break;
+            }
+        }
+                     
+        if(doAutotext) {
+           $.when(this.settings.setTextByValue.call(this)).then($.proxy(finalize, this));
+        } else {
+           finalize.call(this); 
+        }
+        
+        function finalize() {
             //show emptytext if visible text is empty
             this.handleEmpty();
 
@@ -75,7 +114,7 @@
             var event = jQuery.Event("render");
             event.isInit = true;
             this.$element.trigger(event, this);
-        }, this));
+        }        
     };
 
     Editable.prototype = {
@@ -171,10 +210,6 @@
             //validation
             if (error = this.validate(value)) {
                 this.enableContent(error);
-                //TODO: find elegant way to exclude hardcode of types here
-                if (this.settings.type === 'text' || this.settings.type === 'textarea') {
-                    this.$input.focus();
-                }
                 return;
             }
 
@@ -193,9 +228,6 @@
             $.when(this.send(value))
             .done($.proxy(function (data) {
                 var error, isAjax = (typeof data !== 'undefined');
-
-                console.log(this);
-                console.log(data);
 
                 //check and run custom success handler
                 if (isAjax && typeof this.settings.success === 'function' && (error = this.settings.success.apply(this, arguments))) {
@@ -299,6 +331,10 @@
             //move popover to correct position
             this.setPosition();
 
+            //TODO: find elegant way to exclude hardcode of types here
+            if (this.settings.type === 'text' || this.settings.type === 'textarea') {
+                this.$input.focus();
+            }
         },
 
         /**
@@ -500,25 +536,6 @@
             template:'<select></select>',
             source:null,
             prepend:false,
-            init:function (options) {
-                //if no value provided, do nothng
-                if (this.value === undefined || this.value === null) {
-                    return;
-                }
-
-                //set element text by value (depends on autotext option)
-                if (this.settings.autotext === 'always') {
-                    return this.settings.setTextByValue.call(this);
-                }
-
-                var isEmpty = !this.$element.html().length;
-                if (this.settings.autotext === 'auto' && isEmpty) {
-                    this.settings.source = tryParseJson(this.settings.source, true);
-                    if (this.settings.source && typeof this.settings.source === 'object') {
-                        return this.settings.setTextByValue.call(this);
-                    }
-                }
-            },
             onSourceReady:function (success, error) {
                 // try parse json in single quotes (for double quotes jquery does automatically)
                 try {
@@ -697,7 +714,8 @@
          */
         date:{
             template:'<div style="float: left; padding: 0; margin: 0" class="well"></div>',
-            format:'dd/mm/yyyy',
+            format:'dd/mm/yyyy', //format used for datepicker and sending to server
+            viewformat: null,  //used only for showing date
             datepicker:{
                 autoclose:false,
                 keyboardNavigation:false
@@ -705,14 +723,18 @@
             init:function (options) {
                 //set popular options directly from settings or data-* attributes
                 var directOptions = mergeKeys({}, this.settings, ['format', 'weekStart', 'startView']);
-
+                
                 //overriding datepicker config (as by default jQuery merge is not recursive)
                 this.settings.datepicker = $.extend({}, $.fn.editable.types.date.datepicker, directOptions, options.datepicker);
+                
+                //by default viewformat equals to format
+                if(!this.settings.viewformat) {
+                    this.settings.viewformat = this.settings.datepicker.format;
+                }                
             },
             renderInput:function () {
                 this.$input = $(this.settings.template);
                 this.$input.datepicker(this.settings.datepicker);
-                // this.endShow();
             },
             setInputValue:function () {
                 this.$input.datepicker('update', this.value);
@@ -720,10 +742,32 @@
             getInputValue:function () {
                 var dp = this.$input.data('datepicker');
                 return dp.getFormattedDate();
-            }
+            },
+            setTextByValue:function () {
+                var text = this.settings.converFormat.call(this, this.value, this.settings.format, this.settings.viewformat);    
+                this.$element.text(text);
+            },
+            setValueByText:function () {
+                this.value = this.settings.converFormat.call(this, this.$element.text(), this.settings.viewformat, this.settings.format);    
+            },
+            //helper function to convert date between two formats
+            converFormat: function(dateStr, formatFrom, formatTo) {
+                if(formatFrom === formatTo) return dateStr; 
+                var dpg = $.fn.datepicker.DPGlobal, 
+                    dateObj,
+                    lang = (this.settings.datepicker && this.settings.datepicker.language) || 'en';
+                formatFrom = dpg.parseFormat(formatFrom);
+                formatTo = dpg.parseFormat(formatTo);
+                dateObj = dpg.parseDate($.trim(dateStr), formatFrom, lang);
+                return dpg.formatDate(dateObj, formatTo, lang);
+            }           
         }
     };
 
+    /*
+    * ========================== FUNCTIONS ========================
+    */
+    
     /**
      * set caret position in input
      * see http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
