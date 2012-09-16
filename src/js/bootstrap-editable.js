@@ -714,7 +714,7 @@
          */
         date:{
             template:'<div style="float: left; padding: 0; margin: 0" class="well"></div>',
-            format:'dd/mm/yyyy', //format used for datepicker and sending to server
+            format:'yyyy-mm-dd', //format used for datepicker and sending to server
             viewformat: null,  //used only for showing date
             datepicker:{
                 autoclose:false,

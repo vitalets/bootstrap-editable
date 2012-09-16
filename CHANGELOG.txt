@@ -3,6 +3,8 @@ Bootstrap-editable change log
 
 Version 1.1.3 wip
 ----------------------------
+Enh: DATE: default value for 'format' changed to 'yyyy-mm-dd' (@vitalets)
+Enh #36: DATE: added option 'viewformat' - format for display date, previous 'format' used for submit (@vitalets)
 Enh #37: Added event 'render' (@vitalets)
 Enh #34: Clicking outside the popup hides the popup (@vitalets)
 Enh #32: Added methods 'show' and 'hide' to open and close popover manually (@vitalets)
