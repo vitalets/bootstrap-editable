@@ -359,12 +359,12 @@
                     break;
                 case 'top':
                     /* For Bootstrap 2.1.x: 10 pixels needed to correct popover position. See https://github.com/twitter/bootstrap/issues/4665 */
-                    if($tip.find('.arrow').get(0).offsetWidth === 20) {actualHeight += 10}
+                    if($tip.find('.arrow').get(0).offsetHeight === 10) {actualHeight += 10}
                     tp = {top:pos.top - actualHeight, left:pos.left + pos.width / 2 - actualWidth / 2};
                     break;
                 case 'left':
                     /* For Bootstrap 2.1.x: 10 pixels needed to correct popover position. See https://github.com/twitter/bootstrap/issues/4665 */
-                    if($tip.find('.arrow').get(0).offsetHeight === 20) {actualWidth  += 10}
+                    if($tip.find('.arrow').get(0).offsetWidth === 10) {actualWidth  += 10}
                     tp = {top:pos.top + pos.height / 2 - actualHeight / 2, left:pos.left - actualWidth};
                     break;
                 case 'right':
