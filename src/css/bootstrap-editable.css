@@ -26,6 +26,10 @@ a.editable-changed {
   height: 20px;  
 }
 
+.editable-popover {
+    width: auto; /*for bootstrap 2.1.1*/
+}
+
 .editable-popover .popover-inner {
    width: auto;
    max-width: 410px;  /* should be enough for span4 */
@@ -36,3 +40,8 @@ a.editable-changed {
 .editable-popover span.help-block {
    margin-bottom: 0;
 }
+
+.editable-popover .form-inline textarea{
+   vertical-align: top;
+}
+
