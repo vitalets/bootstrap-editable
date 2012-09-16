@@ -2,10 +2,20 @@ $(function(){
     //ajax mocks
     $.mockjaxSettings.responseTime = 500; 
     
+    function log(settings) {
+            var s = [];
+            s.push(settings.type.toUpperCase() + ' url = "' + settings.url + '"');
+            for(var a in settings.data) {
+                s.push(a + ' = "' + settings.data[a] + '"');
+            }
+            s.push('--------------------------------------\n');
+            $('#console').val(s.join('\n') + $('#console').val());
+    }
+    
     $.mockjax({
         url: 'post.php',
-        responseText: {
-            success: true
+        response: function(settings) {
+            log(settings);
         }
     });
 
@@ -13,33 +23,39 @@ $(function(){
         url: 'error.php',
         status: 400,
         statusText: 'Bad Request',
-        responseText: 'Please input correct value'
+        response: function(settings) {
+            log(settings);
+            this.responseText = 'Please input correct value'; 
+        }        
     });
     
     $.mockjax({
         url: 'status.php',
         status: 500,
-        responseText: 'Internal Server Error'
+        response: function(settings) {
+            log(settings);
+            this.responseText = 'Internal Server Error';
+        }        
     });
   
     $.mockjax({
         url: 'groups.php',
-        responseText: {
+        response: function(settings) {
+            log(settings);
+            this.responseText = {
              0: 'Guest',
              1: 'Service',
              2: 'Customer',
              3: 'Operator',
              4: 'Support',
              5: 'Admin'
-        }
+           };
+        }        
     });        
   
     
 //    $.fn.editable.defaults.url = 'error.php'; 
     $.fn.editable.defaults.url = 'post.php'; 
-    $.fn.editable.defaults.success = function(data) {
-         if(typeof data == 'object' && !data.success) return data.msg; 
-    }
 
     $('#username').editable({
                            url: 'post.php',
