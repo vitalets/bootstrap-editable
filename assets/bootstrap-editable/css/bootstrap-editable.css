@@ -1,4 +1,4 @@
-/*! Bootstrap Editable - v1.1.2 
+/*! Bootstrap Editable - v1.1.3 
 * In-place editing with Bootstrap Form and Popover
 * https://github.com/vitalets/bootstrap-editable
 * Copyright (c) 2012 Vitaliy Potapov; Licensed MIT, GPL */
@@ -65,7 +65,7 @@ a.editable-changed {
   top: 0;
   left: 0;    
 }
-
+          
 .datepicker-float:before {
   content: '';
   display: inline-block;
