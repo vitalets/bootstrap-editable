@@ -539,7 +539,16 @@ By default response text will be shown as error message.
     alert('new value: ' + $(this).data('editable').value);
 });</pre>                                      
                                     </td>
-                                </tr>                                
+                                </tr>   
+                                <tr>
+                                    <td>render</td>
+                                    <td>fired each time when text of element is rendered (initially and after value being changed). Use-case for this event is custom formatting of element's text:
+<pre class="prettyprint linenums">$('#action').on('render', function() {
+    var colors = {0: "gray", 1: "green", 2: "blue", 3: "red"};
+    $(this).css("color", colors[editable.value]); 
+});</pre>                                      
+                                    </td>
+                                </tr>                                                               
                             </tbody>
                         </table> 
                                          

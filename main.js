@@ -62,6 +62,11 @@ $(function(){
         }   
     });    
     
+    $('#action').on('render', function(e, editable) {
+        var colors = {0: "gray", 1: "green", 2: "blue", 3: "red"};
+        $(this).css("color", colors[editable.value]);  
+    });
+    
     $('#status, #action').editable({
  
     });   
