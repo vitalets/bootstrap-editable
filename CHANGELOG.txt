@@ -3,7 +3,8 @@ Bootstrap-editable change log
 
 Version 1.1.3 wip
 ----------------------------
-Enh: DATE: default value for 'format' changed to 'yyyy-mm-dd' (@vitalets)
+Enh: Datepicker updated to last version from eternicode's upstream (@vitalets)
+Enh: Date's default value for 'format' option changed to 'yyyy-mm-dd' (@vitalets)
 Enh #36: DATE: added option 'viewformat' - format for display date, previous 'format' is used when submitting (@vitalets)
 Enh #37: Added event 'render' (@vitalets)
 Enh #34: Clicking outside the popup hides the popup (@vitalets)
