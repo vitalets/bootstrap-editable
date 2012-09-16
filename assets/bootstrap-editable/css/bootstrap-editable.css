@@ -26,6 +26,10 @@ a.editable-changed {
   height: 20px;  
 }
 
+.editable-popover {
+    width: auto; /*for bootstrap 2.1.1*/
+}
+
 .editable-popover .popover-inner {
    width: auto;
    max-width: 410px;  /* should be enough for span4 */
@@ -36,6 +40,12 @@ a.editable-changed {
 .editable-popover span.help-block {
    margin-bottom: 0;
 }
+
+.editable-popover .form-inline textarea{
+   vertical-align: top;
+}
+
+
 /*!
  * Datepicker for Bootstrap
  *
@@ -65,7 +75,7 @@ a.editable-changed {
   top: 0;
   left: 0;    
 }
-          
+
 .datepicker-float:before {
   content: '';
   display: inline-block;
@@ -100,7 +110,6 @@ a.editable-changed {
   display: block;
 }
 .datepicker table {
-  width: 100%;
   margin: 0;
 }
 .datepicker td,
@@ -179,11 +188,11 @@ a.editable-changed {
 }
 .datepicker td span {
   display: block;
-  width: 47px;
+  width: 23%;
   height: 54px;
   line-height: 54px;
   float: left;
-  margin: 2px;
+  margin: 1%;
   cursor: pointer;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
