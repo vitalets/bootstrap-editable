@@ -6,14 +6,39 @@ $(function () {
     
     module("text")
       
-     test("input should contain '' if element is empty", function () {
-        var e = $('<a href="#" id="a"></a>').appendTo('#qunit-fixture').editable();
+     test("if element originally empty: emptytext should be shown and input should contain ''", function () {
+        var  emptytext = 'empty',
+             e = $('<a href="#" id="a"> </a>').appendTo('#qunit-fixture').editable({emptytext: emptytext});
+       
+        equal(e.text(), emptytext, 'emptytext shown on init');
+             
         e.click();
         var p = e.data('popover').$tip;
-        ok(!p.find('input[type=text]').val().length, 'input val is empty')
+        equal(p.find('input[type=text]').val(), '', 'input val is empty string')
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')    
       })   
+      
+     test("option 'placeholder'", function () {
+        var  e = $('<a href="#" id="a" data-placeholder="abc"> </a>').appendTo('#qunit-fixture').editable();
+            
+        e.click();
+        var p = e.data('popover').$tip;
+        equal(p.find('input[type=text]').attr('placeholder'), 'abc', 'placeholder exists');
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');
+      });   
+      
+     test("option 'inputclass'", function () {
+        var  e = $('<a href="#" id="a" data-inputclass="span4"> </a>').appendTo('#qunit-fixture').editable();
+            
+        e.click();
+        var p = e.data('popover').$tip;
+        ok(p.find('input[type=text]').hasClass('span4'), 'class set correctly');
+        p.find('button[type=button]').click(); 
+        ok(!p.is(':visible'), 'popover was removed');
+      });           
+      
       
      test("toggle by another element (string)", function () {
         var e = $('<a href="#" id="a"></a>').appendTo('#qunit-fixture').editable({
@@ -259,7 +284,7 @@ $(function () {
      asyncTest("should show emptytext if entered text is empty", function () {
             var emptytext = 'blabla',
                 e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1" data-emptytext="'+emptytext+'">abc</a>').appendTo(fx).editable(),
-                newText = '';
+                newText = ' ';
 
             e.click()
             var p = e.data('popover').$tip;

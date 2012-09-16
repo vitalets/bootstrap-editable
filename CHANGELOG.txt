@@ -1,6 +1,33 @@
 Bootstrap-editable change log
 =============================
 
+Version 1.1.3 wip
+----------------------------
+Enh: Datepicker updated to last version from eternicode's upstream (@vitalets)
+Enh: Date's default value for 'format' option changed to 'yyyy-mm-dd' (@vitalets)
+Enh #36: DATE: added option 'viewformat' - format for display date, previous 'format' is used when submitting (@vitalets)
+Enh #37: Added event 'render' (@vitalets)
+Enh #34: Clicking outside the popup hides the popup (@vitalets)
+Enh #32: Added methods 'show' and 'hide' to open and close popover manually (@vitalets)
+Bug: Text and textarea are not focused after server validation failed (@vitalets)
+      
+
+Version 1.1.2 Sep 8, 2012
+----------------------------
+Enh #31: Added option 'placeholder' for types 'text' and 'textarea' (@vitalets)
+Enh #30: Added option 'inputclass' to change input's css, default 'span2' (@vitalets)
+Enh #27: Textarea submit by ctrl+enter (@vitalets)
+Bug: Element's content not trimmed when checking for emptytext (@vitalets)
+
+
+Version 1.1.1 Sep 2, 2012
+----------------------------
+Enh: Added event 'init' (@vitalets)
+Enh: Popover shows full error message and re-positioned correctly (@vitalets)
+Bug: Cache for select failed when loading options error occured (@vitalets)
+Enh: Scroll navigation in docs (@vitalets)
+
+
 Version 1.1.0 Aug 26, 2012
 ----------------------------
 Enh #23: Added event 'update' (@vitalets)

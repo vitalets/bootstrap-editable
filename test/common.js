@@ -80,6 +80,21 @@
         ok(!p2.is(':visible'), 'popover2 closed');
       });
       
+     test("click outside popoover should hide it", function () {
+        var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo('#qunit-fixture').editable(),
+            e1 = $('<div>').appendTo('body');
+        
+        e.click();
+        var p = e.data('popover').$tip;
+        ok(p.is(':visible'), 'popover shown');
+        
+        p.click();
+        ok(p.is(':visible'), 'popover still shown');
+        
+        e1.click();
+        ok(!p.is(':visible'), 'popover closed');
+     });        
+      
       //unfortunatly, testing this feature does not always work in browsers. Tested manually.
       /*
        test("enablefocus option", function () {

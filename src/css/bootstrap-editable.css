@@ -1,5 +1,5 @@
 /* =========================================================
- * bootstrap-editable.css version 1.0.3
+ * bootstrap-editable.css version 0.0.0
  * https://github.com/vitalets/bootstrap-editable
  * ========================================================= */
 
@@ -26,11 +26,13 @@ a.editable-changed {
   height: 20px;  
 }
 
-div.editable-popover-text { width: 260px; } 
-div.editable-popover-text .popover-content { height: 40px; }
+.editable-popover .popover-inner {
+   width: auto;
+   max-width: 410px;  /* should be enough for span4 */
+}
 
-div.editable-popover-textarea { width: 420px; }
-div.editable-popover-textarea .popover-content { height: 190px; }
-
-div.editable-popover-date { width: 350px; }
-div.editable-popover-date .popover-content { height: 240px; }
+.editable-popover div.control-group,
+.editable-popover form,
+.editable-popover span.help-block {
+   margin-bottom: 0;
+}
