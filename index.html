@@ -180,7 +180,7 @@
                                     </tr>       
                                     <tr>         
                                         <td>Date of birth</td>
-                                        <td><a href="#" id="dob" data-type="date" data-format="dd.mm.yyyy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
+                                        <td><a href="#" id="dob" data-type="date" data-viewformat="dd.mm.yyyy" data-pk="1" data-name="dob" data-original-title="Select Date of birth">15.05.1984</a></td>
                                         <td><span class="muted">Date field, format dd.mm.yyyy</span></td>
                                     </tr> 
                                     <tr>         
@@ -359,7 +359,19 @@
                                     <td>bool</td>
                                     <td>false</td>
                                     <td>wether to return focus on element after popover is closed. This allows fully keyboard input, but focused links may look not pretty</td>
-                                </tr>                                
+                                </tr>
+                                <tr>
+                                    <td>autotext</td>
+                                    <td>string</td>
+                                    <td>'auto'</td>
+                                    <td>can be auto | always | never. Allows to automatically set element's text based on it's value. Usefull for <i>select</i> and <i>date</i>. E.g.:
+                                    <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;group&quot; data-type=&quot;select&quot; data-value=&quot;1&quot; data-source=&quot;{1: 'User', 2: 'Admin'}&quot; &gt;&lt;/a&gt;</pre>
+                                    Content of element above is empty, but when apply <i>editable</i> it will be set to <i>'User'</i>, because provided value is <code>1</code>
+                                    <pre class="prettyprint linenums">$('#group').editable();</pre>  
+                                    <code>auto</code> means text will be set only if element is empty and <i>source</i> defined as object (no extra request).<br>
+                                    <code>always|never</code> means always(never) try to set element's text<br>
+                                    </td>
+                                </tr>                                                                  
                                 <tr>
                                     <td>validate</td>
                                     <td>function | object</td>
@@ -456,18 +468,6 @@ By default response text will be shown as error message.
                                     </td>
                                 </tr>     
                                 <tr>
-                                    <td>autotext</td>
-                                    <td>string</td>
-                                    <td>auto</td>
-                                    <td>can be auto|always|never. Allows automatically set element's text based on it's value and source. E.g.:
-                                    <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;group&quot; data-type=&quot;select&quot; data-value=&quot;1&quot; data-source=&quot;{1: 'User', 2: 'Admin'}&quot; &gt;&lt;/a&gt;</pre>
-                                    Content of element above is empty, but when apply <i>editable</i> it will be set to <i>Admin</i>
-                                    <pre class="prettyprint linenums">$('#group').editable();</pre>  
-                                    <code>auto</code> means text will be set only if element is empty and <i>source</i> defined as object (no extra request).<br>
-                                    <code>always|never</code> means always(never) try to set element's text<br>
-                                    </td>
-                                </tr>   
-                                <tr>
                                     <td>prepend</td>
                                     <td>string | object</td>
                                     <td>false</td>
@@ -490,9 +490,16 @@ By default response text will be shown as error message.
                                 <tr>
                                     <td>format</td>
                                     <td>string</td>
-                                    <td>dd/mm/yyyy</td>
-                                    <td>date format, combination of d, dd, m, mm, yy, yyy. </td>
+                                    <td>yyyy-mm-dd</td>
+                                    <td>format used for <strong>submitting date to server</strong>. Combination of d, dd, m, mm, yy, yyy. </td>
                                 </tr> 
+                                <tr>
+                                    <td>viewformat</td>
+                                    <td>string</td>
+                                    <td>equals to <i>format</i></td>
+                                    <td>format used for <strong>displaying date as text</strong>. Combination of d, dd, m, mm, yy, yyy. </td>
+                                </tr> 
+                                
                                  <tr>
                                     <td>weekStart</td>
                                     <td>integer</td>
