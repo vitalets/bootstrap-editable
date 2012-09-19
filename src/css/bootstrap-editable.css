@@ -3,7 +3,7 @@
  * https://github.com/vitalets/bootstrap-editable
  * ========================================================= */
 
- a.editable, a.editable:hover {
+a.editable, a.editable:hover {
   text-decoration: none;
   border-bottom: dashed 1px #0088cc;
 }
@@ -26,22 +26,22 @@ a.editable-changed {
   height: 20px;  
 }
 
-.editable-popover {
+.popover.editable-popover {
     width: auto; /*for bootstrap 2.1.1*/
 }
 
-.editable-popover .popover-inner {
+.popover.editable-popover .popover-inner {
    width: auto;
    max-width: 410px;  /* should be enough for span4 */
 }
 
-.editable-popover div.control-group,
-.editable-popover form,
-.editable-popover span.help-block {
+.popover.editable-popover div.control-group,
+.popover.editable-popover form,
+.popover.editable-popover span.help-block {
    margin-bottom: 0;
 }
 
-.editable-popover .form-inline textarea{
+.popover.editable-popover .form-inline textarea {
    vertical-align: top;
 }
 
