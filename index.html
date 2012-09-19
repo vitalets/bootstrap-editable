@@ -539,7 +539,7 @@ By default response text will be shown as error message.
                         
                         <section id="events"><hr></section>
                         <h2>Events</h2>
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 150px;">Event</th>
@@ -552,24 +552,26 @@ By default response text will be shown as error message.
                                     <td>fired when editable was initialized. To access editable itself use second parameter:
 <pre class="prettyprint linenums">$('#username').on('init', function(e, editable) {
     alert('Initialized with value: ' + editable.value);
-});</pre>                                    
+});</pre>      
+Should be attached to element <i>before</i> applying <code>$().editable()</code>.                              
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>update</td>
                                     <td>fired when editable has been successfully updated with new value:
-<pre class="prettyprint linenums">$('#username').on('update', function() {
-    alert('new value: ' + $(this).data('editable').value);
+<pre class="prettyprint linenums">$('#username').on('update', function(e, editable) {
+    alert('new value: ' + editable.value);
 });</pre>                                      
                                     </td>
                                 </tr>   
                                 <tr>
                                     <td>render</td>
-                                    <td>fired each time when text of element is rendered (initially and after value being changed). Use-case for this event is custom formatting of element's text:
-<pre class="prettyprint linenums">$('#action').on('render', function() {
+                                    <td>fired each time when text of element is rendered (initially and after each ajax update). Can be used for custom formatting of element's text:
+<pre class="prettyprint linenums">$('#action').on('render', function(e, editable) {
     var colors = {0: "gray", 1: "green", 2: "blue", 3: "red"};
     $(this).css("color", colors[editable.value]); 
-});</pre>                                      
+});</pre>   
+Property <code>e.isInit</code> defines wether it is initial render or render after update.                                    
                                     </td>
                                 </tr>                                                               
                             </tbody>
