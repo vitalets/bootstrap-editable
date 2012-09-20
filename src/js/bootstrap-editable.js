@@ -342,7 +342,7 @@
         /**
          * move popover to new position. This function mainly copied from bootstrap-popover.
          */
-        setPosition:function () {
+        setPosition: function () {
             var p = this.$element.data('popover'), $tip = p.tip(), inside = false, placement, pos, actualWidth, actualHeight, tp;
 
             placement = typeof p.options.placement === 'function' ? p.options.placement.call(p, $tip[0], p.$element[0]) : p.options.placement;
@@ -429,7 +429,7 @@
 
     $.fn.editable = function (option) {
         //special methods returning non-jquery object
-        var result = {};
+        var result = {}, args = arguments
         switch (option) {
             case 'validate':
                 this.each(function () {
@@ -456,7 +456,14 @@
             if (!data) {
                 $this.data('editable', (data = new Editable(this, options)));
             }
-            if (typeof option === 'string') {
+            
+            if(option === 'option') {
+                if(typeof args[1] === 'string' && args.length === 3) {
+                   data.settings[args[1]] = args[2];
+                } else if(typeof args[1] === 'object') {
+                   $.extend(data.settings, args[1]); 
+                }
+            } else if (typeof option === 'string') {
                 data[option]();
             }
         });

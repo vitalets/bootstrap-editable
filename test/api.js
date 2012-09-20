@@ -171,5 +171,20 @@ $(function () {
         e.editable('hide');
         ok(!p.is(':visible'), 'popover closed');
      });      
+     
+     test("option method", function () {
+        var e = $('<a href="#" data-url="post.php" data-name="text">abc</a>').appendTo('#qunit-fixture').editable(),
+            e1 = $('<a href="#" data-pk="1" data-name="text1">abc</a>').appendTo('#qunit-fixture').editable(),
+            url = 'abc';
+            
+        $('#qunit-fixture a').editable('option', 'pk', 2);
+            
+        equal(e.data('editable').settings.pk, 2, 'pk set correctly');
+        equal(e1.data('editable').settings.pk, 2, 'pk2 set correctly');
+        
+        $('#qunit-fixture a').editable('option', {url: url});
+        equal(e.data('editable').settings.url, url, 'url set correctly');
+        equal(e1.data('editable').settings.url, url, 'url2 set correctly');        
+     });      
          
 });            
