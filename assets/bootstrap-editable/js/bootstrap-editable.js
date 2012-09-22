@@ -448,7 +448,7 @@
             case 'getValue':
                 this.each(function () {
                     var $this = $(this), data = $this.data('editable');
-                    if (data) {
+                    if (data && data.value !== undefined && data.value !== null) {
                         result[data.name] = data.value;
                     }
                 });
@@ -469,8 +469,12 @@
                     if(config.data) {
                         $.extend(values, config.data);
                     }
-                    $.post(config.url, values, 'json')
-                     .success(function(response) {
+                    $.ajax({
+                        type: 'POST',
+                        url: config.url, 
+                        data: values, 
+                        dataType: 'json'
+                    }).success(function(response) {
                         if(typeof response === 'object' && response.id) {
                             $elems.editable('option', 'pk', response.id); 
                             $elems.editable('markAsSaved');
@@ -480,8 +484,7 @@
                         } else { //server-side validation error
                             config.error.apply($elems, arguments);
                         }
-                    })
-                    .error(function(){  //ajax error
+                    }).error(function(){  //ajax error
                         config.error.apply($elems, arguments);
                     });
                 } else { //client-side validation error
@@ -802,7 +805,11 @@
                 this.$element.text(text);
             },
             setValueByText:function () {
-                this.value = this.settings.converFormat.call(this, this.$element.text(), this.settings.viewformat, this.settings.format);    
+                var text = $.trim(this.$element.text());
+                if(!text.length) {
+                    return;
+                }
+                this.value = this.settings.converFormat.call(this, text, this.settings.viewformat, this.settings.format);    
             },
             //helper function to convert date between two formats
             converFormat: function(dateStr, formatFrom, formatTo) {
