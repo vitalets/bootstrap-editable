@@ -464,8 +464,12 @@
                     if(config.data) {
                         $.extend(values, config.data);
                     }
-                    $.post(config.url, values, 'json')
-                     .success(function(response) {
+                    $.ajax({
+                        type: 'POST',
+                        url: config.url, 
+                        data: values, 
+                        dataType: 'json'
+                    }).success(function(response) {
                         if(typeof response === 'object' && response.id) {
                             $elems.editable('option', 'pk', response.id); 
                             $elems.editable('markAsSaved');
@@ -475,8 +479,7 @@
                         } else { //server-side validation error
                             config.error.apply($elems, arguments);
                         }
-                    })
-                    .error(function(){  //ajax error
+                    }).error(function(){  //ajax error
                         config.error.apply($elems, arguments);
                     });
                 } else { //client-side validation error

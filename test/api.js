@@ -234,7 +234,6 @@ $(function () {
         $(fx).find('.new').editable('submit', {
             url: 'new.php',
             error: function(data) {
-                console.log(data);
                ok(data.errors, 'errors defined');
                equal(data.errors.text, 'invalid', 'client validation error ok');
             }
