@@ -429,7 +429,7 @@
 
     $.fn.editable = function (option) {
         //special methods returning non-jquery object
-        var result = {}, args = arguments
+        var result = {}, args = arguments;
         switch (option) {
             case 'validate':
                 this.each(function () {
@@ -448,6 +448,42 @@
                     }
                 });
                 return result;
+                
+            case 'submit':  //collects value, validate and submit to server for creating new record
+                var config = arguments[1] || {},
+                    $elems = this,
+                    errors = this.editable('validate'),
+                    values;
+                
+                if(typeof config.error !== 'function') {
+                    config.error = function() {};
+                } 
+
+                if($.isEmptyObject(errors)) {
+                    values = this.editable('getValue'); 
+                    if(config.data) {
+                        $.extend(values, config.data);
+                    }
+                    $.post(config.url, values, 'json')
+                     .success(function(response) {
+                        if(typeof response === 'object' && response.id) {
+                            $elems.editable('option', 'pk', response.id); 
+                            $elems.editable('markAsSaved');
+                            if(typeof config.success === 'function') {
+                                config.success.apply($elems, arguments);
+                            } 
+                        } else { //server-side validation error
+                            config.error.apply($elems, arguments);
+                        }
+                    })
+                    .error(function(){  //ajax error
+                        config.error.apply($elems, arguments);
+                    });
+                } else { //client-side validation error
+                    config.error.call($elems, {errors: errors});
+                }
+                
+                return this;
         }
 
         //return jquery object

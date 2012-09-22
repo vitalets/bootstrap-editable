@@ -185,6 +185,113 @@ $(function () {
         $('#qunit-fixture a').editable('option', {url: url});
         equal(e.data('editable').settings.url, url, 'url set correctly');
         equal(e1.data('editable').settings.url, url, 'url2 set correctly');        
-     });      
-         
+     });    
+     
+      asyncTest("'submit' method: client and server validation", function () {
+        expect(6);  
+        var ev1 = 'ev1',
+            ev2 = 'ev2',
+            e1v = 'e1v',
+            e = $('<a href="#" class="new" data-type="text" data-url="post.php" data-name="text">'+ev1+'</a>').appendTo(fx).editable({
+                validate: function(value) {
+                    if(value == ev1) return 'invalid';
+                }
+            }),
+            e1 = $('<a href="#" class="new" data-type="text" data-name="text1">'+e1v+'</a>').appendTo(fx).editable();
+
+        $.mockjax({
+            url: 'new-error.php',
+            response: function(settings) {
+                equal(settings.data.text, ev2, 'first value ok');
+                equal(settings.data.text1, e1v, 'second value ok');
+                equal(settings.data.a, 123, 'custom data ok');
+                this.responseText = {errors: {
+                    text1: 'server-invalid'
+                  }
+                };  
+            }
+        });
+ 
+        $(fx).find('.new').editable('submit', {
+            url: 'new.php',
+            error: function(data) {
+                console.log(data);
+               ok(data.errors, 'errors defined');
+               equal(data.errors.text, 'invalid', 'client validation error ok');
+            }
+        });
+       
+        //change value to pass client side validation
+        e.click();
+        var p = e.data('popover').$tip;
+        p.find('input[type=text]').val(ev2);
+        p.find('button[type=submit]').click(); 
+       
+        $(fx).find('.new').editable('submit', {
+            url: 'new-error.php',
+            data: {a: 123},
+            error: function(data) {
+                equal(data.errors.text1, 'server-invalid', 'server validation error ok');
+                
+                e.remove();
+                e1.remove();
+                start(); 
+            }            
+        });       
+       
+     });                  
+        
+        
+     asyncTest("'submit' method: server error", function () {
+       expect(2);  
+        var ev1 = 'ev1',
+            e1v = 'e1v',
+            e = $('<a href="#" class="new" data-type="text" data-url="post.php" data-name="text">'+ev1+'</a>').appendTo(fx).editable(),
+            e1 = $('<a href="#" class="new" data-type="text" data-name="text1">'+e1v+'</a>').appendTo(fx).editable();
+
+       $(fx).find('.new').editable('submit', {
+            url: 'error.php',
+            error: function(data) {
+                ok(!data.errors, 'no client errors');
+                equal(data.responseText, 'customtext', 'server error ok');
+                
+                e.remove();
+                e1.remove();
+                start();                 
+            }
+        });
+        
+     });       
+     
+     asyncTest("'submit' method: success", function () {
+       expect(3);  
+        var ev1 = 'ev1',
+            e1v = 'e1v',
+            e = $('<a href="#" class="new" data-type="text" data-url="post.php" data-name="text">'+ev1+'</a>').appendTo(fx).editable(),
+            e1 = $('<a href="#" class="new" data-type="text" data-name="text1">'+e1v+'</a>').appendTo(fx).editable();
+
+        $.mockjax({
+            url: 'new-success.php',
+            response: function(settings) {
+                equal(settings.data.text, ev1, 'first value ok');
+                equal(settings.data.text1, e1v, 'second value ok');
+                this.responseText = {id: 123};  
+            }
+        });            
+            
+       $(fx).find('.new').editable('submit', {
+            url: 'new-success.php',
+            success: function(data) {
+                //todo: check pk value of e and e1
+                
+                equal(data.id, 123, 'server result id ok');
+                
+                e.remove();
+                e1.remove();
+                start();                 
+            }
+        });
+        
+     });                          
+  
 });            
