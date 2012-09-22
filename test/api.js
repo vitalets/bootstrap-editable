@@ -264,9 +264,10 @@ $(function () {
      });       
      
      asyncTest("'submit' method: success", function () {
-       expect(3);  
+       expect(7);  
         var ev1 = 'ev1',
             e1v = 'e1v',
+            pk = 123,
             e = $('<a href="#" class="new" data-type="text" data-url="post.php" data-name="text">'+ev1+'</a>').appendTo(fx).editable(),
             e1 = $('<a href="#" class="new" data-type="text" data-name="text1">'+e1v+'</a>').appendTo(fx).editable();
 
@@ -275,16 +276,20 @@ $(function () {
             response: function(settings) {
                 equal(settings.data.text, ev1, 'first value ok');
                 equal(settings.data.text1, e1v, 'second value ok');
-                this.responseText = {id: 123};  
+                this.responseText = {id: pk};  
             }
         });            
             
        $(fx).find('.new').editable('submit', {
             url: 'new-success.php',
             success: function(data) {
-                //todo: check pk value of e and e1
+                equal(e.data('editable').settings.pk, pk, 'pk1 ok'); 
+                ok(!e.hasClass('editable-changed'), 'no "editable-changed" class'); 
                 
-                equal(data.id, 123, 'server result id ok');
+                equal(e1.data('editable').settings.pk, pk, 'pk2 ok'); 
+                ok(!e1.hasClass('editable-changed'), 'no "editable-changed" class'); 
+                
+                equal(data.id, pk, 'server result id ok');
                 
                 e.remove();
                 e1.remove();

@@ -494,11 +494,11 @@
             }
             
             if(option === 'option') {
-                if(typeof args[1] === 'string' && args.length === 3) {
-                   data.settings[args[1]] = args[2];
-                } else if(typeof args[1] === 'object') {
-                   $.extend(data.settings, args[1]); 
-                }
+                 if(args.length === 2 && typeof args[1] === 'object') {
+                     $.extend(data.settings, args[1]); //set options by object
+                 } else if(args.length === 3 && typeof args[1] === 'string') {
+                    data.settings[args[1]] = args[2]; //set one option
+                 } 
             } else if (typeof option === 'string') {
                 data[option]();
             }
