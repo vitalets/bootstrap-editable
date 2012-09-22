@@ -17,7 +17,7 @@ $(function () {
         equal(p.find('input[type=text]').val(), '', 'input val is empty string')
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed')    
-      })   
+     })   
       
      test("option 'placeholder'", function () {
         var  e = $('<a href="#" id="a" data-placeholder="abc"> </a>').appendTo('#qunit-fixture').editable();
@@ -38,7 +38,6 @@ $(function () {
         p.find('button[type=button]').click(); 
         ok(!p.is(':visible'), 'popover was removed');
       });           
-      
       
      test("toggle by another element (string)", function () {
         var e = $('<a href="#" id="a"></a>').appendTo('#qunit-fixture').editable({

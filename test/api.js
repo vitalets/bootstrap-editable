@@ -59,6 +59,25 @@ $(function () {
         e.editable('markAsSaved');      
         ok(!e.filter('.editable-changed').length, 'editable-changed not exist');
     });
+    
+    test("getValue with originally empty elements", function () {
+        var e = $(
+          '<a href="#" data-type="text" id="username"></a>' + 
+          '<a href="#" data-type="textarea" id="comment"></a>' + 
+          '<a href="#" data-type="select" id="sex" data-source=\'{"1":"q", "2":"w"}\'></a>' + 
+          '<a href="#" data-type="date" id="dob"></a>'
+         ).appendTo('#qunit-fixture');
+        
+        $('#qunit-fixture').find('a').editable();
+        
+        //check get value
+        var values = e.editable('getValue');
+
+        equal(values.username, '', 'text ok') ;
+        equal(values.comment, '', 'textarea ok') ;
+        equal(values.sex, undefined, 'select ok') ;
+        equal(values.dob, undefined, 'date ok') ;
+     });    
      
       asyncTest("'update' event", function () {
         expect(2);

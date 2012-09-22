@@ -3,6 +3,7 @@ Bootstrap-editable change log
 
 Version 1.1.4 wip
 ----------------------------
+Bug: If date not set it equals to today (@vitalets)
 Enh #24: Updated to jquery 1.8.2 (@vitalets)
 Enh: Add api method 'submit' to simplify creating new record (@vitalets)
 Enh #39: Add api method 'option' to set one or several options dynamically (@vitalets)

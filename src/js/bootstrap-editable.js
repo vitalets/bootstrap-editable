@@ -797,7 +797,9 @@
                 this.$element.text(text);
             },
             setValueByText:function () {
-                this.value = this.settings.converFormat.call(this, this.$element.text(), this.settings.viewformat, this.settings.format);    
+                var text = $.trim(this.$element.text());
+                if(!text.length) return;
+                this.value = this.settings.converFormat.call(this, text, this.settings.viewformat, this.settings.format);    
             },
             //helper function to convert date between two formats
             converFormat: function(dateStr, formatFrom, formatTo) {
