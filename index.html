@@ -254,15 +254,10 @@
                         <p>Alternatively, you can set all the same options via <code>data-*</code> attributes</p>  
                         <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;username&quot; data-type=&quot;text&quot; data-pk=&quot;1&quot; data-name=&quot;username&quot; data-url=&quot;post.php&quot; data-original-title=&quot;Enter username&quot;&gt;superuser&lt;/a&gt;</pre> 
                         <pre class="prettyprint linenums">$('#username').editable();</pre>
-
-                        <div class="alert alert-info">
-                            <strong>Tip! </strong>If <code>url</code> for submit is equal for all fields you can define it via defaults: <br>
-                            <code>$.fn.editable.defaults.url = 'post.php';</code>
-                        </div>    
                         
                         <h3>Textarea</h3>
                         <p>Very similar to <i>text</i>, just set <code>type</code> to <i>textarea</i></p>
-                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;comments&quot;&gt;awesome!&lt;/a&gt;</pre> 
+                        <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;comments&quot;&gt;awesome&lt;br&gt;user!&lt;/a&gt;</pre> 
                         <pre class="prettyprint linenums">$('#comments').editable({
                            type:  'textarea',
                            pk:    1,
@@ -277,7 +272,8 @@
                         <pre class="prettyprint linenums">$('#group').editable();</pre>  
                       
                         <h3>Date</h3>
-                        <p>Date is based on <a href="http://vitalets.github.com/bootstrap-datepicker/" taget="_blank">bootstrap-datepicker</a> and included into library</p>
+                        <p>Date is based on <a href="http://vitalets.github.com/bootstrap-datepicker/" taget="_blank">bootstrap-datepicker</a> that is improved fork of <a href="https://github.com/eternicode/bootstrap-datepicker" taget="_blank">eternicode's project</a>. 
+                        Use <code>format</code> and <code>viewformat</code> options to define how date will be stored and displayed</p>
                         <pre class="prettyprint linenums">&lt;a href=&quot;#&quot; id=&quot;dob&quot; data-format=&quot;dd.mm.yyyy&quot;&gt;15.05.1984&lt;/a&gt;</pre>
                         <pre class="prettyprint linenums">$('#dob').editable({
                            type:  'date',
@@ -437,7 +433,7 @@ By default response text will be shown as error message.
                         </table>
                         
                         <div class="alert alert-info">
-                            <strong>Tip! </strong>If you need one success/error callback for all fields you can define it in defaults:  <br>
+                            <strong>Tip! </strong>If you need one option for all editable fields you can define it in defaults:  <br>
                             <pre class="prettyprint linenums">$.fn.editable.defaults.success = function(data) { ... }</pre> 
                         </div>
                        
@@ -507,13 +503,13 @@ By default response text will be shown as error message.
                                     <td>format</td>
                                     <td>string</td>
                                     <td>yyyy-mm-dd</td>
-                                    <td>format used for <strong>submitting date to server</strong>. Combination of d, dd, m, mm, yy, yyy. </td>
+                                    <td>format used for <strong>submitting date to server</strong>. Combination of d, dd, m, mm, yy, yyyy. </td>
                                 </tr> 
                                 <tr>
                                     <td>viewformat</td>
                                     <td>string</td>
                                     <td>equals to <i>format</i></td>
-                                    <td>format used for <strong>displaying date as text</strong>. Combination of d, dd, m, mm, yy, yyy. </td>
+                                    <td>format used for <strong>displaying date</strong>. Combination of d, dd, m, mm, yy, yyyy. </td>
                                 </tr> 
                                 
                                  <tr>
@@ -592,7 +588,7 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
                         <p>Hides editable popover manually.</p>
                         <br>
                         
-                        <h4>.editable('option', nameOrObject, [value])</h4>
+                        <h4>.editable('option', nameOrObject, [value]) <span class="label label-success">New</span></h4>
                         <p>Set one or several options.</p>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('option', 'pk', 123);</pre>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('option', {pk: 123});</pre>
@@ -620,6 +616,83 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
 
                         <h4>.editable('markAsSaved')</h4>
                         <p>Mark editable as saved to server (removes class "editable-changed" and updates <i>lastSavedValue</i> of editable).</p>
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('markAsSaved');</pre>                        
+                        <br>
+                        
+                        <h4>.editable('submit', config) <span class="label label-success">New</span></h4>
+                        <p>This method is combination of <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code> working together in more or less standart way. 
+                        When applied it runs validation for matched editable elements and if no errors - submits data to provided url.
+                        It's configuration contains following options:
+                        </p>
+                        <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">Option name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>url</td>
+                                    <td>url for ajax submit</td>
+                                </tr> 
+                                <tr>
+                                    <td>data</td>
+                                    <td>additional data to submit</td>
+                                </tr> 
+                                <tr>
+                                    <td>success</td>
+                                    <td>callback applied on successful creation of new record</td>
+                                </tr>                                
+                                <tr>
+                                    <td>error</td>
+                                    <td>callback applied on any error (including client-side and server-side validation errors)</td>
+                                </tr>                                
+                            </tbody>
+                        </table> 
+                        <p>There are four possible scenarios:<p>
+                        <ul>
+                            <li>
+                                <strong>successful record creation</strong><br>
+                                Server response pattern must be: <code>{id: &lt;new-record-id&gt;}</code>.
+                                <i>id</i> will be automatically stored into <code>pk</code> value of all editables and they will start working in regular way. 
+                                Will be called <i>success()</i> callback with response object in param.
+                            </li>                        
+                            <li>
+                                <strong>client-side validation error</strong><br>
+                                Will be called <i>error()</i> callback with errors object in param. 
+                            </li>
+                            <li>
+                                <strong>server-side validation error</strong><br>
+                                Server response pattern must <strong>not</strong> be like: <code>{id: &lt;something&gt;}</code>. Good solution is response like <code>{errors: &lt;object with error messages&gt;}</code>
+                                 to have silimar handling of server-side and client-side validation errors. 
+                                Will be called <i>error()</i> callback with errors object in param. 
+                            </li>
+                            <li>
+                                <strong>ajax error, http status != 200</strong><br>
+                                Will be called <i>error()</i> callback with xhr object in param. 
+                            </li>
+
+                        </ul>
+                           
+                        <p>Example code:</p>                    
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('submit', {
+    url: 'new.php',              
+    data: {custom: 'text'},     
+    success: function(data) {
+        /* actions on success */
+    },
+    error: function(data) {
+        /* actions on validation error (or ajax error) */
+        var msg = '';
+        if(data.errors) {              //validation error
+            $.each(data.errors, function(k, v) { msg += k+": "+v+"&lt;br&gt;"; });  
+        } else if(data.responseText) {   //ajax error
+            msg = data.responseText; 
+        }
+    }
+});</pre>                        
+                        
                         
                         <section id="newrecord"><hr></section>
                         <h2>Creating new record</h2> 
@@ -657,11 +730,7 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
                             <button id="save-btn" class="btn btn-primary">Save new user!</button>
                         </div>                        
                          <br>
-<!--                         <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code>.-->
-                        
-<!--                        But when object has been created, editable should work as usual. One approach is to create hidden element to store primary key and link it with editables, e.g.:</p>
-                        <pre class="prettyprint linenums">&lt;span style=&quot;display: none&quot; id=&quot;user_id&quot;&gt;&lt;/span&gt;</pre>
--->                      <p>Editables are initialized without <code>pk</code> option:</p>
+                        <p>Editables are initialized without <code>pk</code> option:</p>
                         <pre class="prettyprint linenums">
 $('.myeditable').editable({
     url: 'post.php',
@@ -672,7 +741,7 @@ $('.myeditable').editable({
 });</pre>
                      <p>When you update fields - no data are submited to server, but values are stored and editables marked with css class <i>editable-changed</i>.</p>
                      <p>When you click on save button, api method <code>submit</code> is called. It runs validation for all fields and if no errors - submits to server.
-                     If server response is <code>{id: &lt;new-record-id&gt;}</code> it automatically stores <i>id</i> into <code>pk</code> value of all editables and they start working in regular way.
+                     If server response is like <code>{id: &lt;new-record-id&gt;}</code> it automatically stores <i>id</i> into <code>pk</code> value of all editables and they start working in regular way.
                      Additionally <code>success</code> and <code>error</code> callbacks can be passed for customization (e.g. to show message).
                      </p>
                         <pre class="prettyprint linenums">$('#save-btn').click(function() {
@@ -726,7 +795,7 @@ $('.myeditable').editable({
 });</pre>                
                 
                           
-            <p>If you find bug or have an idea please feel free to <a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">create issue on github</a>.</p>
+            <p>If you find a bug or have an idea please feel free to <a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">create issue on github</a>.</p>
                    
                    </div> <!-- end of span9 div -->
                 </div> <!-- end of row div -->
