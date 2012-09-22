@@ -73,10 +73,10 @@ $(function () {
         //check get value
         var values = e.editable('getValue');
 
-        equal(values.username, '', 'text ok') ;
-        equal(values.comment, '', 'textarea ok') ;
-        equal(values.sex, undefined, 'select ok') ;
-        equal(values.dob, undefined, 'date ok') ;
+        equal(values.username, '', 'text empyt value') ;
+        equal(values.comment, '', 'textarea empty value') ;
+        ok(!('sex' in values), 'select value not present') ;
+        ok(!('dob' in values), 'date value not present') ;
      });    
      
       asyncTest("'update' event", function () {

@@ -443,7 +443,7 @@
             case 'getValue':
                 this.each(function () {
                     var $this = $(this), data = $this.data('editable');
-                    if (data) {
+                    if (data && data.value !== undefined && data.value !== null) {
                         result[data.name] = data.value;
                     }
                 });
