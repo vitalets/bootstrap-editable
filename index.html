@@ -592,6 +592,12 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
                         <p>Hides editable popover manually.</p>
                         <br>
                         
+                        <h4>.editable('option', [nameOrObject], [value])</h4>
+                        <p>Set one or several options.</p>
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('option', 'pk', 123);</pre>
+                        <pre class="prettyprint linenums">$('#username, #fullname').editable('option', {pk: 123});</pre>
+                        <br>                        
+                        
                         <p><span class="muted">Below methods are mainly for <strong>creating new records</strong> (details in next section)</span></p>
                         <h4>.editable('validate')</h4>
                         <p>Will call validate method for each editable in array. Returns object with names and validation messages, e.g.:</p>
