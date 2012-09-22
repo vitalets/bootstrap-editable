@@ -109,7 +109,7 @@
                             <li>keyboard support (escape/enter)</li>                            
                         </ul>   
                         <p style="text-align: center; margin-bottom: 0">
-                           <a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.1.3.zip" class="btn btn-primary">Download stable (v1.1.3)</a>
+                           <a id="download" href="assets/bootstrap-editable/bootstrap-editable-v1.1.4.zip" class="btn btn-primary">Download stable (v1.1.4)</a>
                            <br><a href="assets/bootstrap-editable/CHANGELOG.txt" style="font-size: 0.85em">release notes</a>
                         </p>
                         <br>
@@ -592,7 +592,7 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
                         <p>Hides editable popover manually.</p>
                         <br>
                         
-                        <h4>.editable('option', [nameOrObject], [value])</h4>
+                        <h4>.editable('option', nameOrObject, [value])</h4>
                         <p>Set one or several options.</p>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('option', 'pk', 123);</pre>
                         <pre class="prettyprint linenums">$('#username, #fullname').editable('option', {pk: 123});</pre>
@@ -623,80 +623,110 @@ Property <code>e.isInit</code> defines wether it is initial render or render aft
                         
                         <section id="newrecord"><hr></section>
                         <h2>Creating new record</h2> 
-                        <p>When creating <strong>new record</strong> it's primary key (record id) is <i>undefined</i> and in-place-editing has no related object on backend.
-                        In that case editable will store new value in itself and will not submit anything to server (this managed by <code>send='auto'</code> option).
-                        But when object has been created, editable should work as usual. One approach is to create hidden element to store primary key and link it with editables, e.g.:</p>
+                        <p>Creating <strong>new record</strong> is a bit problem for editable interface because primary key (record id) is <i>unknown</i> and in-place-editing has no related object on backend.
+                        In that case editable will store new value inside and will not submit anything to server until you do it manually .This is default behavior when <code>pk</code> option is empty and <code>send='auto'</code>.
+                        To submit manually several editable fields there is <code>submit</code> api method. Try example below to see how it works.<p>
+                        
+                        <p><strong>Live example - creating new user:</strong></p>  
+                        <div>
+                            <div id="msg" class="alert hide"></div>
+                            <table id="user" class="table table-bordered table-striped">
+                                <tbody> 
+                                    <tr>         
+                                        <td width="30%">Username</td>
+                                        <td><a href="#" class="myeditable" data-type="text" data-name="username" data-original-title="Enter username"></a></td>
+                                    </tr>
+                                    <tr>         
+                                        <td>First name</td>
+                                        <td><a href="#" class="myeditable" data-type="text" data-name="firstname" data-original-title="Enter your firstname"></a></td>
+                                    </tr>  
+                                    <tr>         
+                                        <td>Group</td>
+                                        <td><a href="#" class="myeditable" data-type="select" data-name="group" data-source="groups.php" data-original-title="Select group"></a></td>
+                                    </tr>     
+                                    <tr>         
+                                        <td>Date of birth</td>
+                                        <td><a href="#" class="myeditable" data-type="date" data-name="dob" data-viewformat="dd/mm/yyyy" data-original-title="Select Date of birth"></a></td>
+                                    </tr>  
+                                    <tr>         
+                                        <td>Comments</td>
+                                        <td><a href="#" class="myeditable" data-type="textarea" data-name="comments" data-original-title="Enter comments"></a></td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                            <button id="save-btn" class="btn btn-primary">Save new user!</button>
+                        </div>                        
+                         <br>
+<!--                         <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code>.-->
+                        
+<!--                        But when object has been created, editable should work as usual. One approach is to create hidden element to store primary key and link it with editables, e.g.:</p>
                         <pre class="prettyprint linenums">&lt;span style=&quot;display: none&quot; id=&quot;user_id&quot;&gt;&lt;/span&gt;</pre>
+-->                      <p>Editables are initialized without <code>pk</code> option:</p>
                         <pre class="prettyprint linenums">
 $('.myeditable').editable({
     url: 'post.php',
-    send: 'auto',   // (by default)
-    pk: '#user_id', // link to hidden element that stores pk as inner text 
+    /* pk not defined for new record */
     validate: {
-        username: function(v) {if(v == '') return 'Username is required!'}
+        username: function(v) {if(v == '') return 'Required field!'}
     } 
 });</pre>
-                        <p>Initially <strong>#user_id</strong> is empty - no requests will be submited to server, but values will be stored and editables will be marked with css class <i>editable-changed</i><br>
-                        <strong>Live example:</strong></p>                                       
-                        
-                        <div>
-                        <div class="alert alert-success hide">
-                            <strong>User created!</strong> Primary key is written into <i>#user_id</i> and editables will work as usual
-                        </div>
-                        <div class="alert alert-error hide">
-                        </div> 
-                        <span style="display: none" id="user_id"></span>
-                        <table id="user" class="table table-bordered table-striped">
-                            <tbody> 
-                               <tr>         
-                                    <td width="30%">Username</td>
-                                    <td><a href="#" class="myeditable" data-type="text" data-name="username" data-original-title="Enter username" data-emptytext="Required"></a></td>
-                                </tr>
-                                <tr>         
-                                    <td>First name</td>
-                                    <td><a href="#" class="myeditable" data-type="text" data-name="firstname" data-original-title="Enter your firstname"></a></td>
-                                </tr>  
-                                <tr>         
-                                    <td>Group</td>
-                                    <td><a href="#" class="myeditable" data-type="select" data-name="group" data-source="groups.php" data-original-title="Select group"></a></td>
-                                </tr>     
-                                <tr>         
-                                    <td>Date of birth</td>
-                                    <td><a href="#" class="myeditable" data-type="date" data-name="dob" data-format="dd.mm.yy" data-original-title="Select Date of birth"></a></td>
-                                </tr>  
-                                <tr>         
-                                    <td>Comments</td>
-                                    <td><a href="#" class="myeditable" data-type="textarea" data-name="comments" data-original-title="Enter comments"></a></td>
-                                </tr> 
-                            </tbody>
-                        </table>
-                        <button id="save-btn" class="btn btn-primary">Create user!</button>
-                    </div>                         
-                     <br>
-                     <p>When you click on <i>create user</i> button, validation runs for all fields and if no errors - submit to server. 
-                     To perform these actions easily there are three methods <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code><br>
-                     E.g.   
+                     <p>When you update fields - no data are submited to server, but values are stored and editables marked with css class <i>editable-changed</i>.</p>
+                     <p>When you click on save button, api method <code>submit</code> is called. It runs validation for all fields and if no errors - submits to server.
+                     If server response is <code>{id: &lt;new-record-id&gt;}</code> it automatically stores <i>id</i> into <code>pk</code> value of all editables and they start working in regular way.
+                     Additionally <code>success</code> and <code>error</code> callbacks can be passed for customization (e.g. to show message).
                      </p>
+                        <pre class="prettyprint linenums">$('#save-btn').click(function() {
+    $('.myeditable').editable('submit', {   //call submit
+        url: 'new.php',                     //url for creating new user
+        success: function(data) {
+            var msg = 'New user created! Now editables work in regular way.';
+            $('#msg').addClass('alert-success').removeClass('alert-error')
+                     .html(msg).show();
+            $('#save-btn').hide(); 
+        },
+        error: function(data) {
+            var msg = '';
+            if(data.errors) {                //validation error
+                $.each(data.errors, function(k, v) { msg += k+": "+v+"&lt;br&gt;"; });  
+            } else if(data.responseText) {   //ajax error
+                msg = data.responseText; 
+            }
+            $('#msg').removeClass('alert-success').addClass('alert-error')
+                     .html(msg).show();
+        }
+    }); 
+});</pre>
                      
-                        <pre class="prettyprint linenums">
-$('#save-btn').click(function() {
-    var errors = $('.myeditable').editable('validate'); //run validation for all values
+            <p>To have more advanced behavior when creating new record you can easily write your own handler using these api methods: <code>validate</code>, <code>getValue</code> and <code>markAsSaved</code>.<br>
+            E.g.:</p>
+<pre class="prettyprint linenums">$('#save-btn').click(function() {
+    var data,
+        $elems = $('.myeditable'),
+        errors = $elems.editable('validate'); //run validation for all values
     if($.isEmptyObject(errors)) {
-        var data = $('.myeditable').editable('getValue'); //get values
-        $.post('new.php', data, function(response) {
-            $('#user_id').text(response.id); 
-            $('.myeditable').editable('markAsSaved'); //on success mark fields as saved
-            ...
-        }); 
+        data = $elems.editable('getValue'); //get all values
+        $.post('new.php', data, 'json').success(function(response) {
+            if(response && response.id) {
+               $elems.editable('option', 'pk', response.id); //store pk
+               $elems.editable('markAsSaved');  //on success mark fields as saved
+               /* other success actions */
+               ...
+            } else {
+               /* server-side validation error */
+               ...
+            }
+        }).error(function() {
+           /* ajax error */
+           ...
+        });
     } else {
-        var msg = 'Validation errors! ';
-        $.each(errors, function(k, v) { msg += v+"&lt;br&gt;"; });
-        $('.alert-error').html(msg).show(); 
+        /* client-side validation error */
         ...
     }
-});</pre>
-          
-            <p>If you find bug or have an idea please feel free to <a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">write me on github</a>.</p>
+});</pre>                
+                
+                          
+            <p>If you find bug or have an idea please feel free to <a href="http://github.com/vitalets/bootstrap-editable/issues" taget="_blank">create issue on github</a>.</p>
                    
                    </div> <!-- end of span9 div -->
                 </div> <!-- end of row div -->

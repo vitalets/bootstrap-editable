@@ -105,7 +105,7 @@ $(function(){
   
     $.mockjax({
         url: 'new.php',
-        responseTime: 500,
+        responseTime: 300,
         responseText: {
             id: 1
         }
@@ -113,12 +113,34 @@ $(function(){
     
    $('.myeditable').editable({
       url: 'post.php',
-      pk: '#user_id',
       validate: {
-         username: function(v) {if(v == '') return 'Username is required!'}
+         username: function(v) {if(v == '') return 'Required field!'}
       } 
    });
    
+   $('#save-btn').click(function() {
+       $('.myeditable').editable('submit', { //call submit
+           url: 'new.php', //url for creating new user
+           success: function(data) {
+               var msg = 'New user created! Now editables work in regular way.';
+               $('#msg').addClass('alert-success').removeClass('alert-error')
+               .html(msg).show();
+               $('#save-btn').hide(); 
+           },
+           error: function(data) {
+               var msg = '';
+               if(data.errors) { //validation error
+                   $.each(data.errors, function(k, v) { msg += k+": "+v+"<br>"; });
+               } else if(data.responseText) { //ajax error
+                   msg = data.responseText;
+               }
+               $('#msg').removeClass('alert-success').addClass('alert-error')
+               .html(msg).show();
+           }
+       });
+   });   
+   
+   /*
    $('#save-btn').click(function() {
        var  $btn = $(this),
             errors = $('.myeditable').editable('validate');
@@ -136,5 +158,6 @@ $(function(){
           $.each(errors, function(k, v) { msg += v+'<br>'; });
           $btn.parent().find('.alert-error').html(msg).show(); 
        }
-   });  
+   });
+   */  
 });

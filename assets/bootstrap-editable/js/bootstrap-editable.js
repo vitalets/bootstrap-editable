@@ -1,4 +1,4 @@
-/*! Bootstrap Editable - v1.1.3 
+/*! Bootstrap Editable - v1.1.4 
 * In-place editing with Bootstrap Form and Popover
 * https://github.com/vitalets/bootstrap-editable
 * Copyright (c) 2012 Vitaliy Potapov; Licensed MIT, GPL */
@@ -347,7 +347,7 @@
         /**
          * move popover to new position. This function mainly copied from bootstrap-popover.
          */
-        setPosition:function () {
+        setPosition: function () {
             var p = this.$element.data('popover'), $tip = p.tip(), inside = false, placement, pos, actualWidth, actualHeight, tp;
 
             placement = typeof p.options.placement === 'function' ? p.options.placement.call(p, $tip[0], p.$element[0]) : p.options.placement;
@@ -434,7 +434,7 @@
 
     $.fn.editable = function (option) {
         //special methods returning non-jquery object
-        var result = {};
+        var result = {}, args = arguments;
         switch (option) {
             case 'validate':
                 this.each(function () {
@@ -453,6 +453,42 @@
                     }
                 });
                 return result;
+                
+            case 'submit':  //collects value, validate and submit to server for creating new record
+                var config = arguments[1] || {},
+                    $elems = this,
+                    errors = this.editable('validate'),
+                    values;
+                
+                if(typeof config.error !== 'function') {
+                    config.error = function() {};
+                } 
+
+                if($.isEmptyObject(errors)) {
+                    values = this.editable('getValue'); 
+                    if(config.data) {
+                        $.extend(values, config.data);
+                    }
+                    $.post(config.url, values, 'json')
+                     .success(function(response) {
+                        if(typeof response === 'object' && response.id) {
+                            $elems.editable('option', 'pk', response.id); 
+                            $elems.editable('markAsSaved');
+                            if(typeof config.success === 'function') {
+                                config.success.apply($elems, arguments);
+                            } 
+                        } else { //server-side validation error
+                            config.error.apply($elems, arguments);
+                        }
+                    })
+                    .error(function(){  //ajax error
+                        config.error.apply($elems, arguments);
+                    });
+                } else { //client-side validation error
+                    config.error.call($elems, {errors: errors});
+                }
+                
+                return this;
         }
 
         //return jquery object
@@ -461,7 +497,14 @@
             if (!data) {
                 $this.data('editable', (data = new Editable(this, options)));
             }
-            if (typeof option === 'string') {
+            
+            if(option === 'option') {
+                 if(args.length === 2 && typeof args[1] === 'object') {
+                     $.extend(data.settings, args[1]); //set options by object
+                 } else if(args.length === 3 && typeof args[1] === 'string') {
+                    data.settings[args[1]] = args[2]; //set one option
+                 } 
+            } else if (typeof option === 'string') {
                 data[option]();
             }
         });
