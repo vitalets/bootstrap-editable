@@ -3,6 +3,7 @@ Bootstrap-editable change log
 
 Version 1.1.4 wip
 ----------------------------
+Bug: Popover position wrong when it is close to screen edge (@vitalets)
 Enh: GetValue api method should return only not-null values (@vitalets)
 Bug: If date not set it's value equals to today (@vitalets)
 Enh #24: Updated to jquery 1.8.2 (@vitalets)

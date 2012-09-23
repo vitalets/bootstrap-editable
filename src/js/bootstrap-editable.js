@@ -151,6 +151,10 @@
 
             //show popover
             this.$element.popover('show');
+            
+            //movepopover to correct position. Refers to bug in bootstrap 2.1.x with popover positioning
+            this.setPosition();
+            
             this.$element.addClass('editable-open');
             this.errorOnRender = false;
 
@@ -163,8 +167,11 @@
                 this.$content = $(this.settings.formTemplate);
                 this.$content.find('div.control-group').prepend(this.$input);
 
-                //show form
+                //invoke form into popover content
                 $tip.find('.popover-content p').append(this.$content);
+                
+                //set position once more. It is required to pre-move popover when it is close to screen edge.
+                this.setPosition();
 
                 //check for error during render input
                 if (this.errorOnRender) {
@@ -330,7 +337,7 @@
             //hide loading
             this.$element.data('popover').tip().find('.editable-loading').hide();
 
-            //move popover to correct position
+            //move popover to final correct position
             this.setPosition();
 
             //TODO: find elegant way to exclude hardcode of types here
