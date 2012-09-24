@@ -182,6 +182,38 @@ $(function () {
         
      });           
     
+     asyncTest("'shown' / 'hidden' events", function () {
+        expect(3);
+        var val = '1',
+            e = $('<a href="#" data-pk="1" data-type="select" data-url="post.php" data-name="text1" data-value="'+val+'"></a>').appendTo(fx);
+        
+        e.on('shown', function(event, editable) {
+             var p = $(this).data('popover').$tip;
+             ok(p.is(':visible'), 'popover shown');  
+             equal(editable.value, val, 'show triggered, value correct');
+        });
+        
+        e.on('hidden', function(event, editable) {
+             var p = $(this).data('popover').$tip;
+             ok(!p.is(':visible'), 'popover hidden'); 
+        });        
+        
+        e.editable({
+            source: 'groups.php',
+        });
+        
+        e.click();
+        
+        setTimeout(function() {
+             var p = e.data('popover').$tip;
+             p.find('button[type=button]').click(); 
+             
+             e.remove();    
+             start();  
+        }, timeout);                                        
+        
+     });     
+    
      test("show / hide methods", function () {
         var e = $('<a href="#" data-pk="1" data-url="post.php" data-name="text1">abc</a>').appendTo('#qunit-fixture').editable();
         e.editable('show');
