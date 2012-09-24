@@ -3,6 +3,7 @@ Bootstrap-editable change log
 
 Version 1.1.4 wip
 ----------------------------
+Enh #40: Added events 'shown' and 'hidden' (@vitalets)
 Bug: Popover position wrong when it is close to screen edge (@vitalets)
 Enh: GetValue api method should return only not-null values (@vitalets)
 Bug: If date not set it's value equals to today (@vitalets)
