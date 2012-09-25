@@ -1,7 +1,7 @@
 Bootstrap-editable change log
 =============================
 
-Version 1.1.4 wip
+Version 1.1.4 Sep 25, 2012
 ----------------------------
 Enh #40: Added events 'shown' and 'hidden' (@vitalets)
 Bug: Popover position wrong when it is close to screen edge (@vitalets)
