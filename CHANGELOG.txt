@@ -1,6 +1,17 @@
 Bootstrap-editable change log
 =============================
 
+Version 1.1.4 Sep 25, 2012
+----------------------------
+Enh #40: Added events 'shown' and 'hidden' (@vitalets)
+Bug: Popover position wrong when it is close to screen edge (@vitalets)
+Enh: GetValue api method should return only not-null values (@vitalets)
+Bug: If date not set it's value equals to today (@vitalets)
+Enh #24: Updated to jquery 1.8.2 (@vitalets)
+Enh: Add api method 'submit' to simplify creating new record (@vitalets)
+Enh #39: Add api method 'option' to set one or several options dynamically (@vitalets)
+
+
 Version 1.1.3 Sep 16, 2012
 ----------------------------
 Enh #24: Updated to jquery 1.8.1 and bootstrap 2.1.1 (@vitalets)

@@ -151,6 +151,10 @@
 
             //show popover
             this.$element.popover('show');
+            
+            //movepopover to correct position. Refers to bug in bootstrap 2.1.x with popover positioning
+            this.setPosition();
+            
             this.$element.addClass('editable-open');
             this.errorOnRender = false;
 
@@ -163,8 +167,11 @@
                 this.$content = $(this.settings.formTemplate);
                 this.$content.find('div.control-group').prepend(this.$input);
 
-                //show form
+                //invoke form into popover content
                 $tip.find('.popover-content p').append(this.$content);
+                
+                //set position once more. It is required to pre-move popover when it is close to screen edge.
+                this.setPosition();
 
                 //check for error during render input
                 if (this.errorOnRender) {
@@ -199,6 +206,9 @@
                
                 //hide popover on external click
                 $(document).on('click.editable', $.proxy(this.hide, this));
+                
+                //trigger 'shown' event
+                this.$element.trigger('shown', this);
             }, this));
         },
 
@@ -315,6 +325,9 @@
             if (this.settings.enablefocus || this.$element.get(0) !== this.$toggle.get(0)) {
                 this.$toggle.focus();
             }
+            
+            //trigger 'hidden' event
+            this.$element.trigger('hidden', this);
         },
 
         /**
@@ -330,7 +343,7 @@
             //hide loading
             this.$element.data('popover').tip().find('.editable-loading').hide();
 
-            //move popover to correct position
+            //move popover to final correct position
             this.setPosition();
 
             //TODO: find elegant way to exclude hardcode of types here
@@ -342,7 +355,7 @@
         /**
          * move popover to new position. This function mainly copied from bootstrap-popover.
          */
-        setPosition:function () {
+        setPosition: function () {
             var p = this.$element.data('popover'), $tip = p.tip(), inside = false, placement, pos, actualWidth, actualHeight, tp;
 
             placement = typeof p.options.placement === 'function' ? p.options.placement.call(p, $tip[0], p.$element[0]) : p.options.placement;
@@ -429,7 +442,7 @@
 
     $.fn.editable = function (option) {
         //special methods returning non-jquery object
-        var result = {};
+        var result = {}, args = arguments;
         switch (option) {
             case 'validate':
                 this.each(function () {
@@ -443,11 +456,50 @@
             case 'getValue':
                 this.each(function () {
                     var $this = $(this), data = $this.data('editable');
-                    if (data) {
+                    if (data && data.value !== undefined && data.value !== null) {
                         result[data.name] = data.value;
                     }
                 });
                 return result;
+                
+            case 'submit':  //collects value, validate and submit to server for creating new record
+                var config = arguments[1] || {},
+                    $elems = this,
+                    errors = this.editable('validate'),
+                    values;
+                
+                if(typeof config.error !== 'function') {
+                    config.error = function() {};
+                } 
+
+                if($.isEmptyObject(errors)) {
+                    values = this.editable('getValue'); 
+                    if(config.data) {
+                        $.extend(values, config.data);
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: config.url, 
+                        data: values, 
+                        dataType: 'json'
+                    }).success(function(response) {
+                        if(typeof response === 'object' && response.id) {
+                            $elems.editable('option', 'pk', response.id); 
+                            $elems.editable('markAsSaved');
+                            if(typeof config.success === 'function') {
+                                config.success.apply($elems, arguments);
+                            } 
+                        } else { //server-side validation error
+                            config.error.apply($elems, arguments);
+                        }
+                    }).error(function(){  //ajax error
+                        config.error.apply($elems, arguments);
+                    });
+                } else { //client-side validation error
+                    config.error.call($elems, {errors: errors});
+                }
+                
+                return this;
         }
 
         //return jquery object
@@ -456,7 +508,14 @@
             if (!data) {
                 $this.data('editable', (data = new Editable(this, options)));
             }
-            if (typeof option === 'string') {
+            
+            if(option === 'option') {
+                 if(args.length === 2 && typeof args[1] === 'object') {
+                     $.extend(data.settings, args[1]); //set options by object
+                 } else if(args.length === 3 && typeof args[1] === 'string') {
+                    data.settings[args[1]] = args[2]; //set one option
+                 } 
+            } else if (typeof option === 'string') {
                 data[option]();
             }
         });
@@ -754,7 +813,11 @@
                 this.$element.text(text);
             },
             setValueByText:function () {
-                this.value = this.settings.converFormat.call(this, this.$element.text(), this.settings.viewformat, this.settings.format);    
+                var text = $.trim(this.$element.text());
+                if(!text.length) {
+                    return;
+                }
+                this.value = this.settings.converFormat.call(this, text, this.settings.viewformat, this.settings.format);    
             },
             //helper function to convert date between two formats
             converFormat: function(dateStr, formatFrom, formatTo) {
