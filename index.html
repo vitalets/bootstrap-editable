@@ -233,10 +233,10 @@
                         <section id="getstarted"><hr></section>
                         <h2>Getting started</h2>
                         <p>Include required js and css files: </p>
-                        <p>jQuery & Bootstrap (>= 2.0.4)</p>
+                        <p>jQuery & Bootstrap</p>
                         <pre class="prettyprint linenums">
 &lt;link href=&quot;path/to/bootstrap/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src=&quot;path/to/jquery/jquery-1.8.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/jquery/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;path/to/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</pre> 
                                                  
                         <p>Bootstrap-editable</p>
@@ -495,7 +495,13 @@ By default response text will be shown as error message.
                                     <td>string | object</td>
                                     <td>false</td>
                                     <td>allows to prepend values in select list.<br>E.g. if set <code>prepend: 'Not defined'</code> then new value <code>{'': 'Not defined'}</code> will be automatically inserted at the begining of select list</td>
-                                </tr>                                                               
+                                </tr>   
+                                <tr>
+                                    <td>loadingError</td>
+                                    <td>string</td>
+                                    <td>'Error when loading options'</td>
+                                    <td>Message shown when options can't be loaded</td>
+                                </tr>                                                                                             
                             </tbody>
                            </table>                         
                
