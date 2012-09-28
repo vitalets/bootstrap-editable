@@ -394,7 +394,17 @@
                                     <code>auto</code> means text will be set only if element is empty and <i>source</i> defined as object (no extra request).<br>
                                     <code>always|never</code> means always(never) try to set element's text<br>
                                     </td>
-                                </tr>                                                                  
+                                </tr> 
+                                <tr>
+                                    <td>template</td>
+                                    <td>string</td>
+                                    <td>depends on type</td>
+                                    <td>html template used for input inside popover. Allows to do whatever with input: 
+                                      <pre class="prettyprint linenums">$('#comments').editable({
+template: '&lt;textarea rows="12"&gt;&lt;/textarea&gt;'
+});</pre>
+                                    </td>
+                                </tr>                                                                                                 
                                 <tr>
                                     <td>validate</td>
                                     <td>function | object</td>
