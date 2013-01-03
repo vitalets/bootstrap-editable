@@ -757,7 +757,7 @@
                 this.$input.focus();
             },
             setValueByText:function () {
-                var lines = this.$element.html().split(/<br\s*\/?>/i);
+                var lines = this.$element.html().split("\n");
                 for (var i = 0; i < lines.length; i++) {
                     lines[i] = $('<div>').html(lines[i]).text();
                 }
