@@ -1,6 +1,5 @@
 ![This project was significally improved and renamed into X-editable](https://github.com/downloads/vitalets/bootstrap-editable/move_to_x-editable1.png)  
-Please use **[X-editable page](https://github.com/vitalets/x-editable)** to download newest release, create issues and view actual documentation.  
-All futher updates will be done there.
+## This plugin is renamed into **[X-editable](https://github.com/vitalets/x-editable)** and no longer supported! Please use X-editable to create issues!
 
 ---
 
