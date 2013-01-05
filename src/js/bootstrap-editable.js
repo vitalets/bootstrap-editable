@@ -143,7 +143,8 @@
                 this.$element.popover({
                     trigger  :'manual',
                     placement:'top',
-                    content  :this.settings.loading
+                    content  :this.settings.loading,
+                    html: true
                 });
 
                 this.$element.data('popover').tip().addClass('editable-popover');
@@ -168,7 +169,7 @@
                 this.$content.find('div.control-group').prepend(this.$input);
 
                 //invoke form into popover content
-                $tip.find('.popover-content p').append(this.$content);
+                $tip.find('.popover-content').append(this.$content);
                 
                 //set position once more. It is required to pre-move popover when it is close to screen edge.
                 this.setPosition();
