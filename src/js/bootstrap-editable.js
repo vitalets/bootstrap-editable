@@ -305,6 +305,10 @@
                     params.pk = pk;
                 }
 
+                if(typeof this.settings.sendMethod === 'function'){
+                    return this.settings.sendMethod(params);
+                }
+
                 //send ajax to server and return deferred object
                 return $.ajax({
                     url     : (typeof this.settings.url === 'function') ? this.settings.url.call(this) : this.settings.url,
