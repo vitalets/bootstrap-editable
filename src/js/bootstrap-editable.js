@@ -401,11 +401,6 @@
         },
 
         handleEmpty:function () {
-            //don't have editalbe class --> it's not link --> toggled by another element --> no need to set emptytext
-            if (!this.$element.hasClass('editable')) {
-                return;
-            }
-
             if ($.trim(this.$element.text()) === '') {
                 this.$element.addClass('editable-empty').text(this.settings.emptytext);
             } else {
